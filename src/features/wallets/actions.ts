@@ -1,76 +1,60 @@
-"use server";
-
 import { prisma } from '@/core/database/client';
-import { Decimal, Prisma } from '@prisma/client';
+import { nanoid }  from 'nanoid';
 
-export async function processServicePayment(
-  assignmentId: string,
-  totalAmount: number
-): Promise<{ success: boolean; error?: string }> {
-  const platformFee = new Decimal(totalAmount).mul(0.20);
-  const providerPayout = new Decimal(totalAmount).mul(0.80);
+export type IdempotencyResult =
+  | { processed: false }   // Already handled — caller returns 200 immediately
+  | { processed: true  }   // First time — business logic was executed
 
+/**
+ * Idempotency wrapper for all external webhook events.
+ *
+ * Protocol:
+ *   1. Attempt INSERT into processed_webhooks using the externalId as the
+ *      unique key.
+ *   2. If the INSERT succeeds → this is the first time we've seen this event.
+ *      Execute businessLogic().
+ *   3. If the INSERT throws a UNIQUE constraint violation (Prisma P2002) →
+ *      we have already processed this event. Return { processed: false }
+ *      immediately with ZERO side effects.
+ *
+ * This prevents double-credit from Selcom retries even if our server
+ * crashes after crediting the wallet but before acknowledging the webhook.
+ *
+ * @param externalId   The unique ID from the payment provider (Selcom txRef)
+ * @param eventType    Human-readable event label (e.g. "PAYMENT_SUCCESS")
+ * @param payload      Full raw payload — stored for audit
+ * @param businessLogic The function that moves money. Called at most once per externalId.
+ */
+export async function withIdempotency(
+  externalId:    string,
+  eventType:     string,
+  payload:       Record<string, unknown>,
+  businessLogic: () => Promise<void>,
+): Promise<IdempotencyResult> {
+  // ── Step 1: Claim the event ──────────────────────────────────────
   try {
-    return await prisma.$transaction(async (tx) => {
-      // Step 3: Debit/Verify owner payment status (Assume funds escrowed)
-      const assignment = await tx.assignment.findUnique({
-        where: { id: assignmentId },
-        include: {
-          provider: {
-            include: { wallet: true },
-          }
-        },
-      });
-
-      if (!assignment || !assignment.provider) {
-        throw new Error('Assignment or provider context missing');
-      }
-
-      // Ensure wallet exists for the provider
-      let wallet = assignment.provider.wallet;
-      if (!wallet) {
-        wallet = await tx.wallet.create({
-          data: { providerId: assignment.providerId! }
-        });
-      }
-
-      // Step 4: Credit provider's pendingBalance
-      await tx.wallet.update({
-        where: { id: wallet.id },
-        data: { pendingBalance: { increment: providerPayout } }
-      });
-
-      // Step 5: Create WalletTransaction (CREDIT, PENDING)
-      await tx.walletTransaction.create({
-        data: {
-          walletId: wallet.id,
-          type: 'CREDIT',
-          amount: providerPayout,
-          reference: assignmentId,
-          status: 'PENDING',
-        },
-      });
-
-      // Step 6: Create FinancialAuditLog entry
-      await tx.financialAuditLog.create({
-        data: {
-          entityType: 'ASSIGNMENT',
-          entityId: assignmentId,
-          action: 'PAYMENT_SPLIT',
-          payload: {
-            totalAmount,
-            providerPayout: providerPayout.toString(),
-            platformFee: platformFee.toString(),
-          },
-        },
-      });
-
-      return { success: true };
-    }, {
-      isolationLevel: Prisma.TransactionIsolationLevel.Serializable
+    await prisma.processedWebhook.create({
+      data: {
+        id:         nanoid(),
+        externalId,
+        eventType,
+        payload,
+      },
     });
-  } catch (error) {
-    console.error('Split payment saga failed:', error);
-    return { success: false, error: 'Financial processing failed' };
+  } catch (err: any) {
+    // P2002 = Prisma unique constraint violation
+    if (err?.code === 'P2002') {
+      // Already processed — this is a Selcom retry or a duplicate delivery.
+      // Return immediately. The caller MUST respond 200 OK to prevent
+      // Selcom from retrying indefinitely.
+      return { processed: false };
+    }
+    // Any other DB error is a real failure — let it propagate
+    throw err;
   }
+
+  // ── Step 2: Execute business logic exactly once ──────────────────
+  await businessLogic();
+
+  return { processed: true };
 }
