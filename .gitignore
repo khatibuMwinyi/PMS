@@ -1,1 +1,9 @@
-.env.example/
+.env
+.env.local
+.env.example
+node_modules/
+dist/
+current.md
+DESIGN.md
+OPSMP_Combined_Analysis.md
+.claude/
