@@ -1,13 +1,15 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["postgresqlExtensions", "fullTextSearch"]
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
   extensions = [pgcrypto, postgis]
 }
+
+// ─── Enums ───────────────────────────────────────────────────────────
 
 enum UserRole {
   ADMIN
@@ -28,24 +30,69 @@ enum VerificationStatus {
   REJECTED
 }
 
+enum UnitType {
+  APARTMENT
+  HOUSE
+  COMMERCIAL
+}
+
+enum AssignmentStatus {
+  PENDING_ACCEPTANCE
+  ACCEPTED
+  IN_PROGRESS
+  COMPLETED
+  EXPIRED
+  CANCELLED_NO_SHOW
+  AUTO_REASSIGNED
+  DISPUTED
+}
+
+// ─── Financial Enums ─────────────────────────────────────────────────
+
+enum TransactionType {
+  CREDIT      // Incoming earning (80% of service payment)
+  DEBIT       // Internal adjustment or fee
+  WITHDRAWAL  // Provider cash-out request
+}
+
+enum TransactionStatus {
+  PENDING   // Split recorded, awaiting settlement confirmation
+  SETTLED   // Funds confirmed available
+  FAILED    // Saga compensating transaction fired
+}
+
+// ─── Auth ────────────────────────────────────────────────────────────
+
 model User {
-  id            String    @id @default(uuid())
-  email         String    @unique
-  phone         String    @unique // Encrypted at application layer
-  passwordHash  String    @map("password_hash")
-  role          UserRole
-  status        UserStatus @default(PENDING_VERIFICATION)
-  createdAt     DateTime  @default(now()) @map("created_at")
-  updatedAt     DateTime  @updatedAt @map("updated_at") // Keep this from previous implementation
-  deletedAt     DateTime? @map("deleted_at")
-  
+  id           String     @id @default(uuid())
+  email        String     @unique
+  phone        String     @unique // Encrypted at application layer
+  passwordHash String     @map("password_hash")
+  role         UserRole
+  status       UserStatus @default(PENDING_VERIFICATION)
+  createdAt    DateTime   @default(now()) @map("created_at")
+  updatedAt    DateTime   @updatedAt @map("updated_at")
+  deletedAt    DateTime?  @map("deleted_at")
+
   sessions        Session[]
-  ownerProfile     OwnerProfile?
-  providerProfile  ProviderProfile?
+  ownerProfile    OwnerProfile?
+  providerProfile ProviderProfile?
 
   @@index([role, status])
   @@map("users")
 }
+
+model Session {
+  id           String   @id @default(uuid())
+  sessionToken String   @unique @map("session_token")
+  userId       String   @map("user_id")
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+// ─── Owner side ──────────────────────────────────────────────────────
 
 model OwnerProfile {
   id        String @id @default(uuid())
@@ -53,34 +100,30 @@ model OwnerProfile {
   user      User   @relation(fields: [userId], references: [id])
   firstName String @map("first_name")
   lastName  String @map("last_name")
-  
+
   properties Property[]
 
   @@map("owner_profiles")
 }
 
 model Property {
-  id        String   @id @default(uuid())
-  ownerId   String   @map("owner_id")
-  name      String
-  encryptedAddress String @map("encrypted_address") // Updated to match isolation requirements
-  location    Unsupported("geometry(Point, 4326)")? // For findBestProvider queries
-  latitude    Float
-  longitude   Float
-  imageUrls String[] @map("image_urls")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  id               String   @id @default(uuid())
+  ownerId          String   @map("owner_id")
+  name             String
+  encryptedAddress String   @map("encrypted_address")
+  zone             String
+  location         Unsupported("geometry(Point, 4326)")?
+  latitude         Float
+  longitude        Float
+  imageUrls        String[] @map("image_urls")
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
 
-  owner OwnerProfile @relation(fields: [ownerId], references: [id])
-  units Unit[]
+  owner       OwnerProfile @relation(fields: [ownerId], references: [id])
+  units       Unit[]
+  assignments Assignment[]
 
   @@map("properties")
-}
-
-enum UnitType {
-  APARTMENT
-  HOUSE
-  COMMERCIAL
 }
 
 model Unit {
@@ -95,6 +138,8 @@ model Unit {
   @@map("units")
 }
 
+// ─── Services ────────────────────────────────────────────────────────
+
 model ServiceType {
   id           String   @id @default(uuid())
   name         String   @unique
@@ -104,8 +149,12 @@ model ServiceType {
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
 
+  assignments Assignment[]
+
   @@map("service_types")
 }
+
+// ─── Provider side ───────────────────────────────────────────────────
 
 model ProviderProfile {
   id                String   @id @default(uuid())
@@ -114,16 +163,117 @@ model ProviderProfile {
   businessName      String   @map("business_name")
   serviceCategories String[] @map("service_categories")
   operationalZones  String[] @map("operational_zones")
-  
+
+  assignments Assignment[]
+  wallet      Wallet?
+
   @@map("provider_profiles")
 }
 
-model Session {
-  id           String   @id @default(uuid())
-  sessionToken String   @unique @map("session_token")
-  userId       String   @map("user_id")
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+// ─── Assignment ──────────────────────────────────────────────────────
 
-  @@map("sessions")
+model Assignment {
+  id             String           @id @default(uuid())
+  status         AssignmentStatus @default(PENDING_ACCEPTANCE)
+  providerId     String?          @map("provider_id")
+  propertyId     String           @map("property_id")
+  serviceTypeId  String           @map("service_type_id")
+  expiresAt      DateTime         @map("expires_at")
+  acceptedAt     DateTime?        @map("accepted_at")
+  transitionedAt DateTime?        @map("transitioned_at")
+  version        Int              @default(0)
+  createdAt      DateTime         @default(now()) @map("created_at")
+  updatedAt      DateTime         @updatedAt @map("updated_at")
+
+  provider    ProviderProfile? @relation(fields: [providerId], references: [id], onDelete: SetNull)
+  property    Property         @relation(fields: [propertyId], references: [id])
+  serviceType ServiceType      @relation(fields: [serviceTypeId], references: [id])
+
+  @@index([providerId, status])
+  @@index([status, expiresAt])
+  @@map("assignments")
+}
+
+// ─── Financial Core ──────────────────────────────────────────────────
+
+/// Provider wallet — one per provider, created on first payout.
+/// availableBalance  = funds ready for withdrawal (settled)
+/// pendingBalance    = funds from completed jobs awaiting settlement confirmation
+model Wallet {
+  id               String  @id @default(uuid())
+  providerId       String  @unique @map("provider_id")
+  availableBalance Decimal @default(0) @map("available_balance") @db.Decimal(12, 2)
+  pendingBalance   Decimal @default(0) @map("pending_balance")   @db.Decimal(12, 2)
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  provider     ProviderProfile    @relation(fields: [providerId], references: [id])
+  transactions WalletTransaction[]
+  alerts       ReconciliationAlert[]
+
+  @@map("wallets")
+}
+
+/// Immutable ledger — NEVER update or delete rows.
+/// Every money movement is a new append-only row.
+model WalletTransaction {
+  id        String            @id @default(uuid())
+  walletId  String            @map("wallet_id")
+  type      TransactionType
+  amount    Decimal           @db.Decimal(12, 2)
+  reference String            // assignmentId or splitId that caused this movement
+  status    TransactionStatus @default(PENDING)
+  createdAt DateTime          @default(now()) @map("created_at")
+  // updatedAt intentionally absent — transactions are immutable
+
+  wallet Wallet @relation(fields: [walletId], references: [id])
+
+  @@index([walletId, status])
+  @@index([reference])
+  @@map("wallet_transactions")
+}
+
+/// Full audit trail — one row per money-related event.
+/// Append-only. Never updated.
+model FinancialAuditLog {
+  id         String   @id @default(uuid())
+  entityType String   @map("entity_type") // "ASSIGNMENT" | "WITHDRAWAL" | "REFUND"
+  entityId   String   @map("entity_id")
+  action     String   // "PAYMENT_SPLIT" | "WITHDRAWAL_REQUESTED" | "SAGA_COMPENSATED"
+  payload    Json     // Full context: amounts, provider, fees
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@index([entityId])
+  @@map("financial_audit_logs")
+}
+
+/// Idempotency table for Selcom webhooks.
+/// Before executing any business logic, attempt INSERT.
+/// On UNIQUE violation → already processed → return 200 immediately.
+model ProcessedWebhook {
+  id          String   @id @default(uuid())
+  externalId  String   @unique @map("external_id")  // Selcom transaction reference
+  eventType   String   @map("event_type")
+  payload     Json
+  processedAt DateTime @default(now()) @map("processed_at")
+
+  @@map("processed_webhooks")
+}
+
+/// Created by the nightly reconciliation job when a wallet balance
+/// diverges from its ledger sum. Ops team resolves manually.
+/// Never auto-corrected by code.
+model ReconciliationAlert {
+  id             String   @id @default(uuid())
+  walletId       String   @map("wallet_id")
+  ledgerSum      Decimal  @map("ledger_sum")      @db.Decimal(12, 2)
+  actualBalance  Decimal  @map("actual_balance")  @db.Decimal(12, 2)
+  delta          Decimal  @map("delta")           @db.Decimal(12, 2)
+  resolvedAt     DateTime? @map("resolved_at")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  wallet Wallet @relation(fields: [walletId], references: [id])
+
+  @@index([walletId, resolvedAt])
+  @@map("reconciliation_alerts")
 }
