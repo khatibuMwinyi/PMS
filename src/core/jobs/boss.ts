@@ -2,23 +2,52 @@ import PgBoss from 'pg-boss';
 import { assignmentExpirationWorker, financialReconciliationWorker } from './workers';
 
 if (!process.env.DATABASE_URL) {
-  throw new Error('DATABASE_URL is not set');
+  throw new Error('DATABASE_URL is not set — pg-boss cannot start');
 }
 
-const boss = new PgBoss(process.env.DATABASE_URL);
+const boss = new PgBoss({
+  connectionString: process.env.DATABASE_URL,
+  // Retain completed job records for 7 days for audit purposes
+  deleteAfterDays: 7,
+});
 
-boss.on('error', (error: unknown) => console.error('pg-boss error:', error));
+boss.on('error', (error: unknown) => {
+  console.error('[pg-boss] Unhandled error:', error);
+});
 
-export async function startWorker() {
+export async function startWorker(): Promise<void> {
   await boss.start();
+  console.log('[pg-boss] Started');
 
-  await boss.work(assignmentExpirationWorker.name, assignmentExpirationWorker.handler);
-  await boss.work(financialReconciliationWorker.name, financialReconciliationWorker.handler);
+  // ── Worker 1: Assignment expiration ───────────────────────────────
+  // Polls every minute for assignments past their expiresAt timestamp
+  await boss.work(
+    assignmentExpirationWorker.name,
+    { teamSize: 5, teamConcurrency: 5 },
+    assignmentExpirationWorker.handler,
+  );
+  await boss.schedule(
+    assignmentExpirationWorker.name,
+    '* * * * *',          // Every minute
+    {},
+    { singletonKey: 'assignment-expiration' },
+  );
 
-  await boss.schedule(assignmentExpirationWorker.name, '* * * * *');
-  await boss.schedule(financialReconciliationWorker.name, '0 0 * * *');
+  // ── Worker 2: Nightly financial reconciliation ─────────────────────
+  // Runs at 23:00 UTC (02:00 EAT) — after the day's transactions settle
+  await boss.work(
+    financialReconciliationWorker.name,
+    { teamSize: 1, teamConcurrency: 1 },   // Must run serially
+    financialReconciliationWorker.handler,
+  );
+  await boss.schedule(
+    financialReconciliationWorker.name,
+    '0 23 * * *',         // 23:00 UTC daily
+    {},
+    { singletonKey: 'financial-reconciliation' },
+  );
 
-  console.log('OPSMP Job Worker Initialized');
+  console.log('[pg-boss] Workers registered: assignment-expiration, financial-reconciliation');
 }
 
 export { boss };
