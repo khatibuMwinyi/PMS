@@ -1,16 +1,35 @@
 export type AssignmentStatus =
   | 'PENDING_ACCEPTANCE'
   | 'ACCEPTED'
-  | 'SCHEDULED'
   | 'IN_PROGRESS'
   | 'COMPLETED'
-  | 'DISPUTED'
   | 'EXPIRED'
-  | 'CANCELLED_NO_SHOW';
+  | 'CANCELLED_NO_SHOW'
+  | 'AUTO_REASSIGNED'
+  | 'DISPUTED';
 
-export interface Assignment {
-  id: string;
-  agreementId: string;
-  providerId: string;
-  status: AssignmentStatus;
+/**
+ * Shape returned by getProviderPendingAssignments().
+ * PII fields (exact address, owner name) are NEVER included — isolation enforced at query layer.
+ */
+export interface AssignmentWithDetails {
+  id:         string;
+  status:     AssignmentStatus;
+  expiresAt:  string;          // ISO string — safe to pass from server to client component
+  version:    number;
+  serviceType: {
+    name:     string;
+    category?: string;
+  };
+  property: {
+    zone:     string;          // Neighbourhood only — never the encrypted address
+    latitude: number;
+    longitude: number;
+  };
+}
+
+export interface AcceptResult {
+  success:   boolean;
+  conflict?: boolean;   // true → another provider won the race
+  error?:    string;
 }
