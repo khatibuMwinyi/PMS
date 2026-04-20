@@ -1,50 +1,65 @@
-"use server";
+'use server';
 
 import { prisma } from '@/core/database/client';
 import bcrypt from 'bcryptjs';
-import { OwnerRegisterSchema, ProviderRegisterSchema } from './types';
+import {
+  OwnerRegisterSchema,
+  ProviderRegisterSchema,
+  type OwnerRegisterInput,
+  type ProviderRegisterInput,
+} from './types';
 
-export async function registerOwner(formData: FormData) {
-  const rawData = Object.fromEntries(formData);
-  const data = OwnerRegisterSchema.parse(rawData);
+export async function registerOwner(data: OwnerRegisterInput) {
+  const validated = OwnerRegisterSchema.parse(data);
+  const passwordHash = await bcrypt.hash(validated.password, 12);
 
-  const passwordHash = await bcrypt.hash(data.password, 12);
+  const existing = await prisma.user.findFirst({
+    where: { OR: [{ email: validated.email }] },
+  });
+  if (existing) throw new Error('An account with this email already exists.');
 
-  return await prisma.user.create({
+  await prisma.user.create({
     data: {
-      email: data.email,
-      phone: data.phone,
+      email:        validated.email,
+      phone:        validated.phone,
       passwordHash,
-      role: 'OWNER',
+      role:         'OWNER',
       ownerProfile: {
         create: {
-          firstName: data.firstName,
-          lastName: data.lastName,
+          firstName: validated.firstName,
+          lastName:  validated.lastName,
         },
       },
     },
   });
+
+  return { success: true };
 }
 
-export async function registerProvider(formData: FormData) {
-  const rawData = Object.fromEntries(formData);
-  const data = ProviderRegisterSchema.parse(rawData);
+export async function registerProvider(data: ProviderRegisterInput) {
+  const validated = ProviderRegisterSchema.parse(data);
+  const passwordHash = await bcrypt.hash(validated.password, 12);
 
-  const passwordHash = await bcrypt.hash(data.password, 12);
+  const existing = await prisma.user.findFirst({
+    where: { OR: [{ email: validated.email }] },
+  });
+  if (existing) throw new Error('An account with this email already exists.');
 
-  return await prisma.user.create({
+  await prisma.user.create({
     data: {
-      email: data.email,
-      phone: data.phone,
+      email:           validated.email,
+      phone:           validated.phone,
       passwordHash,
-      role: 'PROVIDER',
+      role:            'PROVIDER',
       providerProfile: {
         create: {
-          businessName: data.businessName,
-          serviceCategories: data.serviceCategories,
-          operationalZones: data.operationalZones,
+          businessName:      validated.businessName,
+          serviceCategories: validated.serviceCategories,
+          operationalZones:  validated.operationalZones,
         },
       },
     },
   });
+
+  return { success: true };
 }
