@@ -1,81 +1,101 @@
-"use server";
+'use server';
 
-import { prisma } from '@/core/database/client';
-import { auth } from '@/core/auth';
-import { uploadImage } from '@/core/storage/upload';
-import { CreatePropertySchema, AddUnitSchema } from './types';
+import { revalidatePath } from 'next/cache';
+import { prisma }          from '@/core/database/client';
+import { auth }            from '@/core/auth';
+import { uploadImage }     from '@/core/storage/upload';
+import { CreatePropertySchema, DAR_ES_SALAAM_LAT, DAR_ES_SALAAM_LNG } from './types';
 
-export async function createProperty(formData: FormData) {
+export async function createProperty(formData: FormData): Promise<{ success: boolean; error?: string }> {
   const session = await auth();
   if (!session?.user || session.user.role !== 'OWNER') {
-    throw new Error('Unauthorized');
+    return { success: false, error: 'Unauthorized' };
   }
 
-  const rawData = Object.fromEntries(formData);
-  const data = CreatePropertySchema.parse(rawData);
+  // ── Parse & validate text fields ────────────────────────────────────
+  const raw = {
+    name:      formData.get('name'),
+    address:   formData.get('address'),
+    zone:      formData.get('zone'),
+    latitude:  formData.get('latitude')  ?? DAR_ES_SALAAM_LAT,
+    longitude: formData.get('longitude') ?? DAR_ES_SALAAM_LNG,
+  };
 
+  const parsed = CreatePropertySchema.safeParse(raw);
+  if (!parsed.success) {
+    const first = parsed.error.errors[0];
+    return { success: false, error: first?.message ?? 'Validation failed' };
+  }
+
+  const data = parsed.data;
+
+  // ── Owner profile ────────────────────────────────────────────────────
   const ownerProfile = await prisma.ownerProfile.findUnique({
     where: { userId: session.user.id },
   });
-
   if (!ownerProfile) {
-    throw new Error('Owner profile not found');
+    return { success: false, error: 'Owner profile not found' };
   }
 
-  return await prisma.property.create({
+  // ── Upload images ────────────────────────────────────────────────────
+  const imageFiles  = formData.getAll('images') as File[];
+  const imageUrls: string[] = [];
+
+  for (const file of imageFiles) {
+    if (file && file.size > 0) {
+      try {
+        const url = await uploadImage(file, 'properties');
+        imageUrls.push(url);
+      } catch {
+        // Non-fatal: skip failed images
+      }
+    }
+  }
+
+  // ── Create property record ───────────────────────────────────────────
+  const property = await prisma.property.create({
     data: {
-      name: data.name,
-      type: data.type,
-      encryptedAddress: data.address, // Use encryptedAddress field for encryption
-      location: 'SRID=4326;POINT(' + data.longitude + ' ' + data.latitude + ')', // Add location using PostGIS format
-      city: data.city,
-      unitCount: data.unitCount,
-      ownerId: ownerProfile.id,
+      name:             data.name,
+      encryptedAddress: data.address,   // Prisma extension encrypts this at write time
+      zone:             data.zone,
+      latitude:         data.latitude,
+      longitude:        data.longitude,
+      imageUrls,
+      ownerId:          ownerProfile.id,
     },
   });
+
+  // ── Set PostGIS geometry via raw query (Unsupported type workaround) ─
+  await prisma.$executeRaw`
+    UPDATE properties
+    SET    location = ST_SetSRID(ST_MakePoint(${data.longitude}, ${data.latitude}), 4326)
+    WHERE  id = ${property.id}
+  `;
+
+  // ── Bust cache so the grid re-fetches immediately ────────────────────
+  revalidatePath('/owner/properties');
+
+  return { success: true };
 }
 
-export async function addUnit(propertyId: string, unitData: {
-  unitNumber: string;
-  bedrooms: number;
-  bathrooms: number;
-  sqm: number;
-}) {
+export async function addUnit(formData: FormData): Promise<{ success: boolean; error?: string }> {
   const session = await auth();
   if (!session?.user || session.user.role !== 'OWNER') {
-    throw new Error('Unauthorized');
+    return { success: false, error: 'Unauthorized' };
   }
 
-  const data = AddUnitSchema.parse({
-    propertyId,
-    ...unitData,
-  });
-
-  return await prisma.unit.create({
+  const property = await prisma.property.create({
     data: {
-      propertyId: data.propertyId,
-      unitNumber: data.unitNumber,
-      bedrooms: data.bedrooms,
-      bathrooms: data.bathrooms,
-      sqm: data.sqm,
-    },
-  });
-}
-
-export async function uploadPropertyImage(propertyId: string, file: File) {
-  const session = await auth();
-  if (!session?.user || session.user.role !== 'OWNER') {
-    throw new Error('Unauthorized');
-  }
-
-  const imageUrl = await uploadImage(file, propertyId);
-
-  await prisma.propertyImage.create({
-    data: {
-      propertyId,
-      imageUrl,
+      name:             formData.get('name') as string,
+      encryptedAddress: formData.get('address') as string,
+      zone:             formData.get('zone') as string,
+      latitude:         DAR_ES_SALAAM_LAT,
+      longitude:        DAR_ES_SALAAM_LNG,
+      imageUrls:        [],
+      ownerId:          formData.get('ownerId') as string,
     },
   });
 
-  return imageUrl;
+  revalidatePath('/owner/properties');
+  return { success: true };
 }
