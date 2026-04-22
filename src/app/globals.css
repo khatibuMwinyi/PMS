@@ -138,6 +138,36 @@ html, body {
   100% { transform: translate(0px, 0px) scale(1); }
 }
 
+/* AUTH PAGE ANIMATIONS */
+@keyframes fade-in-down {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(200, 145, 40, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(200, 145, 40, 0.5);
+  }
+}
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 /* NEW ANIMATION KEYFRAMES */
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
@@ -214,6 +244,19 @@ html, body {
   .animate-pulse-subtle {
     animation: var(--animate-pulse-subtle);
   }
+
+  /* AUTH PAGE ANIMATIONS */
+  .animate-fade-in-down {
+    animation: fade-in-down 0.6s ease-out forwards;
+  }
+
+  .animate-glow-pulse {
+    animation: glow-pulse 3s ease-in-out infinite;
+  }
+
+  .animate-slide-in-right {
+    animation: slide-in-right 0.5s ease-out forwards;
+  }
 }
 
 /* ─── Component Classes ────────────────────────────── */
@@ -247,4 +290,93 @@ html, body {
   .label {
     @apply block text-sm font-medium text-text-primary mb-1.5;
   }
+}
+
+/* ─── Auth Pages Layout ─────────────────────────────── */
+.auth-split {
+  @apply grid min-h-screen;
+  grid-template-columns: 45fr 55fr;
+}
+
+@media (min-width: 1024px) {
+  .auth-split {
+    grid-template-columns: 45fr 55fr;
+  }
+}
+
+@media (max-width: 1023px) {
+  .auth-split {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+  }
+}
+
+.auth-panel-left {
+  @apply relative hidden lg:flex flex-col justify-center px-10 py-16 overflow-hidden;
+  @apply bg-gradient-to-br from-[#0F172A] via-[#1E293B] to-[#0F172A];
+}
+
+.auth-panel-right {
+  @apply relative flex flex-col items-center justify-center px-6 py-12;
+  @apply bg-gradient-to-br from-[#0F172A] via-[#0F172A] to-[#1E293B];
+}
+
+@media (max-width: 1023px) {
+  .auth-panel-left {
+    @apply flex lg:hidden h-32 px-6 py-4;
+  }
+}
+
+/* ─── Auth Branding Panel ─────────────────────────── */
+.auth-brand-logo {
+  @apply inline-flex items-center justify-center w-12 h-12;
+  @apply bg-gradient-to-br from-[#C89128] to-[#E5B972];
+  @apply rounded-xl shadow-xl;
+}
+
+.auth-value-prop {
+  @apply flex items-start gap-3;
+}
+
+.auth-value-prop-icon {
+  @apply w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0;
+  @apply bg-[#C89128]/20;
+}
+
+/* ─── Auth Form Card ─────────────────────────────── */
+.auth-form-card {
+  @apply w-full max-w-[440px] backdrop-blur-xl;
+  @apply bg-black/20 border border-[#E5B972]/20;
+  @apply rounded-2xl p-8 shadow-2xl;
+}
+
+/* ─── Animations ────────────────────────────────── */
+@keyframes fade-in-down {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-down {
+  animation: fade-in-down 0.5s ease-out forwards;
+}
+
+.animate-slide-up {
+  animation: slide-up 0.4s ease-out forwards;
 }
