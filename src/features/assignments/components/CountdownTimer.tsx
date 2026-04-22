@@ -34,7 +34,25 @@ export function CountdownTimer({ expiresAt, onExpired }: CountdownTimerProps) {
     };
 
     const id = setInterval(tick, 1000);
-    return () => clearInterval(id);
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        setRemaining(getRemainingMs(expiresAt));
+      }
+    };
+
+    const handleFocus = () => {
+      setRemaining(getRemainingMs(expiresAt));
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('focus', handleFocus);
+
+    return () => {
+      clearInterval(id);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('focus', handleFocus);
+    };
   }, [expiresAt, onExpired]);
 
   const expired  = remaining === 0;

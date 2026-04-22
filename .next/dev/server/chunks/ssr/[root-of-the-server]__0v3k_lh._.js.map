@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 10, "column": 0}, "map": {"version":3,"sources":["file:///F:/OPSMP/PropertManagement/src/app/page.tsx"],"sourcesContent":["export default function LandingPage() {\r\n  return (\r\n    <main className=\"p-24\">\r\n      <h1>Oweru Platform — Phase 3 Foundation</h1>\r\n      <p>Financial Core and Assignment Engine are ready. UI Layer has been reverted.</p>\r\n    </main>\r\n  );\r\n}"],"names":["LandingPage","className"],"mappings":";;;;;;AAAe,SAASA;IACtB,qBACE,6WAAC;QAAKC,WAAU;;0BACd,6WAAC;0BAAG;;;;;;0BACJ,6WAAC;0BAAE;;;;;;;;;;;;AAGT"}}]
-}

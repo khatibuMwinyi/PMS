@@ -44,8 +44,9 @@ export async function POST(request: Request): Promise<NextResponse> {
       console.error('[Webhook] Invalid signature for transactionId:', payload.transactionId);
       return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
     }
-  } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : 'Unknown error';
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 
   // ── Step 3 + 4: Idempotency gate → Saga ─────────────────────────
@@ -55,31 +56,27 @@ export async function POST(request: Request): Promise<NextResponse> {
     body as Record<string, unknown>,
     async () => {
       if (payload.status !== 'SUCCESS') {
-        // Payment failed or still pending — log and do nothing
         console.log(
           `[Webhook] Non-success status for ${payload.transactionId}: ${payload.status}`
         );
         return;
       }
 
-      const sagaResult = await processServicePayment(
-        payload.invoiceId,
-        payload.amount,
-      );
-
-      if (!sagaResult.success) {
-        // Saga compensated — already logged to FinancialAuditLog
-        // We still return 200 to Selcom (the event was received and processed;
-        // the failure is a business logic issue, not a delivery failure)
-        console.error(
-          `[Webhook] Saga failed for assignment ${payload.invoiceId}:`,
-          sagaResult.error,
+      try {
+        await processServicePayment(
+          payload.invoiceId,
+          payload.amount,
         );
-      } else {
         console.log(
-          `[Webhook] Split complete for assignment ${payload.invoiceId}: ` +
-          `provider=TZS ${sagaResult.providerPayout} platform=TZS ${sagaResult.platformFee}`
+          `[Webhook] Payment processed for assignment ${payload.invoiceId}: amount=TZS ${payload.amount}`
         );
+      } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+        console.error(
+          `[Webhook] Failed to process payment for assignment ${payload.invoiceId}:`,
+          errorMessage
+        );
+        throw err;
       }
     },
   );

@@ -3,8 +3,8 @@
   "middleware": {},
   "instrumentation": {
     "files": [
-      "server/edge/chunks/_0ytrhwv._.js",
-      "server/edge/chunks/08yl_next_dist_esm_build_templates_edge-wrapper_0gmjv07.js"
+      "server/edge/chunks/_0e82_ds._.js",
+      "server/edge/chunks/turbopack-node_modules_next_dist_esm_build_templates_edge-wrapper_0-.nrnm.js"
     ],
     "name": "instrumentation"
   },

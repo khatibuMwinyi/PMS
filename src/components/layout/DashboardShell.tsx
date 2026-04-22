@@ -1,6 +1,7 @@
 import { TopbarUserMenu } from './Topbar';
 import { Sidebar } from './Sidebar';
 import { MobileNav } from './MobileNav';
+import { motion } from 'framer-motion';
 
 interface DashboardShellProps {
   children: React.ReactNode;
@@ -18,7 +19,15 @@ export function DashboardShell({ children, role, userName, pageTitle }: Dashboar
     <div className="min-h-screen bg-[var(--surface-page)]">
 
       {/* ── Top bar ─────────────────────────────────────────── */}
-      <header className="sticky top-0 z-50 h-16 flex items-center gap-3 px-4 sm:px-6 bg-[var(--surface-card)] border-b border-[var(--border-subtle)]">
+      <header className="sticky top-0 z-50 h-16 flex items-center gap-3 px-4 sm:px-6 bg-gradient-to-r from-[var(--surface-card)] to-[var(--surface-overlay)] border-b border-[var(--border-subtle)] shadow-sm">
+        {/* Subtle animated background */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <motion.div
+            className="absolute -top-20 -right-20 w-40 h-40 bg-[var(--brand-gold)] rounded-full mix-blend-multiply filter blur-3xl opacity-5 animate-float"
+            animate={{ y: [0, -10, 0] }}
+            transition={{ duration: 10, repeat: Infinity }}
+          />
+        </div>
 
         {/* Mobile hamburger — client component */}
         <div className="md:hidden">
@@ -26,7 +35,7 @@ export function DashboardShell({ children, role, userName, pageTitle }: Dashboar
         </div>
 
         {/* Logo */}
-        <span className="font-display text-[18px] text-[var(--brand-primary)] leading-none select-none">
+        <span className="font-display text-[18px] text-gradient leading-none select-none relative z-10">
           Oweru
         </span>
 

@@ -13,8 +13,8 @@ export const OwnerRegisterSchema = BaseAuthSchema.extend({
 
 export const ProviderRegisterSchema = BaseAuthSchema.extend({
   businessName: z.string().min(1),
-  serviceCategories: z.array(z.string()).default([]),
-  operationalZones: z.array(z.string()).default([]),
+  serviceCategories: z.array(z.string()),
+  operationalZones: z.array(z.string()),
 });
 
 export type OwnerRegisterInput = z.infer<typeof OwnerRegisterSchema>;

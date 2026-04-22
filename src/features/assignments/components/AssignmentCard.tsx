@@ -20,9 +20,8 @@ export function AssignmentCard({ assignment }: AssignmentCardProps) {
     | { type: 'conflict' }
     | { type: 'error'; message: string }
     | { type: 'accepted' }
+    | { type: 'expired'; startTime: number }
   >({ type: 'idle' });
-
-  const [expired, setExpired] = useState(false);
 
   const handleAccept = () => {
     startTransition(async () => {
@@ -69,13 +68,15 @@ export function AssignmentCard({ assignment }: AssignmentCardProps) {
     );
   }
 
+  const isExpired = state.type === 'expired';
+
   return (
     <div
       className="rounded-[var(--radius-lg)] border flex flex-col gap-0 overflow-hidden transition-shadow duration-200 hover:shadow-[var(--shadow-modal)]"
       style={{
-        borderColor: expired ? 'var(--border-subtle)' : 'var(--border-default)',
+        borderColor: isExpired ? 'var(--border-subtle)' : 'var(--border-default)',
         background:  'var(--surface-card)',
-        opacity:     expired ? 0.55 : 1,
+        opacity:     isExpired ? 0.55 : 1,
       }}
     >
       {/* ── Card header: service type + countdown ──────────────── */}
@@ -92,7 +93,10 @@ export function AssignmentCard({ assignment }: AssignmentCardProps) {
 
         <CountdownTimer
           expiresAt={assignment.expiresAt}
-          onExpired={() => setExpired(true)}
+          onExpired={() => {
+            setState({ type: 'expired', startTime: Date.now() });
+            setTimeout(() => router.refresh(), 4000);
+          }}
         />
       </div>
 
@@ -141,11 +145,23 @@ export function AssignmentCard({ assignment }: AssignmentCardProps) {
             </p>
           </div>
         )}
+
+        {state.type === 'expired' && (
+          <div
+            className="flex items-start gap-2 px-3 py-2.5 rounded-[var(--radius-md)]"
+            style={{ background: 'var(--state-warning-bg)' }}
+          >
+            <AlertCircle size={14} className="mt-0.5 shrink-0" style={{ color: 'var(--state-warning)' }} />
+            <p className="text-[13px]" style={{ color: 'var(--state-warning)' }}>
+              This assignment has expired and been reassigned to another provider.
+            </p>
+          </div>
+        )}
       </div>
 
       {/* ── Accept button ───────────────────────────────────────── */}
       <div className="px-5 pb-5">
-        {expired ? (
+        {isExpired ? (
           <div
             className="flex items-center justify-center h-10 rounded-[var(--radius-md)] text-[13px] font-medium"
             style={{ background: 'var(--surface-overlay)', color: 'var(--text-muted)' }}

@@ -1,60 +1,88 @@
+// Financial Core: 80/20 payout saga implementation
 import { prisma } from '@/core/database/client';
-import { nanoid }  from 'nanoid';
-
-export type IdempotencyResult =
-  | { processed: false }   // Already handled — caller returns 200 immediately
-  | { processed: true  }   // First time — business logic was executed
+import { nanoid } from 'nanoid';
+import { Decimal } from '@prisma/client/runtime/library';
+import { Prisma } from '@prisma/client';
 
 /**
- * Idempotency wrapper for all external webhook events.
+ * Process payment for a completed assignment, splitting 80% to the provider and 20% platform fee.
+ * Implements the Saga pattern with a Serializable transaction. Any failure rolls back the DB changes.
  *
- * Protocol:
- *   1. Attempt INSERT into processed_webhooks using the externalId as the
- *      unique key.
- *   2. If the INSERT succeeds → this is the first time we've seen this event.
- *      Execute businessLogic().
- *   3. If the INSERT throws a UNIQUE constraint violation (Prisma P2002) →
- *      we have already processed this event. Return { processed: false }
- *      immediately with ZERO side effects.
- *
- * This prevents double-credit from Selcom retries even if our server
- * crashes after crediting the wallet but before acknowledging the webhook.
- *
- * @param externalId   The unique ID from the payment provider (Selcom txRef)
- * @param eventType    Human-readable event label (e.g. "PAYMENT_SUCCESS")
- * @param payload      Full raw payload — stored for audit
- * @param businessLogic The function that moves money. Called at most once per externalId.
+ * @param assignmentId - The ID of the assignment that has been completed.
+ * @param totalAmount  - Total amount paid by the owner (decimal string or number).
+ * @throws on validation or DB errors.
  */
-export async function withIdempotency(
-  externalId:    string,
-  eventType:     string,
-  payload:       Record<string, unknown>,
-  businessLogic: () => Promise<void>,
-): Promise<IdempotencyResult> {
-  // ── Step 1: Claim the event ──────────────────────────────────────
-  try {
-    await prisma.processedWebhook.create({
+export async function processServicePayment(
+  assignmentId: string,
+  totalAmount: string | number,
+): Promise<void> {
+  // Convert to Decimal for precise arithmetic
+  const total = new Decimal(totalAmount);
+  const platformFee = total.mul(0.20);
+  const providerPayout = total.mul(0.80);
+
+  await prisma.$transaction(async (tx) => {
+    // ---- Verify assignment eligibility ----
+    const assignment = await tx.assignment.findUnique({
+      where: { id: assignmentId },
+      select: { status: true, providerId: true },
+    });
+    if (!assignment) throw new Error('Assignment not found');
+    // Only COMPLETED assignments are eligible for payout
+    if (assignment.status !== 'COMPLETED') {
+      throw new Error('Assignment not eligible for payout');
+    }
+    if (!assignment.providerId) throw new Error('Assignment has no provider');
+
+    // ---- Ensure provider wallet exists ----
+    let wallet = await tx.wallet.findUnique({
+      where: { providerId: assignment.providerId },
+    });
+    if (!wallet) {
+      wallet = await tx.wallet.create({
+        data: {
+          id: nanoid(),
+          providerId: assignment.providerId,
+          availableBalance: new Decimal(0),
+          pendingBalance: new Decimal(0),
+        },
+      });
+    }
+
+    // ---- Credit pending balance ----
+    await tx.wallet.update({
+      where: { id: wallet.id },
+      data: { pendingBalance: { increment: providerPayout } },
+    });
+
+    // ---- Record immutable ledger entry ----
+    await tx.walletTransaction.create({
       data: {
-        id:         nanoid(),
-        externalId,
-        eventType,
-        payload,
+        id: nanoid(),
+        walletId: wallet.id,
+        type: 'CREDIT',
+        amount: providerPayout,
+        reference: assignmentId,
+        status: 'PENDING',
       },
     });
-  } catch (err: any) {
-    // P2002 = Prisma unique constraint violation
-    if (err?.code === 'P2002') {
-      // Already processed — this is a Selcom retry or a duplicate delivery.
-      // Return immediately. The caller MUST respond 200 OK to prevent
-      // Selcom from retrying indefinitely.
-      return { processed: false };
-    }
-    // Any other DB error is a real failure — let it propagate
-    throw err;
-  }
 
-  // ── Step 2: Execute business logic exactly once ──────────────────
-  await businessLogic();
+    // ---- Audit log ----
+    await tx.financialAuditLog.create({
+      data: {
+        id: nanoid(),
+        entityType: 'ASSIGNMENT',
+        entityId: assignmentId,
+        action: 'PAYMENT_SPLIT',
+        payload: {
+          totalAmount: total.toString(),
+          platformFee: platformFee.toString(),
+          providerPayout: providerPayout.toString(),
+        },
+      },
+    });
+  }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
 
-  return { processed: true };
+  // If we reach here, the transaction succeeded. Further steps such as settlement
+  // (moving from pending to available) are handled elsewhere.
 }

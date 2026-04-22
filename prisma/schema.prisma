@@ -122,6 +122,7 @@ model Property {
   owner       OwnerProfile @relation(fields: [ownerId], references: [id])
   units       Unit[]
   assignments Assignment[]
+  priceLocks PriceLock[]
 
   @@map("properties")
 }
@@ -134,6 +135,7 @@ model Unit {
   squareFootage Float    @map("square_footage")
 
   property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  priceLocks PriceLock[]
 
   @@map("units")
 }
@@ -150,6 +152,7 @@ model ServiceType {
   updatedAt    DateTime @updatedAt @map("updated_at")
 
   assignments Assignment[]
+  priceLocks PriceLock[]
 
   @@map("service_types")
 }
@@ -163,10 +166,18 @@ model ProviderProfile {
   businessName      String   @map("business_name")
   serviceCategories String[] @map("service_categories")
   operationalZones  String[] @map("operational_zones")
+  latitude          Float?   @map("latitude")
+  longitude         Float?   @map("longitude")
+  rating            Float    @default(0) @map("rating")
+  completedJobs     Int      @default(0) @map("completed_jobs")
+  totalJobs         Int      @default(0) @map("total_jobs")
+  acceptanceRate   Float    @default(0) @map("acceptance_rate")
+  responsiveness    Float    @default(0) @map("responsiveness")
 
   assignments Assignment[]
   wallet      Wallet?
 
+  @@index([latitude, longitude])
   @@map("provider_profiles")
 }
 
@@ -174,6 +185,7 @@ model ProviderProfile {
 
 model Assignment {
   id             String           @id @default(uuid())
+  task           Task? @relation("AssignmentTask")
   status         AssignmentStatus @default(PENDING_ACCEPTANCE)
   providerId     String?          @map("provider_id")
   propertyId     String           @map("property_id")
@@ -194,7 +206,54 @@ model Assignment {
   @@map("assignments")
 }
 
-// ─── Financial Core ──────────────────────────────────────────────────
+// ─── Financial Core ─────────────────────────────────────────────────-
+
+// ─── Enums ───────────────────────────────────────────────────────────
+enum TaskStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  DISPUTED
+}
+
+// ─── Models ───────────────────────────────────────────────────────────
+model Task {
+  id                String   @id @default(uuid())
+  assignmentId      String   @unique
+  status            TaskStatus @default(PENDING)
+  checkInTime       DateTime?
+  checkOutTime      DateTime?
+  checkInLatitude   Float?
+  checkInLongitude  Float?
+  checkInMethod     String?  @map("check_in_method") // 'GPS' | 'PHOTO_FALLBACK' | 'MANUAL'
+  evidenceImages    String[] @default([])
+  pendingPhotoVerification Boolean @default(false) @map("pending_photo_verification")
+  manualReviewReason String?  @map("manual_review_reason")
+  manualReviewRequestedAt DateTime? @map("manual_review_requested_at")
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  assignment Assignment? @relation("AssignmentTask", fields: [assignmentId], references: [id])
+  dispute    Dispute?
+
+  @@map("tasks")
+}
+
+model Dispute {
+  id          String   @id @default(uuid())
+  taskId      String   @unique
+  reason      String
+  createdAt   DateTime @default(now())
+  expiresAt   DateTime
+  resolvedAt  DateTime?
+  status      String   @default("OPEN")
+
+  task Task @relation(fields: [taskId], references: [id])
+
+  @@map("disputes")
+}
+
+// ─── Financial Core (existing) ──────────────────────────────────────────────────
 
 /// Provider wallet — one per provider, created on first payout.
 /// availableBalance  = funds ready for withdrawal (settled)
@@ -216,6 +275,24 @@ model Wallet {
 
 /// Immutable ledger — NEVER update or delete rows.
 /// Every money movement is a new append-only row.
+model PriceLock {
+  id          String   @id @default(uuid())
+  propertyId  String   @map("property_id")
+  serviceTypeId String @map("service_type_id")
+  unitId      String   @map("unit_id")
+  expiresAt   DateTime @map("expires_at")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  property    Property   @relation(fields: [propertyId], references: [id])
+  serviceType ServiceType @relation(fields: [serviceTypeId], references: [id])
+  unit        Unit        @relation(fields: [unitId], references: [id])
+
+  @@unique([propertyId, serviceTypeId, unitId])
+  @@index([expiresAt])
+  @@map("price_locks")
+}
+
 model WalletTransaction {
   id        String            @id @default(uuid())
   walletId  String            @map("wallet_id")
@@ -276,4 +353,46 @@ model ReconciliationAlert {
 
   @@index([walletId, resolvedAt])
   @@map("reconciliation_alerts")
+}
+
+// ─── Staff Support System ───────────────────────────────────────────────────
+
+enum TicketPriority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum TicketStatus {
+  PENDING
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
+enum TicketType {
+  DISPUTE
+  TECHNICAL
+  PAYMENT
+  ACCOUNT
+  OTHER
+}
+
+model StaffTicket {
+  id          String       @id @default(uuid())
+  type        TicketType
+  priority    TicketPriority
+  title       String
+  content     Json
+  status      TicketStatus @default(PENDING)
+  assignedTo  String?      @map("assigned_to")
+  resolvedAt  DateTime?    @map("resolved_at")
+  resolution  Json?
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt @map("updated_at")
+
+  @@index([status, assignedTo])
+  @@index([priority, status])
+  @@map("staff_tickets")
 }

@@ -16,30 +16,35 @@ export async function findBestProvider(
 ): Promise<ProviderWithScore | null> {
   const property = await prisma.property.findUnique({
     where: { id: propertyId },
-    select: { location: true }
+    select: { latitude: true, longitude: true }
   });
 
-  if (!property || !property.location) throw new Error("Property location context missing");
+  if (!property) throw new Error("Property not found");
 
   const serviceType = await prisma.serviceType.findUnique({
     where: { id: serviceTypeId },
-    select: { category: true }
+    select: { name: true }
   });
 
-  if (!serviceType) throw new Error("Service category context missing");
+  if (!serviceType) throw new Error("Service type not found");
 
-  // Geospatial radius search using PostGIS
   const providers = await prisma.$queryRaw<any[]>`
     SELECT 
       pp.id, pp.rating, pp.completed_jobs, pp.total_jobs,
       pp.acceptance_rate, pp.responsiveness,
-      ST_DistanceSphere(pp.location, ${property.location}::geometry) / 1000 as distance_km
+      ST_DistanceSphere(
+        ST_SetSRID(ST_MakePoint(pp.longitude, pp.latitude), 4326),
+        ST_SetSRID(ST_MakePoint(${property.longitude}, ${property.latitude}), 4326)
+      ) / 1000 as distance_km
     FROM provider_profiles pp
     JOIN users u ON pp.user_id = u.id
     WHERE u.status = 'ACTIVE'
-    AND pp.verification = 'VERIFIED' -- Corrected from verification_status to verification
-    AND ST_DWithin(pp.location, ${property.location}::geometry, ${radiusKm * 1000})
-    AND ${serviceType.category} = ANY(pp.service_categories)
+    AND pp.verification = 'VERIFIED'
+    AND ST_DWithin(
+      ST_SetSRID(ST_MakePoint(pp.longitude, pp.latitude), 4326),
+      ST_SetSRID(ST_MakePoint(${property.longitude}, ${property.latitude}), 4326),
+      ${radiusKm * 1000}
+    )
   `;
 
   if (providers.length === 0) return null;
@@ -47,7 +52,6 @@ export async function findBestProvider(
   const scored = providers.map(p => {
     const completion_rate = p.total_jobs > 0 ? p.completed_jobs / p.total_jobs : 0;
     
-    // Formula: (rating[normalized] * 0.4) + (comp * 0.3) + (acc * 0.2) + (resp * 0.1) - (dist_penalty * 0.15)
     const score = ((p.rating / 5) * 0.40) + 
                   (completion_rate * 0.30) + 
                   (p.acceptance_rate * 0.20) + 

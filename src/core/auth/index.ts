@@ -11,6 +11,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   session: { strategy: 'jwt' }, // Keep JWT strategy for statelessness
   providers: [ // Providers (e.g., Credentials) to be added in Phase 1 Step 2
     Credentials({
+      // Define expected fields for credentials provider
+      credentials: {
+        email: { label: "Email", type: "email", placeholder: "admin@example.com" },
+        password: { label: "Password", type: "password" },
+      },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null; // Use email for login
         

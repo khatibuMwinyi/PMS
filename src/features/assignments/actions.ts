@@ -83,15 +83,14 @@ export async function acceptAssignment(assignmentId: string): Promise<AcceptResu
 }
 
 /**
- * Stub: reassignAssignment — full tiered cascade implemented in Phase 2.
+ * Reassign an expired assignment to another provider using tiered cascade.
  * Called by the pg-boss assignment-expiration worker.
+ * 
+ * Tiered Auto-Expansion: 5km/80% -> 10km/70% -> 15km/60%
+ * Falls back to AUTO_REASSIGNED for manual staff review if no provider found.
  */
 export async function reassignAssignment(assignmentId: string): Promise<void> {
-  const tiers = [
-    { radiusKm: 5,  threshold: 0.8 },
-    { radiusKm: 10, threshold: 0.7 },
-    { radiusKm: 15, threshold: 0.6 },
-  ];
+  const { findBestProvider } = await import('@/features/services/queries');
 
   const assignment = await prisma.assignment.findUnique({
     where:  { id: assignmentId },
@@ -99,8 +98,35 @@ export async function reassignAssignment(assignmentId: string): Promise<void> {
   });
   if (!assignment) return;
 
-  // TODO: wire to findBestProvider() from features/services/queries.ts
-  // For now: mark as AUTO_REASSIGNED for staff review
+  const tiers = [
+    { radius: 5, threshold: 0.8 },
+    { radius: 10, threshold: 0.7 },
+    { radius: 15, threshold: 0.6 },
+  ];
+
+  for (const tier of tiers) {
+    const best = await findBestProvider(
+      assignment.propertyId,
+      assignment.serviceTypeId,
+      tier.radius,
+      tier.threshold,
+    );
+
+    if (best) {
+      await prisma.assignment.update({
+        where: { id: assignmentId },
+        data: {
+          status:        'PENDING_ACCEPTANCE',
+          providerId:   best.id,
+          expiresAt:     new Date(Date.now() + 6 * 60 * 60 * 1000),
+          transitionedAt: new Date(),
+          version:      { increment: 1 },
+        },
+      });
+      return;
+    }
+  }
+
   await prisma.assignment.update({
     where: { id: assignmentId },
     data: {

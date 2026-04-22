@@ -12,3 +12,17 @@ export const DisputeResolutionSchema = z.object({
 
 export type ProcessPaymentInput = z.infer<typeof ProcessPaymentSchema>;
 export type DisputeResolutionInput = z.infer<typeof DisputeResolutionSchema>;
+
+export interface WalletSummary {
+  id: string;
+  availableBalance: number;
+  pendingBalance: number;
+  lastUpdated: Date | null;
+  transactions?: Array<{
+    id: string;
+    type: string;
+    amount: number;
+    status: string;
+    createdAt: string;
+  }>;
+}

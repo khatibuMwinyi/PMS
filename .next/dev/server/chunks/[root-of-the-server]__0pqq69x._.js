@@ -135,12 +135,12 @@ __turbopack_context__.s([
     "prisma",
     ()=>prisma
 ]);
-var __TURBOPACK__imported__module__$5b$externals$5d2f40$prisma$2f$client__$5b$external$5d$__$2840$prisma$2f$client$2c$__cjs$2c$__$5b$project$5d2f$node_modules$2f2e$pnpm$2f40$prisma$2b$client$40$5$2e$22$2e$0_prisma$40$5$2e$22$2e$0$2f$node_modules$2f40$prisma$2f$client$29$__ = __turbopack_context__.i("[externals]/@prisma/client [external] (@prisma/client, cjs, [project]/node_modules/.pnpm/@prisma+client@5.22.0_prisma@5.22.0/node_modules/@prisma/client)");
+var __TURBOPACK__imported__module__$5b$externals$5d2f40$prisma$2f$client__$5b$external$5d$__$2840$prisma$2f$client$2c$__cjs$2c$__$5b$project$5d2f$node_modules$2f40$prisma$2f$client$29$__ = __turbopack_context__.i("[externals]/@prisma/client [external] (@prisma/client, cjs, [project]/node_modules/@prisma/client)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$core$2f$security$2f$encryption$2e$ts__$5b$middleware$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/core/security/encryption.ts [middleware] (ecmascript)");
 ;
 ;
 const prismaClientSingleton = ()=>{
-    return new __TURBOPACK__imported__module__$5b$externals$5d2f40$prisma$2f$client__$5b$external$5d$__$2840$prisma$2f$client$2c$__cjs$2c$__$5b$project$5d2f$node_modules$2f2e$pnpm$2f40$prisma$2b$client$40$5$2e$22$2e$0_prisma$40$5$2e$22$2e$0$2f$node_modules$2f40$prisma$2f$client$29$__["PrismaClient"]().$extends({
+    return new __TURBOPACK__imported__module__$5b$externals$5d2f40$prisma$2f$client__$5b$external$5d$__$2840$prisma$2f$client$2c$__cjs$2c$__$5b$project$5d2f$node_modules$2f40$prisma$2f$client$29$__["PrismaClient"]().$extends({
         query: {
             user: {
                 async create ({ args, query }) {
@@ -152,26 +152,6 @@ const prismaClientSingleton = ()=>{
                 async update ({ args, query }) {
                     if (args.data.phone && typeof args.data.phone === 'string') {
                         args.data.phone = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$core$2f$security$2f$encryption$2e$ts__$5b$middleware$5d$__$28$ecmascript$29$__["encrypt"])(args.data.phone);
-                    }
-                    return query(args);
-                }
-            },
-            ownerProfile: {
-                async create ({ args, query }) {
-                    if (args.data.encryptedId) {
-                        args.data.encryptedId = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$core$2f$security$2f$encryption$2e$ts__$5b$middleware$5d$__$28$ecmascript$29$__["encrypt"])(args.data.encryptedId);
-                    }
-                    if (args.data.encryptedAddress) {
-                        args.data.encryptedAddress = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$core$2f$security$2f$encryption$2e$ts__$5b$middleware$5d$__$28$ecmascript$29$__["encrypt"])(args.data.encryptedAddress);
-                    }
-                    return query(args);
-                },
-                async update ({ args, query }) {
-                    if (args.data.encryptedId && typeof args.data.encryptedId === 'string') {
-                        args.data.encryptedId = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$core$2f$security$2f$encryption$2e$ts__$5b$middleware$5d$__$28$ecmascript$29$__["encrypt"])(args.data.encryptedId);
-                    }
-                    if (args.data.encryptedAddress && typeof args.data.encryptedAddress === 'string') {
-                        args.data.encryptedAddress = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$core$2f$security$2f$encryption$2e$ts__$5b$middleware$5d$__$28$ecmascript$29$__["encrypt"])(args.data.encryptedAddress);
                     }
                     return query(args);
                 }
@@ -202,32 +182,6 @@ const prismaClientSingleton = ()=>{
                             return (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$core$2f$security$2f$encryption$2e$ts__$5b$middleware$5d$__$28$ecmascript$29$__["decrypt"])(user.phone);
                         } catch (e) {
                             return user.phone;
-                        }
-                    }
-                }
-            },
-            ownerProfile: {
-                encryptedId: {
-                    needs: {
-                        encryptedId: true
-                    },
-                    compute (ownerProfile) {
-                        try {
-                            return ownerProfile.encryptedId ? (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$core$2f$security$2f$encryption$2e$ts__$5b$middleware$5d$__$28$ecmascript$29$__["decrypt"])(ownerProfile.encryptedId) : null;
-                        } catch (e) {
-                            return ownerProfile.encryptedId;
-                        }
-                    }
-                },
-                encryptedAddress: {
-                    needs: {
-                        encryptedAddress: true
-                    },
-                    compute (ownerProfile) {
-                        try {
-                            return ownerProfile.encryptedAddress ? (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$core$2f$security$2f$encryption$2e$ts__$5b$middleware$5d$__$28$ecmascript$29$__["decrypt"])(ownerProfile.encryptedAddress) : null;
-                        } catch (e) {
-                            return ownerProfile.encryptedAddress;
                         }
                     }
                 }
@@ -267,24 +221,36 @@ __turbopack_context__.s([
     "signOut",
     ()=>signOut
 ]);
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$2d$auth$40$5$2e$0$2e$0$2d$beta$2e$31_nex_032be8cb613345c5b69de16ab6c65cb5$2f$node_modules$2f$next$2d$auth$2f$index$2e$js__$5b$middleware$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/node_modules/.pnpm/next-auth@5.0.0-beta.31_nex_032be8cb613345c5b69de16ab6c65cb5/node_modules/next-auth/index.js [middleware] (ecmascript) <locals>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f40$auth$2b$prisma$2d$adapter$40$2$2e$11$2e$2_12b282a16b6a5c71228727e05ea97d01$2f$node_modules$2f40$auth$2f$prisma$2d$adapter$2f$index$2e$js__$5b$middleware$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/.pnpm/@auth+prisma-adapter@2.11.2_12b282a16b6a5c71228727e05ea97d01/node_modules/@auth/prisma-adapter/index.js [middleware] (ecmascript)"); // Re-add PrismaAdapter
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$2d$auth$40$5$2e$0$2e$0$2d$beta$2e$31_nex_032be8cb613345c5b69de16ab6c65cb5$2f$node_modules$2f$next$2d$auth$2f$providers$2f$credentials$2e$js__$5b$middleware$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/node_modules/.pnpm/next-auth@5.0.0-beta.31_nex_032be8cb613345c5b69de16ab6c65cb5/node_modules/next-auth/providers/credentials.js [middleware] (ecmascript) <locals>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f40$auth$2b$core$40$0$2e$41$2e$2$2f$node_modules$2f40$auth$2f$core$2f$providers$2f$credentials$2e$js__$5b$middleware$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/.pnpm/@auth+core@0.41.2/node_modules/@auth/core/providers/credentials.js [middleware] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2d$auth$2f$index$2e$js__$5b$middleware$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/node_modules/next-auth/index.js [middleware] (ecmascript) <locals>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$auth$2f$prisma$2d$adapter$2f$index$2e$js__$5b$middleware$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@auth/prisma-adapter/index.js [middleware] (ecmascript)"); // Re-add PrismaAdapter
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2d$auth$2f$providers$2f$credentials$2e$js__$5b$middleware$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/node_modules/next-auth/providers/credentials.js [middleware] (ecmascript) <locals>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$auth$2f$core$2f$providers$2f$credentials$2e$js__$5b$middleware$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@auth/core/providers/credentials.js [middleware] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$core$2f$database$2f$client$2e$ts__$5b$middleware$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/core/database/client.ts [middleware] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$bcryptjs$40$2$2e$4$2e$3$2f$node_modules$2f$bcryptjs$2f$index$2e$js__$5b$middleware$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/.pnpm/bcryptjs@2.4.3/node_modules/bcryptjs/index.js [middleware] (ecmascript)"); // For password comparison
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$bcryptjs$2f$index$2e$js__$5b$middleware$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/bcryptjs/index.js [middleware] (ecmascript)"); // For password comparison
 ;
 ;
 ;
 ;
 ;
-const { handlers, auth, signIn, signOut } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$2d$auth$40$5$2e$0$2e$0$2d$beta$2e$31_nex_032be8cb613345c5b69de16ab6c65cb5$2f$node_modules$2f$next$2d$auth$2f$index$2e$js__$5b$middleware$5d$__$28$ecmascript$29$__$3c$locals$3e$__["default"])({
-    adapter: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f40$auth$2b$prisma$2d$adapter$40$2$2e$11$2e$2_12b282a16b6a5c71228727e05ea97d01$2f$node_modules$2f40$auth$2f$prisma$2d$adapter$2f$index$2e$js__$5b$middleware$5d$__$28$ecmascript$29$__["PrismaAdapter"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$core$2f$database$2f$client$2e$ts__$5b$middleware$5d$__$28$ecmascript$29$__["prisma"]),
+const { handlers, auth, signIn, signOut } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2d$auth$2f$index$2e$js__$5b$middleware$5d$__$28$ecmascript$29$__$3c$locals$3e$__["default"])({
+    adapter: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$auth$2f$prisma$2d$adapter$2f$index$2e$js__$5b$middleware$5d$__$28$ecmascript$29$__["PrismaAdapter"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$core$2f$database$2f$client$2e$ts__$5b$middleware$5d$__$28$ecmascript$29$__["prisma"]),
     session: {
         strategy: 'jwt'
     },
     providers: [
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f40$auth$2b$core$40$0$2e$41$2e$2$2f$node_modules$2f40$auth$2f$core$2f$providers$2f$credentials$2e$js__$5b$middleware$5d$__$28$ecmascript$29$__["default"])({
+        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$auth$2f$core$2f$providers$2f$credentials$2e$js__$5b$middleware$5d$__$28$ecmascript$29$__["default"])({
+            // Define expected fields for credentials provider
+            credentials: {
+                email: {
+                    label: "Email",
+                    type: "email",
+                    placeholder: "admin@example.com"
+                },
+                password: {
+                    label: "Password",
+                    type: "password"
+                }
+            },
             async authorize (credentials) {
                 if (!credentials?.email || !credentials?.password) return null; // Use email for login
                 const user = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$core$2f$database$2f$client$2e$ts__$5b$middleware$5d$__$28$ecmascript$29$__["prisma"].user.findUnique({
@@ -297,7 +263,7 @@ const { handlers, auth, signIn, signOut } = (0, __TURBOPACK__imported__module__$
                     }
                 });
                 if (!user) return null;
-                const isValid = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$bcryptjs$40$2$2e$4$2e$3$2f$node_modules$2f$bcryptjs$2f$index$2e$js__$5b$middleware$5d$__$28$ecmascript$29$__["default"].compare(credentials.password, user.passwordHash);
+                const isValid = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$bcryptjs$2f$index$2e$js__$5b$middleware$5d$__$28$ecmascript$29$__["default"].compare(credentials.password, user.passwordHash);
                 if (!isValid) return null;
                 return {
                     id: user.id,
@@ -340,7 +306,7 @@ __turbopack_context__.s([
     ()=>proxy
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$core$2f$auth$2f$index$2e$ts__$5b$middleware$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/core/auth/index.ts [middleware] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$4_react$2d$dom$40$19$2e$2$2e$5_react$40$19$2e$2$2e$5_$5f$react$40$19$2e$2$2e$5$2f$node_modules$2f$next$2f$server$2e$js__$5b$middleware$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/.pnpm/next@16.2.4_react-dom@19.2.5_react@19.2.5__react@19.2.5/node_modules/next/server.js [middleware] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$middleware$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/server.js [middleware] (ecmascript)");
 ;
 ;
 async function proxy(request) {
@@ -365,11 +331,11 @@ async function proxy(request) {
         if (pathname.startsWith(route)) {
             if (!session?.user || !allowedRoles.includes(session.user.role)) {
                 const url = new URL('/login', request.url);
-                return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$4_react$2d$dom$40$19$2e$2$2e$5_react$40$19$2e$2$2e$5_$5f$react$40$19$2e$2$2e$5$2f$node_modules$2f$next$2f$server$2e$js__$5b$middleware$5d$__$28$ecmascript$29$__["NextResponse"].redirect(url);
+                return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$middleware$5d$__$28$ecmascript$29$__["NextResponse"].redirect(url);
             }
         }
     }
-    return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$4_react$2d$dom$40$19$2e$2$2e$5_react$40$19$2e$2$2e$5_$5f$react$40$19$2e$2$2e$5$2f$node_modules$2f$next$2f$server$2e$js__$5b$middleware$5d$__$28$ecmascript$29$__["NextResponse"].next();
+    return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$middleware$5d$__$28$ecmascript$29$__["NextResponse"].next();
 }
 }),
 ];

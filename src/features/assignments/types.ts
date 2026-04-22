@@ -12,6 +12,13 @@ export type AssignmentStatus =
  * Shape returned by getProviderPendingAssignments().
  * PII fields (exact address, owner name) are NEVER included — isolation enforced at query layer.
  */
+export interface PaginatedAssignments {
+  assignments: AssignmentWithDetails[];
+  total: number;
+  page: number;
+  pageSize: number;
+}
+
 export interface AssignmentWithDetails {
   id:         string;
   status:     AssignmentStatus;

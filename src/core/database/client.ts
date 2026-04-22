@@ -18,29 +18,9 @@ const prismaClientSingleton = () => {
           return query(args);
         },
       },
-      ownerProfile: {
-        async create({ args, query }) {
-          if (args.data.encryptedId) {
-            args.data.encryptedId = encrypt(args.data.encryptedId);
-          }
-          if (args.data.encryptedAddress) {
-            args.data.encryptedAddress = encrypt(args.data.encryptedAddress);
-          }
-          return query(args);
-        },
-        async update({ args, query }) {
-          if (args.data.encryptedId && typeof args.data.encryptedId === 'string') {
-            args.data.encryptedId = encrypt(args.data.encryptedId);
-          }
-          if (args.data.encryptedAddress && typeof args.data.encryptedAddress === 'string') {
-            args.data.encryptedAddress = encrypt(args.data.encryptedAddress);
-          }
-          return query(args);
-        },
-      },
       property: {
         async create({ args, query }) {
-          if (args.data.encryptedAddress) { // Use encryptedAddress field
+          if (args.data.encryptedAddress) {
             args.data.encryptedAddress = encrypt(args.data.encryptedAddress);
           }
           return query(args);
@@ -62,28 +42,6 @@ const prismaClientSingleton = () => {
               return decrypt(user.phone);
             } catch (e) {
               return user.phone;
-            }
-          },
-        },
-      },
-      ownerProfile: {
-        encryptedId: {
-          needs: { encryptedId: true },
-          compute(ownerProfile) {
-            try {
-              return ownerProfile.encryptedId ? decrypt(ownerProfile.encryptedId) : null;
-            } catch (e) {
-              return ownerProfile.encryptedId;
-            }
-          },
-        },
-        encryptedAddress: {
-          needs: { encryptedAddress: true },
-          compute(ownerProfile) {
-            try {
-              return ownerProfile.encryptedAddress ? decrypt(ownerProfile.encryptedAddress) : null;
-            } catch (e) {
-              return ownerProfile.encryptedAddress;
             }
           },
         },

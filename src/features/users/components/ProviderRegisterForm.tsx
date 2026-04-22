@@ -19,6 +19,16 @@ const Schema = ProviderRegisterSchema.extend({
   path:    ['confirmPassword'],
 });
 
+const defaultFormValues: FormData = {
+  phone: '',
+  email: '',
+  password: '',
+  confirmPassword: '',
+  businessName: '',
+  serviceCategories: [] as string[],
+  operationalZones: [] as string[],
+};
+
 type FormData = z.infer<typeof Schema>;
 
 const SERVICE_CATEGORIES = [

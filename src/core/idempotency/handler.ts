@@ -29,7 +29,7 @@ export async function withIdempotency(
   externalId:    string,
   eventType:     string,
   payload:       Record<string, unknown>,
-  businessLogic: () => Promise<void>,
+  businessLogic: () => Promise<unknown>,
 ): Promise<IdempotencyResult> {
   // ── Step 1: Claim the event ──────────────────────────────────────
   try {

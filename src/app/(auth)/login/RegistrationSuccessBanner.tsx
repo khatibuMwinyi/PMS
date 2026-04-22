@@ -13,8 +13,7 @@ export function RegistrationSuccessBanner() {
       className="flex items-start gap-3 mb-6 px-4 py-3 rounded-[var(--radius-md)] border"
       style={{
         background:   'var(--state-success-bg)',
-        borderColor:  'var(--state-success)',
-        borderOpacity: 0.3,
+        borderColor:  'rgba(22, 163, 74, 0.3)',
       }}
     >
       <CheckCircle2 size={16} className="mt-0.5 shrink-0" style={{ color: 'var(--state-success)' }} />

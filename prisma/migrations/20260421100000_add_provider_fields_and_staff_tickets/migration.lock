@@ -1,0 +1,18 @@
+{
+  "version": "5.20.0",
+  "dependencies": [
+    {
+      "vendor": "prisma",
+      "value": "5.20.0"
+    },
+    {
+      "vendor": "postgresql",
+      "value": "16.2"
+    }
+  ],
+  "createdAt": "2026-04-21T00:00:00.000Z",
+  "generator": {
+    "provider": "prisma-client-js",
+    "engineVersion": "5200a9965377995e60b760519c74e0fc7ef08cf6"
+  }
+}

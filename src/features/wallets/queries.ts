@@ -37,6 +37,7 @@ export async function getProviderWallet(): Promise<WalletSummary | null> {
     id:               wallet.id,
     availableBalance: wallet.availableBalance.toNumber(),
     pendingBalance:   wallet.pendingBalance.toNumber(),
+    lastUpdated:      wallet.updatedAt,
     transactions: wallet.transactions.map((t) => ({
       id:        t.id,
       type:      t.type,
