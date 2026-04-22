@@ -63,60 +63,60 @@ export function LoginForm() {
   };
 
   return (
-    <div className="w-full max-w-[420px] animate-fade-up">
-      {/* Heading */}
-      <h1 className="font-display text-[28px] text-[var(--text-primary)] leading-tight mb-1">
-        Welcome back
-      </h1>
-      <p className="text-[14px] text-[var(--text-secondary)] mb-8">
-        Sign in to your Oweru account
-      </p>
-
+    <div className="w-full space-y-5">
       {/* Server-level error */}
       {serverError && (
-        <div className="mb-5 px-4 py-3 rounded-[var(--radius-md)] bg-[var(--state-error-bg)] border border-[var(--state-error)] border-opacity-30">
-          <p className="text-[13px] text-[var(--state-error)]">{serverError}</p>
+        <div className="mb-5 px-4 py-3 rounded-xl bg-[#DC2626]/10 border border-[#DC2626]/30 backdrop-blur-sm">
+          <p className="text-sm text-[#DC2626] font-medium">{serverError}</p>
         </div>
       )}
 
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
-        <fieldset disabled={isSubmitting} className="border-none p-0 m-0 min-w-0 flex flex-col gap-4">
+        <fieldset disabled={isSubmitting} className="border-none p-0 m-0 min-w-0 flex flex-col gap-6">
 
           {/* Email */}
-          <Input
-            label="Email Address"
-            type="email"
-            autoComplete="email"
-            placeholder="you@example.com"
-            error={errors.email?.message}
-            {...register('email')}
-          />
+          <div className="relative">
+            <Input
+              label="Email Address"
+              type="email"
+              autoComplete="email"
+              placeholder="you@example.com"
+              error={errors.email?.message}
+              className="bg-black/30 border-[#E5B972]/20 text-white placeholder-[#E5B972]/40 focus:border-[#C89128] focus:ring-[#C89128]/20"
+              {...register('email')}
+            />
+            <div className="absolute inset-0 rounded-xl pointer-events-none bg-gradient-to-r from-[#C89128]/0 via-[#C89128]/0 to-[#C89128]/0 hover:from-[#C89128]/5 hover:to-[#C89128]/5 transition-all duration-300" />
+          </div>
 
           {/* Password */}
           <div className="flex flex-col gap-1">
-            <Input
-              label="Password"
-              type={showPassword ? 'text' : 'password'}
-              autoComplete="current-password"
-              placeholder="••••••••"
-              error={errors.password?.message}
-              rightElement={
-                <button
-                  type="button"
-                  tabIndex={-1}
-                  onClick={() => setShowPassword((v) => !v)}
-                  aria-label={showPassword ? 'Hide password' : 'Show password'}
-                  className="hover:text-[var(--text-primary)] transition-colors"
-                >
-                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-                </button>
-              }
-              {...register('password')}
-            />
+            <div className="relative">
+              <Input
+                label="Password"
+                type={showPassword ? 'text' : 'password'}
+                autoComplete="current-password"
+                placeholder="••••••••"
+                error={errors.password?.message}
+                className="bg-black/30 border-[#E5B972]/20 text-white placeholder-[#E5B972]/40 focus:border-[#C89128] focus:ring-[#C89128]/20"
+                rightElement={
+                  <button
+                    type="button"
+                    tabIndex={-1}
+                    onClick={() => setShowPassword((v) => !v)}
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                    className="text-[#E5B972]/60 hover:text-white transition-colors p-2"
+                  >
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                }
+                {...register('password')}
+              />
+              <div className="absolute inset-0 rounded-xl pointer-events-none bg-gradient-to-r from-[#C89128]/0 via-[#C89128]/0 to-[#C89128]/0 hover:from-[#C89128]/5 hover:to-[#C89128]/5 transition-all duration-300" />
+            </div>
             <div className="text-right">
               <a
                 href="/forgot-password"
-                className="text-[13px] text-[var(--brand-primary)] hover:underline"
+                className="text-sm text-[#C89128] hover:text-[#E5B972] transition-colors font-medium"
               >
                 Forgot password?
               </a>
@@ -131,7 +131,7 @@ export function LoginForm() {
             fullWidth
             loading={isSubmitting}
             loadingText="Signing in…"
-            className="mt-2"
+            className="mt-4 bg-gradient-to-r from-[#C89128] to-[#E5B972] text-white border-0 hover:from-[#B8801A] hover:to-[#D4A76A] shadow-lg hover:shadow-[0_0_20px_rgba(200,145,40,0.4)] transform hover:scale-[1.02] transition-all duration-200"
           >
             Sign In
           </LoadingButton>
@@ -140,15 +140,15 @@ export function LoginForm() {
       </form>
 
       {/* Divider */}
-      <div className="flex items-center gap-3 my-6">
-        <div className="flex-1 h-px bg-[var(--border-subtle)]" />
-        <span className="text-[13px] text-[var(--text-muted)]">or</span>
-        <div className="flex-1 h-px bg-[var(--border-subtle)]" />
+      <div className="flex items-center gap-4 my-6">
+        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#E5B972]/30 to-transparent" />
+        <span className="text-sm text-[#E5B972]/60">or</span>
+        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#E5B972]/30 to-transparent" />
       </div>
 
-      <p className="text-center text-[14px] text-[var(--text-secondary)]">
+      <p className="text-center text-sm text-[#E5B972]/80">
         Don&apos;t have an account?{' '}
-        <a href="/register" className="text-[var(--brand-primary)] font-medium hover:underline">
+        <a href="/register" className="text-white font-medium hover:text-[#E5B972] transition-colors">
           Register →
         </a>
       </p>
