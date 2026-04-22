@@ -15,7 +15,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const inputId = id ?? label?.toLowerCase().replace(/\s+/g, '-');
 
     return (
-      <div className="flex flex-col gap-1.5">
+      <div className="flex flex-col mt-2">
         {label && (
           <label
             htmlFor={inputId}
@@ -57,7 +57,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
                 !error && 'border-[var(--border-default)]',
                 error && 'border-[var(--state-error)] focus:ring-[var(--state-error)]',
                 'focus:outline-none focus:ring-2 focus:ring-[var(--brand-gold)] focus:border-transparent',
-                'backdrop-blur-sm',
+                'backdrop-blur-md',
               ],
               className,
             )}
