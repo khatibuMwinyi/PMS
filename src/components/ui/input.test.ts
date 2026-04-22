@@ -26,8 +26,17 @@ describe('Input Component', () => {
 
   describe('focus ring', () => {
     it('should use brand-gold for focus ring in auth variant', () => {
-      const authVariantMatch = inputContent.match(/variant === 'auth'[\s\S]*?focus:ring.*?(\[[^\]]+\]|[\w-]+)/);
       expect(inputContent).toMatch(/brand-gold.*?focus/);
+    });
+  });
+
+  describe('light theme support', () => {
+    it('should have data-theme attribute handling for light theme', () => {
+      expect(inputContent).toMatch(/data-theme/);
+    });
+
+    it('should use brand-gold for light theme border color', () => {
+      expect(inputContent).toMatch(/brand-gold.*?border|border.*?brand-gold/);
     });
   });
 });

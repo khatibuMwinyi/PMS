@@ -8,11 +8,14 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
   rightElement?: React.ReactNode;
   inputSize?: 'md' | 'lg';
   variant?: 'default' | 'bold' | 'auth';
+  dataTheme?: 'light' | 'dark';
 }
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, label, error, helper, rightElement, inputSize = 'md', variant = 'default', id, ...props }, ref) => {
+  ({ className, label, error, helper, rightElement, inputSize = 'md', variant = 'default', dataTheme = 'dark', id, ...props }, ref) => {
     const inputId = id ?? label?.toLowerCase().replace(/\s+/g, '-');
+    const isLightTheme = dataTheme === 'light';
+    const borderColor = isLightTheme ? 'var(--brand-gold)' : 'var(--border-default)';
 
     return (
       <div className="flex flex-col mt-2">
@@ -29,8 +32,10 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           <input
             ref={ref}
             id={inputId}
+            data-theme={dataTheme}
             className={cn(
-              'w-full rounded-[var(--radius-md)] border bg-[var(--surface-card)]',
+              'w-full rounded-[var(--radius-md)] border',
+              `border-[${borderColor}]`,
               'text-[var(--text-primary)] placeholder:text-[var(--text-muted)]',
               'transition-all duration-200',
               // Focus and hover effects based on variant
@@ -53,8 +58,8 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
               rightElement && 'pr-10',
               // Auth variant (Light Theme)
               variant === 'auth' && [
-                'bg-white/80 border border-[var(--border-default)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)]',
-                !error && 'border-[var(--border-default)]',
+                'bg-white/80 text-[var(--text-primary)] placeholder:text-[var(--text-muted)]',
+                !error && `border-[${borderColor}]`,
                 error && 'border-[var(--state-error)] focus:ring-[var(--state-error)]',
                 'focus:outline-none focus:ring-2 focus:ring-[var(--brand-gold)] focus:border-transparent',
                 'backdrop-blur-md',
