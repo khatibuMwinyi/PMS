@@ -90,7 +90,7 @@
   --gradient-text-reverse: linear-gradient(135deg, var(--brand-gold) 0%, var(--brand-primary) 100%);
 
   /* Animation keyframes */
-  --animate-float:         float 6s ease-in-out infinite;
+  --animate-float:         float 3s ease-in-out infinite;
   --animate-pulse-subtle:  pulse-subtle 3s ease-in-out infinite;
 }
 
@@ -161,8 +161,8 @@ html, body {
 .animate-spin           { animation: spin var(--transition-base) linear infinite; }
 .animate-fade-up        { animation: fade-up var(--transition-slow) forwards; }
 .animate-pulse-skeleton { animation: pulse-skeleton 1.8s ease-in-out infinite; }
-.animate-float          { animation: float 6s ease-in-out infinite; }
-.animate-pulse-subtle   { animation: pulse-subtle 4s ease-in-out infinite; }
+.animate-float          { animation: float 3s ease-in-out infinite; }
+.animate-pulse-subtle   { animation: pulse-subtle 3s ease-in-out infinite; }
 
 /* ─── Focus ring ─────────────────────────────────────── */
 :focus-visible {
