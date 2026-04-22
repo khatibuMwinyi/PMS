@@ -28,7 +28,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           variant === 'danger'    && 'bg-[var(--state-error-bg)] text-[var(--state-error)] hover:brightness-95',
           variant === 'bold'      && [
             'gradient-primary text-white',
-            'hover:shadow-lg hover:shadow-[var(--shadow-bold)] hover:scale-[1.03]',
+            'hover:shadow-lg hover:shadow-bold hover:scale-105',
             'active:scale-[0.98]',
           ],
           // Sizes
