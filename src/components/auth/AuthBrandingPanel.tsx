@@ -41,8 +41,9 @@ export function AuthBrandingPanel({
   features = DEFAULT_FEATURES,
 }: AuthBrandingPanelProps) {
   return (
-    <div className="auth-panel-left">
-      {/* Grid pattern overlay (light theme) */}
+    <div className="auth-panel-left relative flex items-center">
+      
+      {/* Grid pattern */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
@@ -53,42 +54,52 @@ export function AuthBrandingPanel({
         }}
       />
 
-      {/* Content */}
-      <div className="relative z-10 max-w-sm animate-fade-in-down">
-        {/* Brand mark */}
+      {/* ✅ THIS is where max-width belongs */}
+      <div className="relative z-10 w-full max-w-md mx-auto space-y-8">
+        
+        {/* Brand */}
         <div className="flex items-center gap-3 mb-6">
           <div className="auth-brand-logo">
             <span className="text-xl font-bold text-white">O</span>
           </div>
-          <span className="text-3xl font-bold text-[var(--brand-primary)] tracking-tight font-display">
+          <span className="text-4xl md:text-5xl font-bold text-[var(--brand-gold)] tracking-tight">
             {title}
           </span>
         </div>
 
         {/* Tagline */}
-        <p className="text-[var(--text-secondary)] text-lg mb-10 leading-relaxed">
+        <p className="text-lg text-[var(--text-secondary)] leading-relaxed">
           {tagline}
         </p>
 
-        {/* Value propositions */}
+        {/* Features */}
         <div className="space-y-5">
           {features.map((feature, i) => (
-            <div key={i} className="auth-value-prop animate-slide-up" style={{ animationDelay: `${i * 80}ms` }}>
+            <div key={i} className="auth-value-prop">
               <div className="auth-value-prop-icon">
                 {feature.icon}
               </div>
               <div>
-                <p className="text-[var(--brand-primary)] font-medium text-sm mb-0.5">{feature.label}</p>
-                <p className="text-[var(--text-secondary)] text-sm leading-snug">{feature.description}</p>
+                <p className="text-sm font-medium text-[var(--brand-primary)]">
+                  {feature.label}
+                </p>
+                <p className="text-sm text-[var(--text-secondary)] leading-snug">
+                  {feature.description}
+                </p>
               </div>
             </div>
           ))}
         </div>
+
       </div>
 
-      {/* Decorative gradient orbs */}
-      <div className="absolute -bottom-20 -left-20 w-64 h-64 rounded-full blur-3xl pointer-events-none" style={{ backgroundColor: 'rgba(200, 145, 40, 0.08)' }} />
-      <div className="absolute -top-10 -right-10 w-48 h-48 rounded-full blur-3xl pointer-events-none" style={{ backgroundColor: 'rgba(200, 145, 40, 0.06)' }} />
+      {/* Decorative orbs */}
+      <div className="absolute -bottom-20 -left-20 w-64 h-64 rounded-full blur-3xl pointer-events-none"
+        style={{ backgroundColor: 'rgba(200, 145, 40, 0.08)' }} 
+      />
+      <div className="absolute -top-10 -right-10 w-48 h-48 rounded-full blur-3xl pointer-events-none"
+        style={{ backgroundColor: 'rgba(200, 145, 40, 0.06)' }} 
+      />
     </div>
   );
 }
