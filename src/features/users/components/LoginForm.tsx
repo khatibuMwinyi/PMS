@@ -7,25 +7,23 @@ import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { z } from 'zod';
 import { Eye, EyeOff } from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import { LoadingButton } from '@/components/shared/LoadingButton';
+import { motion } from 'framer-motion';
+import { AnimatedInput } from '@/components/ui/AnimatedInput';
+import { AnimatedButton } from '@/components/ui/AnimatedButton';
 
-// ─── Schema ──────────────────────────────────────────────────────────
 const LoginSchema = z.object({
-  email:    z.string().email('Enter a valid email address'),
+  email: z.string().email('Enter a valid email address'),
   password: z.string().min(1, 'Password is required'),
 });
 type LoginInput = z.infer<typeof LoginSchema>;
 
-// ─── Role → destination map ───────────────────────────────────────────
 const ROLE_REDIRECT: Record<string, string> = {
-  ADMIN:    '/admin/services',
-  OWNER:    '/owner/properties',
+  ADMIN: '/admin/services',
+  OWNER: '/owner/properties',
   PROVIDER: '/provider/assignments',
-  STAFF:    '/staff/disputes',
+  STAFF: '/staff/disputes',
 };
 
-// ─── Component ────────────────────────────────────────────────────────
 export function LoginForm() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
@@ -41,7 +39,7 @@ export function LoginForm() {
     setServerError(null);
     try {
       const result = await signIn('credentials', {
-        email:    data.email,
+        email: data.email,
         password: data.password,
         redirect: false,
       });
@@ -51,7 +49,6 @@ export function LoginForm() {
         return;
       }
 
-      // After successful sign‑in, fetch the session to determine the user's role and redirect accordingly
       const sessionRes = await fetch('/api/auth/session');
       const session = await sessionRes.json();
       const userRole = session?.user?.role as string | undefined;
@@ -63,95 +60,105 @@ export function LoginForm() {
   };
 
   return (
-    <div className="w-full space-y-5">
-      {/* Server-level error */}
+    <motion.div
+      className="w-full space-y-6"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: 0.4 }}
+    >
+      <motion.div
+        className="text-center mb-8"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5 }}
+      >
+        <h2 className="text-2xl font-bold text-white mb-2">Welcome Back</h2>
+        <p className="text-sm text-white/60">Sign in to continue to Oweru</p>
+      </motion.div>
+
       {serverError && (
-        <div className="mb-5 px-4 py-3 rounded-xl bg-[#DC2626]/10 border border-[#DC2626]/30 backdrop-blur-sm">
-          <p className="text-sm text-[#DC2626] font-medium">{serverError}</p>
-        </div>
+        <motion.div
+          className="px-4 py-3 rounded-xl bg-red-500/10 border border-red-500/30"
+          initial={{ opacity: 0, x: -10 }}
+          animate={{ opacity: 1, x: 0 }}
+        >
+          <p className="text-sm text-red-400">{serverError}</p>
+        </motion.div>
       )}
 
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
-        <fieldset disabled={isSubmitting} className="border-none p-0 m-0 min-w-0 flex flex-col gap-6">
+        <motion.div
+          className="space-y-5"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.6 }}
+        >
+          <AnimatedInput
+            label="Email Address"
+            type="email"
+            autoComplete="email"
+            error={errors.email?.message}
+            {...register('email')}
+          />
 
-          {/* Email */}
           <div className="relative">
-            <Input
-              label="Email Address"
-              type="email"
-              autoComplete="email"
-              placeholder="you@example.com"
-              error={errors.email?.message}
-              className="bg-black/30 border-[#E5B972]/20 text-white placeholder-[#E5B972]/40 focus:border-[#C89128] focus:ring-[#C89128]/20"
-              {...register('email')}
+            <AnimatedInput
+              label="Password"
+              type={showPassword ? 'text' : 'password'}
+              autoComplete="current-password"
+              error={errors.password?.message}
+              {...register('password')}
             />
-            <div className="absolute inset-0 rounded-xl pointer-events-none bg-gradient-to-r from-[#C89128]/0 via-[#C89128]/0 to-[#C89128]/0 hover:from-[#C89128]/5 hover:to-[#C89128]/5 transition-all duration-300" />
+            <button
+              type="button"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-[#C89128] transition-colors"
+              onClick={() => setShowPassword((v) => !v)}
+            >
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
           </div>
 
-          {/* Password */}
-          <div className="flex flex-col gap-1">
-            <div className="relative">
-              <Input
-                label="Password"
-                type={showPassword ? 'text' : 'password'}
-                autoComplete="current-password"
-                placeholder="••••••••"
-                error={errors.password?.message}
-                className="bg-black/30 border-[#E5B972]/20 text-white placeholder-[#E5B972]/40 focus:border-[#C89128] focus:ring-[#C89128]/20"
-                rightElement={
-                  <button
-                    type="button"
-                    tabIndex={-1}
-                    onClick={() => setShowPassword((v) => !v)}
-                    aria-label={showPassword ? 'Hide password' : 'Show password'}
-                    className="text-[#E5B972]/60 hover:text-white transition-colors p-2"
-                  >
-                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                  </button>
-                }
-                {...register('password')}
-              />
-              <div className="absolute inset-0 rounded-xl pointer-events-none bg-gradient-to-r from-[#C89128]/0 via-[#C89128]/0 to-[#C89128]/0 hover:from-[#C89128]/5 hover:to-[#C89128]/5 transition-all duration-300" />
-            </div>
-            <div className="text-right">
-              <a
-                href="/forgot-password"
-                className="text-sm text-[#C89128] hover:text-[#E5B972] transition-colors font-medium"
-              >
-                Forgot password?
-              </a>
-            </div>
+          <div className="text-right">
+            <a
+              href="/forgot-password"
+              className="text-sm text-[#C89128] hover:text-[#E5B972] transition-colors"
+            >
+              Forgot password?
+            </a>
           </div>
 
-          {/* Submit */}
-          <LoadingButton
+          <AnimatedButton
             type="submit"
-            variant="primary"
-            size="lg"
-            fullWidth
-            loading={isSubmitting}
-            loadingText="Signing in…"
-            className="mt-4 bg-gradient-to-r from-[#C89128] to-[#E5B972] text-white border-0 hover:from-[#B8801A] hover:to-[#D4A76A] shadow-lg hover:shadow-[0_0_20px_rgba(200,145,40,0.4)] transform hover:scale-[1.02] transition-all duration-200"
+            isLoading={isSubmitting}
+            className="mt-2"
           >
             Sign In
-          </LoadingButton>
-
-        </fieldset>
+          </AnimatedButton>
+        </motion.div>
       </form>
 
-      {/* Divider */}
-      <div className="flex items-center gap-4 my-6">
-        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#E5B972]/30 to-transparent" />
-        <span className="text-sm text-[#E5B972]/60">or</span>
-        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#E5B972]/30 to-transparent" />
-      </div>
+      <motion.div
+        className="flex items-center gap-4"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.8 }}
+      >
+        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#C89128]/30 to-transparent" />
+        <span className="text-xs text-white/40">or</span>
+        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#C89128]/30 to-transparent" />
+      </motion.div>
 
-      <p className="text-center text-sm text-[#E5B972]/80">
+      <motion.p
+        className="text-center text-sm text-white/60"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.9 }}
+      >
         Don&apos;t have an account?{' '}
-        <a href="/register" className="text-white font-medium hover:text-[#E5B972] transition-colors">
+        <a href="/register" className="text-[#C89128] font-medium hover:text-[#E5B972] transition-colors">
           Register →
         </a>
-      </p>
-    </div>
+      </motion.p>
+    </motion.div>
   );
 }

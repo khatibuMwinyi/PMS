@@ -12,12 +12,16 @@ export function RegistrationSuccessBanner() {
     <div
       className="flex items-start gap-3 mb-6 px-4 py-3 rounded-[var(--radius-md)] border"
       style={{
-        background:   'var(--state-success-bg)',
-        borderColor:  'rgba(22, 163, 74, 0.3)',
+        background: 'var(--state-success-bg)',
+        borderColor: 'rgba(22, 163, 74, 0.3)',
       }}
     >
-      <CheckCircle2 size={16} className="mt-0.5 shrink-0" style={{ color: 'var(--state-success)' }} />
-      <p className="text-[13px]" style={{ color: 'var(--brand-primary-dim)' }}>
+      <CheckCircle2
+        size={16}
+        className="mt-0.5 shrink-0"
+        style={{ color: 'var(--state-success)' }}
+      />
+      <p className="text-[13px]" style={{ color: 'var(--text-secondary)' }}>
         Account created successfully! Please sign in to continue.
       </p>
     </div>

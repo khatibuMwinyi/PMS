@@ -20,6 +20,10 @@ const sans = DM_Sans({
 export const metadata: Metadata = {
   title: 'Oweru — Property Services, Professionally Managed',
   description: 'Oweru Property Service Management Platform',
+  icons: {
+    icon: '/images/logo.jpeg',
+    apple: '/images/logo.jpeg',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

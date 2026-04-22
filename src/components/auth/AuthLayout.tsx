@@ -1,7 +1,10 @@
-import { ReactNode } from 'react';
-import { AnimatedBackground } from './AnimatedBackground';
-import { GlowOrb } from './GlowOrb';
-import { AuthBrandingPanel } from './AuthBrandingPanel';
+'use client';
+
+import { motion, AnimatePresence } from 'framer-motion';
+import { ReactNode, useEffect, useState } from 'react';
+import { GradientBackground } from './GradientBackground';
+import { AnimatedBrandingPanel } from './AnimatedBrandingPanel';
+import { AnimatedFormCard } from './AnimatedFormCard';
 
 interface AuthLayoutProps {
   children: ReactNode;
@@ -12,49 +15,66 @@ interface AuthLayoutProps {
 }
 
 export function AuthLayout({ children, branding }: AuthLayoutProps) {
-  return (
-    <div className="min-h-screen bg-[var(--surface-dark)] grid lg:grid-cols-2 gap-8 py-12 lg:py-20">
-      <div className="max-w-6xl w-full mx-auto grid lg:grid-cols-2 gap-8">
-        {/* Left Panel */}
-        <AuthBrandingPanel
-          title={branding?.title}
-          tagline={branding?.tagline}
-        />
+  const [mounted, setMounted] = useState(false);
 
-        {/* Right Panel */}
-        <div className="flex flex-col justify-center items-center p-8 overflow-y-auto relative">
-          {/* Background */}
-          <AnimatedBackground />
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
-          {/* Glow Effects */}
-          <div className="absolute inset-0 pointer-events-none z-[2]">
-            <GlowOrb
-              className="absolute top-20 left-10 w-64 h-64 blur-3xl"
-              delay={0}
-            />
-            <GlowOrb
-              className="absolute bottom-20 right-10 w-80 h-80 blur-3xl"
-              delay={2}
-            />
-            <GlowOrb
-              className="absolute top-1/2 left-1/2 w-96 h-96 blur-3xl"
-              delay={4}
-            />
-          </div>
-
-          {/* Form */}
-          <div className="w-full flex justify-center">
-            <div className="auth-form-card w-full max-w-lg relative z-10">
-              {children}
-            </div>
-          </div>
-
-          {/* Footer */}
-          <p className="mt-6 text-sm text-[var(--text-muted)] relative z-10">
-            © 2026 Oweru. All rights reserved.
-          </p>
-        </div>
+  if (!mounted) {
+    return (
+      <div className="min-h-screen bg-[#0F172A] flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-[#C89128] border-t-transparent rounded-full animate-spin" />
       </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen flex">
+      <AnimatePresence mode="wait">
+        <motion.div
+          key="auth-layout"
+          className="w-full min-h-screen grid lg:grid-cols-[1.5fr_1fr] bg-[#0F172A]"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          <GradientBackground />
+
+          <motion.div
+            className="auth-panel-left"
+            initial={{ opacity: 0, x: -100 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, ease: 'easeOut' }}
+          >
+            <AnimatedBrandingPanel
+              title={branding?.title}
+              tagline={branding?.tagline}
+            />
+          </motion.div>
+
+          <motion.div
+            className="auth-panel-right"
+            initial={{ opacity: 0, x: 100 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, ease: 'easeOut', delay: 0.2 }}
+          >
+            <AnimatedFormCard>
+              {children}
+            </AnimatedFormCard>
+
+            <motion.p
+              className="mt-6 text-sm text-white/40 text-center"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.8 }}
+            >
+              © 2026 Oweru. All rights reserved.
+            </motion.p>
+          </motion.div>
+        </motion.div>
+      </AnimatePresence>
     </div>
   );
 }

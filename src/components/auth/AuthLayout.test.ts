@@ -9,28 +9,28 @@ const authLayoutContent = fs.readFileSync(
 
 describe('AuthLayout Component', () => {
   describe('grid layout', () => {
-    it('should use grid layout on large screens', () => {
-      expect(authLayoutContent).toMatch(/grid.*lg:grid-cols-2/);
-    });
-
-    it('should have responsive padding', () => {
-      expect(authLayoutContent).toMatch(/py-\d+/);
+    it('should use Tailwind grid for layout', () => {
+      expect(authLayoutContent).toMatch(/grid/);
     });
   });
 
-  describe('centered container', () => {
-    it('should have max-w container', () => {
-      expect(authLayoutContent).toMatch(/max-w-\d+xl/);
+  describe('panels', () => {
+    it('should use auth-panel-left CSS class', () => {
+      expect(authLayoutContent).toMatch(/auth-panel-left/);
     });
 
-    it('should have mx-auto for centering', () => {
-      expect(authLayoutContent).toMatch(/mx-auto/);
+    it('should use auth-panel-right CSS class', () => {
+      expect(authLayoutContent).toMatch(/auth-panel-right/);
     });
   });
 
-  describe('right panel scrollable', () => {
-    it('should have overflow-y-auto for form panel', () => {
-      expect(authLayoutContent).toMatch(/overflow-y-auto/);
+  describe('framer-motion', () => {
+    it('should import and use framer-motion', () => {
+      expect(authLayoutContent).toMatch(/framer-motion/);
+    });
+
+    it('should use motion.div for animations', () => {
+      expect(authLayoutContent).toMatch(/motion\.div/);
     });
   });
 });
