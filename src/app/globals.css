@@ -301,22 +301,29 @@ html, body {
 
 /* ─── Auth Pages Layout (Full Screen) ─────────────────────────────── */
 .auth-split {
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
   width: 100%;
   min-height: 100vh;
-  overflow-x: hidden;
+  overflow: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.auth-split::-webkit-scrollbar {
+  display: none;
 }
 
 @media (min-width: 1024px) {
   .auth-split {
-    grid-template-columns: 2fr 3fr;
+    display: grid;
+    grid-template-columns: 3fr 2fr; /* Branding 60%, Form 40% */
   }
 }
 
 @media (max-width: 1023px) {
   .auth-split {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
   }
   
   .auth-panel-left {
@@ -324,21 +331,18 @@ html, body {
   }
 }
 
-/* Left Panel — Branding (Light Theme) */
+/* Left Panel — Branding */
 .auth-panel-left {
   display: flex;
   flex-direction: column;
   justify-content: center;
   padding: 2.5rem;
   overflow: hidden;
-  background: linear-gradient(135deg, var(--surface-card) 0%, var(--surface-page) 50%, var(--surface-card) 100%);
 }
 
 @media (max-width: 1023px) {
   .auth-panel-left {
-    padding: 1.5rem 1.25rem;
-    min-height: auto;
-    border-bottom: 1px solid var(--border-subtle);
+    display: none !important;
   }
 }
 
@@ -346,19 +350,27 @@ html, body {
 .auth-panel-right {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-  padding: 1.5rem;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
   width: 100%;
-  min-height: 100vh;
+  min-height: 100dvh;
   overflow-y: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.auth-panel-right::-webkit-scrollbar {
+  display: none;
 }
 
 @media (max-width: 1023px) {
   .auth-panel-right {
-    padding: 1rem;
+    flex: 1;
     min-height: 100dvh;
-    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
   }
 }
@@ -463,11 +475,17 @@ html, body {
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 20px;
   width: 100%;
-  max-height: calc(100vh - 4rem);
-  overflow-y: auto;
+  max-width: 480px;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   box-shadow: 
     0 25px 50px -12px rgba(0, 0, 0, 0.25),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.glass-card::-webkit-scrollbar {
+  display: none;
 }
 
 /* ─── Shimmer Effect ─────────────────────────────── */
@@ -532,4 +550,20 @@ html, body {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+/* ─── Hide All Scrollbars Globally ─────────────────────────────── */
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+*::-webkit-scrollbar {
+  display: none;
 }
