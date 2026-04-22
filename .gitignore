@@ -8,3 +8,11 @@ DESIGN.md
 OPSMP_Combined_Analysis.md
 .claude/
 .next/
+next-env.d.ts
+tsconfig.tsbuildinfo
+.env
+.next/
+node_modules/
+.env
+*.log
+tsconfig.tsbuildinfo
