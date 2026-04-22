@@ -2,7 +2,7 @@ import * as React from 'react';
 import { cn } from '@/core/lib/utils';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'bold';
   size?: 'sm' | 'md' | 'lg';
   fullWidth?: boolean;
 }
@@ -26,6 +26,11 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           variant === 'outline'   && 'bg-transparent border border-[var(--border-default)] text-[var(--text-primary)] hover:bg-[var(--surface-overlay)]',
           variant === 'ghost'     && 'bg-transparent text-[var(--text-secondary)] hover:bg-[var(--surface-overlay)] hover:text-[var(--text-primary)]',
           variant === 'danger'    && 'bg-[var(--state-error-bg)] text-[var(--state-error)] hover:brightness-95',
+          variant === 'bold'      && [
+            'gradient-primary text-white',
+            'hover:shadow-lg hover:shadow-[var(--shadow-bold)] hover:scale-[1.03]',
+            'active:scale-[0.98]',
+          ],
           // Sizes
           size === 'sm' && 'h-8  px-3   text-[13px] gap-1.5 rounded-[var(--radius-sm)]',
           size === 'md' && 'h-10 px-4   text-[14px] gap-2   rounded-[var(--radius-md)]',

@@ -7,10 +7,11 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
   helper?: string;
   rightElement?: React.ReactNode;
   inputSize?: 'md' | 'lg';
+  variant?: 'default' | 'bold';
 }
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, label, error, helper, rightElement, inputSize = 'md', id, ...props }, ref) => {
+  ({ className, label, error, helper, rightElement, inputSize = 'md', variant = 'default', id, ...props }, ref) => {
     const inputId = id ?? label?.toLowerCase().replace(/\s+/g, '-');
 
     return (
@@ -32,11 +33,19 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
               'w-full rounded-[var(--radius-md)] border bg-[var(--surface-card)]',
               'text-[var(--text-primary)] placeholder:text-[var(--text-muted)]',
               'transition-all duration-200',
-              'focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)] focus:border-transparent',
-              // Normal border
-              !error && 'border-[var(--border-default)]',
-              // Error border
-              error && 'border-[var(--state-error)] focus:ring-[var(--state-error)]',
+              // Focus and hover effects based on variant
+              variant === 'default' && [
+                'focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)] focus:border-transparent',
+                !error && 'border-[var(--border-default)]',
+                error && 'border-[var(--state-error)] focus:ring-[var(--state-error)]',
+                'hover:shadow-[var(--shadow-bold)]',
+              ],
+              variant === 'bold' && [
+                'focus:outline-none focus:ring-2 focus:ring-[var(--brand-gold)] focus:border-transparent',
+                !error && 'border-[var(--border-subtle)]',
+                error && 'border-[var(--state-error)] focus:ring-[var(--state-error)]',
+                'hover:shadow-[var(--shadow-bold)]',
+              ],
               // Sizes
               inputSize === 'md' && 'h-10 px-3 text-[14px]',
               inputSize === 'lg' && 'h-12 px-4 text-[15px]',
