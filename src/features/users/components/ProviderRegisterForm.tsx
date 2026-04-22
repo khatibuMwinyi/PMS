@@ -52,34 +52,17 @@ export function ProviderRegisterForm({ onSuccess }: ProviderRegisterFormProps) {
   const {
     register,
     handleSubmit,
-    watch,
     control,
-    setValue,
-    getValues,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<FormData>({
     resolver: zodResolver(Schema),
-    defaultValues: {
-      serviceCategories: [],
-      operationalZones:  [],
-    },
+    defaultValues: defaultFormValues,
   });
 
   const passwordValue = watch('password') ?? '';
 
-  const toggleCategory = useCallback(
-    (cat: string) => {
-      const current = getValues('serviceCategories') ?? [];
-      setValue(
-        'serviceCategories',
-        current.includes(cat) ? current.filter((c) => c !== cat) : [...current, cat],
-        { shouldValidate: true }
-      );
-    },
-    [getValues, setValue]
-  );
-
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = useCallback(async (data: FormData) => {
     setServerError(null);
     try {
       await registerProvider({
@@ -88,145 +71,127 @@ export function ProviderRegisterForm({ onSuccess }: ProviderRegisterFormProps) {
         password:          data.password,
         businessName:      data.businessName,
         serviceCategories: data.serviceCategories,
-        operationalZones:  data.operationalZones,
+        operationalZones: data.operationalZones,
       });
       onSuccess();
     } catch (err: any) {
       setServerError(err?.message ?? 'Registration failed. Please try again.');
     }
-  };
-
-  const selectedCategories = watch('serviceCategories') ?? [];
+  }, [onSuccess]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate>
-      <fieldset disabled={isSubmitting} className="border-none p-0 m-0 min-w-0 flex flex-col gap-4">
+      <fieldset disabled={isSubmitting} className="border-none p-0 m-0 min-w-0 flex flex-col gap-6">
 
         {serverError && (
-          <div className="px-4 py-3 rounded-[var(--radius-md)] bg-[var(--state-error-bg)]">
-            <p className="text-[13px] text-[var(--state-error)]">{serverError}</p>
+          <div className="px-4 py-3 rounded-xl bg-[#DC2626]/10 border border-[#DC2626]/30 backdrop-blur-sm">
+            <p className="text-sm text-[#DC2626] font-medium">{serverError}</p>
           </div>
         )}
 
-        <Input
-          label="Business / Trading Name"
-          type="text"
-          placeholder="e.g. CleanCo Services"
-          error={errors.businessName?.message}
-          {...register('businessName')}
-        />
+        {/* Business Name */}
+        <div className="relative">
+          <Input
+            label="Business Name"
+            type="text"
+            autoComplete="organization"
+            placeholder="Your Business Name"
+            error={errors.businessName?.message}
+            variant="auth"
+            {...register('businessName')}
+          />
+        </div>
 
-        <Input
-          label="Email Address"
-          type="email"
-          autoComplete="email"
-          placeholder="you@example.com"
-          error={errors.email?.message}
-          {...register('email')}
-        />
+        {/* Email */}
+        <div className="relative">
+          <Input
+            label="Email Address"
+            type="email"
+            autoComplete="email"
+            placeholder="you@example.com"
+            error={errors.email?.message}
+            variant="auth"
+            {...register('email')}
+          />
+        </div>
 
-        <Input
-          label="Phone Number"
-          type="tel"
-          autoComplete="tel"
-          placeholder="+255 71x xxx xxxx"
-          helper="+255 71x or +255 68x format"
-          error={errors.phone?.message}
-          {...register('phone')}
-        />
+        {/* Phone */}
+        <div className="relative">
+          <Input
+            label="Phone Number"
+            type="tel"
+            autoComplete="tel"
+            placeholder="+255 71x xxx xxxx"
+            helper="+255 71x or +255 68x format"
+            error={errors.phone?.message}
+            variant="auth"
+            {...register('phone')}
+          />
+        </div>
 
         {/* Password */}
         <div>
-          <Input
-            label="Password"
-            type={showPass ? 'text' : 'password'}
-            autoComplete="new-password"
-            placeholder="••••••••"
-            error={errors.password?.message}
-            rightElement={
-              <button type="button" tabIndex={-1} onClick={() => setShowPass((v) => !v)} aria-label="Toggle password">
-                {showPass ? <EyeOff size={16} /> : <Eye size={16} />}
-              </button>
-            }
-            {...register('password')}
-          />
+          <div className="relative">
+            <Input
+              label="Password"
+              type={showPass ? 'text' : 'password'}
+              autoComplete="new-password"
+              placeholder="••••••••"
+              error={errors.password?.message}
+              variant="auth"
+              rightElement={
+                <button type="button" tabIndex={-1} onClick={() => setShowPass((v) => !v)} aria-label="Toggle password">
+                  <EyeOff className="text-[#E5B972]/60 hover:text-white transition-colors" size={18} />
+                </button>
+              }
+              {...register('password')}
+            />
+          </div>
           <PasswordStrengthMeter password={passwordValue} />
         </div>
 
-        <Input
-          label="Confirm Password"
-          type={showConfirm ? 'text' : 'password'}
-          autoComplete="new-password"
-          placeholder="••••••••"
-          error={errors.confirmPassword?.message}
-          rightElement={
-            <button type="button" tabIndex={-1} onClick={() => setShowConfirm((v) => !v)} aria-label="Toggle confirm">
-              {showConfirm ? <EyeOff size={16} /> : <Eye size={16} />}
-            </button>
-          }
-          {...register('confirmPassword')}
-        />
-
-        {/* Service categories */}
-        <div className="flex flex-col gap-2">
-          <p className="text-[13px] font-medium text-[var(--text-secondary)]">
-            What services do you offer?
-          </p>
-          <div className="grid grid-cols-2 gap-2">
-            {SERVICE_CATEGORIES.map(({ value, label, emoji }) => {
-              const selected = selectedCategories.includes(value);
-              return (
-                <button
-                  key={value}
-                  type="button"
-                  onClick={() => toggleCategory(value)}
-                  className="flex items-center gap-2 px-3 py-2.5 rounded-[var(--radius-md)] border text-[13px] font-medium transition-all duration-120 text-left"
-                  style={
-                    selected
-                      ? {
-                          background:    '#e8f7f2',
-                          borderColor:   'var(--brand-primary)',
-                          color:         'var(--brand-primary-dim)',
-                        }
-                      : {
-                          background:  'var(--surface-card)',
-                          borderColor: 'var(--border-default)',
-                          color:       'var(--text-secondary)',
-                        }
-                  }
-                  aria-pressed={selected}
-                >
-                  <span>{emoji}</span>
-                  {label}
-                  {selected && (
-                    <span className="ml-auto text-[var(--brand-primary)]">✓</span>
-                  )}
-                </button>
-              );
-            })}
-          </div>
-          {errors.serviceCategories && (
-            <p className="text-[13px] text-[var(--state-error)]">
-              {errors.serviceCategories.message as string}
-            </p>
-          )}
+        {/* Confirm Password */}
+        <div className="relative">
+          <Input
+            label="Confirm Password"
+            type={showConfirm ? 'text' : 'password'}
+            autoComplete="new-password"
+            placeholder="••••••••"
+            error={errors.confirmPassword?.message}
+            variant="auth"
+            rightElement={
+              <button type="button" tabIndex={-1} onClick={() => setShowConfirm((v) => !v)} aria-label="Toggle confirm password">
+                <EyeOff className="text-[#E5B972]/60 hover:text-white transition-colors" size={18} />
+              </button>
+            }
+            {...register('confirmPassword')}
+          />
         </div>
 
-        {/* Operational zones */}
-        <Controller
-          name="operationalZones"
-          control={control}
-          render={({ field }) => (
-            <TagInput
-              label="Which areas do you cover?"
-              placeholder="e.g. Kinondoni, Msasani, Masaki — press Enter"
-              helper="Type an area name and press Enter or comma to add"
-              value={field.value}
-              onChange={field.onChange}
-              error={errors.operationalZones?.message as string | undefined}
-            />
+        {/* Service Categories */}
+        <div>
+          <label className="text-sm font-medium text-[#E5B972]/80 mb-2 block">
+            Service Categories <span className="text-[#E5B972]/60">(Select all that apply)</span>
+          </label>
+          <Controller
+            name="serviceCategories"
+            control={control}
+            render={({ field }) => (
+              <TagInput
+                options={SERVICE_CATEGORIES.map(opt => ({
+                  value: opt.value,
+                  label: `${opt.emoji} ${opt.label}`,
+                }))}
+                selected={field.value}
+                onChange={field.onChange}
+                placeholder="Select services"
+              />
+            )}
+          />
+          {errors.serviceCategories?.message && (
+            <p className="text-sm text-[#DC2626] mt-1">{errors.serviceCategories.message}</p>
           )}
-        />
+        </div>
 
         <LoadingButton
           type="submit"
@@ -234,10 +199,10 @@ export function ProviderRegisterForm({ onSuccess }: ProviderRegisterFormProps) {
           size="lg"
           fullWidth
           loading={isSubmitting}
-          loadingText="Submitting application…"
-          className="mt-1"
+          loadingText="Creating account…"
+          className="mt-4 bg-gradient-to-r from-[#C89128] to-[#E5B972] text-white border-0 hover:from-[#B8801A] hover:to-[#D4A76A] shadow-lg hover:shadow-[0_0_20px_rgba(200,145,40,0.4)] transform hover:scale-[1.02] transition-all duration-200"
         >
-          Apply as Provider
+          Create Provider Account
         </LoadingButton>
 
       </fieldset>

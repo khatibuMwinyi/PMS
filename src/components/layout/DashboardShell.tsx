@@ -1,3 +1,5 @@
+"use client";
+
 import { TopbarUserMenu } from './Topbar';
 import { Sidebar } from './Sidebar';
 import { MobileNav } from './MobileNav';

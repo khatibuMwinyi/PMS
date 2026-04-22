@@ -7,7 +7,7 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
   helper?: string;
   rightElement?: React.ReactNode;
   inputSize?: 'md' | 'lg';
-  variant?: 'default' | 'bold';
+  variant?: 'default' | 'bold' | 'auth';
 }
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
@@ -51,6 +51,14 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
               inputSize === 'lg' && 'h-12 px-4 text-[15px]',
               // Right padding when there's a right element
               rightElement && 'pr-10',
+              // Auth variant (Light Theme)
+              variant === 'auth' && [
+                'bg-white/80 border border-[var(--border-default)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)]',
+                !error && 'border-[var(--border-default)]',
+                error && 'border-[var(--state-error)] focus:ring-[var(--state-error)]',
+                'focus:outline-none focus:ring-2 focus:ring-[var(--brand-gold)] focus:border-transparent',
+                'backdrop-blur-sm',
+              ],
               className,
             )}
             {...props}

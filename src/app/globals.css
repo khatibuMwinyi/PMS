@@ -292,10 +292,14 @@ html, body {
   }
 }
 
-/* ─── Auth Pages Layout ─────────────────────────────── */
+/* ─── Auth Pages Layout (Full Screen) ─────────────────────────────── */
 .auth-split {
-  @apply grid min-h-screen;
+  display: grid;
   grid-template-columns: 45fr 55fr;
+  grid-template-rows: 100vh;
+  width: 100vw;
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
 @media (min-width: 1024px) {
@@ -308,30 +312,55 @@ html, body {
   .auth-split {
     grid-template-columns: 1fr;
     grid-template-rows: auto 1fr;
+    height: auto;
+    min-height: 100dvh;
   }
 }
 
+/* Left Panel — Branding (Light Theme) */
 .auth-panel-left {
-  @apply relative hidden lg:flex flex-col justify-center px-10 py-16 overflow-hidden;
-  @apply bg-gradient-to-br from-[#0F172A] via-[#1E293B] to-[#0F172A];
-}
-
-.auth-panel-right {
-  @apply relative flex flex-col items-center justify-center px-6 py-12;
-  @apply bg-gradient-to-br from-[#0F172A] via-[#0F172A] to-[#1E293B];
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2.5rem;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--surface-card) 0%, var(--surface-page) 50%, var(--surface-card) 100%);
 }
 
 @media (max-width: 1023px) {
   .auth-panel-left {
-    @apply flex lg:hidden h-32 px-6 py-4;
+    padding: 1.5rem 1.25rem;
+    min-height: auto;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+}
+
+/* Right Panel — Form (Light Theme with Glassmorphism) */
+.auth-panel-right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: linear-gradient(135deg, var(--surface-page) 0%, var(--surface-card) 50%, var(--surface-page) 100%);
+  width: 100%;
+  min-height: 100vh;
+  overflow-y: auto;
+}
+
+@media (max-width: 1023px) {
+  .auth-panel-right {
+    padding: 1.5rem 1.25rem;
+    min-height: auto;
+    min-height: calc(100dvh - 160px);
   }
 }
 
 /* ─── Auth Branding Panel ─────────────────────────── */
 .auth-brand-logo {
   @apply inline-flex items-center justify-center w-12 h-12;
-  @apply bg-gradient-to-br from-[#C89128] to-[#E5B972];
-  @apply rounded-xl shadow-xl;
+  @apply bg-gradient-to-br from-[var(--brand-primary)] to-[var(--brand-gold)];
+  @apply rounded-xl shadow-lg;
 }
 
 .auth-value-prop {
@@ -340,14 +369,27 @@ html, body {
 
 .auth-value-prop-icon {
   @apply w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0;
-  @apply bg-[#C89128]/20;
+  background-color: rgba(200, 145, 40, 0.15);
 }
 
-/* ─── Auth Form Card ─────────────────────────────── */
+/* ─── Auth Form Card (Glassmorphism Light) ─────────────────────────────── */
 .auth-form-card {
-  @apply w-full max-w-[440px] backdrop-blur-xl;
-  @apply bg-black/20 border border-[#E5B972]/20;
-  @apply rounded-2xl p-8 shadow-2xl;
+  width: 100%;
+  max-width: 420px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border-subtle);
+  border-radius: 1.25rem;
+  box-shadow: var(--shadow-modal);
+}
+
+@media (min-width: 640px) {
+  .auth-form-card {
+    padding: 2rem;
+  }
 }
 
 /* ─── Animations ────────────────────────────────── */

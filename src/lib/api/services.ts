@@ -6,5 +6,8 @@ export async function getAllServiceTypes() {
     select: { id: true, name: true, description: true, basePrice: true, pricingRules: true },
     orderBy: { name: 'asc' },
   });
-  return services;
+  return services.map(s => ({
+    ...s,
+    basePrice: s.basePrice.toString(),
+  }));
 }

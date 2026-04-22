@@ -25,27 +25,32 @@ export function AuthLayout({ children, branding }: AuthLayoutProps) {
         {/* Animated Background */}
         <AnimatedBackground />
 
-        {/* Floating Glow Orbs */}
-        <GlowOrb
-          className="absolute top-20 left-10 w-64 h-64 bg-[#C89128]/20 blur-3xl"
-          delay={0}
-        />
-        <GlowOrb
-          className="absolute bottom-20 right-10 w-80 h-80 bg-[#E5B972]/15 blur-3xl"
-          delay={2}
-        />
-        <GlowOrb
-          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#0F172A]/10 blur-3xl"
-          delay={4}
-        />
+        {/* Floating Glow Orbs (Light Theme) */}
+        <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 2 }}>
+          <GlowOrb
+            className="absolute top-20 left-10 w-64 h-64 blur-3xl"
+            style={{ backgroundColor: 'rgba(200, 145, 40, 0.1)' }}
+            delay={0}
+          />
+          <GlowOrb
+            className="absolute bottom-20 right-10 w-80 h-80 blur-3xl"
+            style={{ backgroundColor: 'rgba(200, 145, 40, 0.08)' }}
+            delay={2}
+          />
+          <GlowOrb
+            className="absolute top-1/2 left-1/2 w-96 h-96 blur-3xl"
+            style={{ backgroundColor: 'rgba(15, 23, 42, 0.05)', transform: 'translate(-50%, -50%)' }}
+            delay={4}
+          />
+        </div>
 
         {/* Form Card */}
-        <div className="auth-form-card">
+        <div className="auth-form-card mx-auto max-w-[420px]" style={{ position: 'relative', zIndex: 10 }}>
           {children}
         </div>
 
         {/* Footer */}
-        <p className="mt-6 text-[#E5B972]/40 text-sm">
+        <p className="mt-6 text-[var(--text-muted)] text-sm" style={{ position: 'relative', zIndex: 10 }}>
           © 2026 Oweru. All rights reserved.
         </p>
       </div>

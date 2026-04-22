@@ -14,22 +14,22 @@ interface AuthBrandingPanelProps {
 
 const DEFAULT_FEATURES = [
   {
-    icon: <Home size={18} className="text-[#E5B972]" />,
+    icon: <Home size={18} className="text-[var(--brand-gold)]" />,
     label: 'Property Management',
     description: 'Professional services for your property, tracked in real-time',
   },
   {
-    icon: <Zap size={18} className="text-[#E5B972]" />,
+    icon: <Zap size={18} className="text-[var(--brand-gold)]" />,
     label: 'Instant Quotes',
     description: 'Get price estimates within seconds, no back-and-forth',
   },
   {
-    icon: <Shield size={18} className="text-[#E5B972]" />,
+    icon: <Shield size={18} className="text-[var(--brand-gold)]" />,
     label: 'Secure Payments',
     description: 'Pay safely via mobile money with full protection',
   },
   {
-    icon: <Building2 size={18} className="text-[#E5B972]" />,
+    icon: <Building2 size={18} className="text-[var(--brand-gold)]" />,
     label: 'Provider Ratings',
     description: 'Choose from rated, vetted service professionals',
   },
@@ -42,12 +42,13 @@ export function AuthBrandingPanel({
 }: AuthBrandingPanelProps) {
   return (
     <div className="auth-panel-left">
-      {/* Grid pattern overlay */}
+      {/* Grid pattern overlay (light theme) */}
       <div
-        className="absolute inset-0 opacity-[0.03] pointer-events-none"
+        className="absolute inset-0 pointer-events-none"
         style={{
+          opacity: 0.02,
           backgroundImage:
-            'linear-gradient(rgba(229, 185, 114, 0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(229, 185, 114, 0.5) 1px, transparent 1px)',
+            'linear-gradient(rgba(200, 145, 40, 0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(200, 145, 40, 0.6) 1px, transparent 1px)',
           backgroundSize: '48px 48px',
         }}
       />
@@ -59,13 +60,13 @@ export function AuthBrandingPanel({
           <div className="auth-brand-logo">
             <span className="text-xl font-bold text-white">O</span>
           </div>
-          <span className="text-3xl font-bold text-white tracking-tight font-display">
+          <span className="text-3xl font-bold text-[var(--brand-primary)] tracking-tight font-display">
             {title}
           </span>
         </div>
 
         {/* Tagline */}
-        <p className="text-white/90 text-lg mb-10 leading-relaxed">
+        <p className="text-[var(--text-secondary)] text-lg mb-10 leading-relaxed">
           {tagline}
         </p>
 
@@ -77,8 +78,8 @@ export function AuthBrandingPanel({
                 {feature.icon}
               </div>
               <div>
-                <p className="text-white font-medium text-sm mb-0.5">{feature.label}</p>
-                <p className="text-white/50 text-sm leading-snug">{feature.description}</p>
+                <p className="text-[var(--brand-primary)] font-medium text-sm mb-0.5">{feature.label}</p>
+                <p className="text-[var(--text-secondary)] text-sm leading-snug">{feature.description}</p>
               </div>
             </div>
           ))}
@@ -86,8 +87,8 @@ export function AuthBrandingPanel({
       </div>
 
       {/* Decorative gradient orbs */}
-      <div className="absolute -bottom-20 -left-20 w-64 h-64 rounded-full bg-[#C89128]/10 blur-3xl pointer-events-none" />
-      <div className="absolute -top-10 -right-10 w-48 h-48 rounded-full bg-[#E5B972]/10 blur-3xl pointer-events-none" />
+      <div className="absolute -bottom-20 -left-20 w-64 h-64 rounded-full blur-3xl pointer-events-none" style={{ backgroundColor: 'rgba(200, 145, 40, 0.08)' }} />
+      <div className="absolute -top-10 -right-10 w-48 h-48 rounded-full blur-3xl pointer-events-none" style={{ backgroundColor: 'rgba(200, 145, 40, 0.06)' }} />
     </div>
   );
 }

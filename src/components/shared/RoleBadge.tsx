@@ -5,7 +5,7 @@ type Role = 'ADMIN' | 'STAFF' | 'OWNER' | 'PROVIDER';
 const ROLE_STYLES: Record<Role, string> = {
   ADMIN:    'bg-[var(--state-info-bg)]    text-[var(--state-info)]',
   STAFF:    'bg-[var(--state-warning-bg)] text-[var(--state-warning)]',
-  OWNER:    'bg-[#e8f7f2]                 text-[var(--brand-primary-dim)]',
+  OWNER:    'bg-[var(--brand-gold)]/10    text-[var(--brand-primary)]',
   PROVIDER: 'bg-[var(--state-success-bg)] text-[var(--state-success)]',
 };
 

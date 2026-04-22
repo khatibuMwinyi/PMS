@@ -57,84 +57,102 @@ export function OwnerRegisterForm({ onSuccess }: OwnerRegisterFormProps) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate>
-      <fieldset disabled={isSubmitting} className="border-none p-0 m-0 min-w-0 flex flex-col gap-4">
+      <fieldset disabled={isSubmitting} className="border-none p-0 m-0 min-w-0 flex flex-col gap-6">
 
         {serverError && (
-          <div className="px-4 py-3 rounded-[var(--radius-md)] bg-[var(--state-error-bg)]">
-            <p className="text-[13px] text-[var(--state-error)]">{serverError}</p>
+          <div className="px-4 py-3 rounded-xl bg-[#DC2626]/10 border border-[#DC2626]/30 backdrop-blur-sm">
+            <p className="text-sm text-[#DC2626] font-medium">{serverError}</p>
           </div>
         )}
 
         {/* First + Last name row */}
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-4">
+          <div className="relative">
+            <Input
+              label="First Name"
+              type="text"
+              autoComplete="given-name"
+              placeholder="Amina"
+              error={errors.firstName?.message}
+              variant="auth"
+              {...register('firstName')}
+            />
+          </div>
+          <div className="relative">
+            <Input
+              label="Last Name"
+              type="text"
+              autoComplete="family-name"
+              placeholder="Bakari"
+              error={errors.lastName?.message}
+              variant="auth"
+              {...register('lastName')}
+            />
+          </div>
+        </div>
+
+        <div className="relative">
           <Input
-            label="First Name"
-            type="text"
-            autoComplete="given-name"
-            placeholder="Amina"
-            error={errors.firstName?.message}
-            {...register('firstName')}
-          />
-          <Input
-            label="Last Name"
-            type="text"
-            autoComplete="family-name"
-            placeholder="Bakari"
-            error={errors.lastName?.message}
-            {...register('lastName')}
+            label="Email Address"
+            type="email"
+            autoComplete="email"
+            placeholder="you@example.com"
+            error={errors.email?.message}
+            variant="auth"
+            {...register('email')}
           />
         </div>
 
-        <Input
-          label="Email Address"
-          type="email"
-          autoComplete="email"
-          placeholder="you@example.com"
-          error={errors.email?.message}
-          {...register('email')}
-        />
-
-        <Input
-          label="Phone Number"
-          type="tel"
-          autoComplete="tel"
-          placeholder="+255 71x xxx xxxx"
-          helper="+255 71x or +255 68x format"
-          error={errors.phone?.message}
-          {...register('phone')}
-        />
+        <div className="relative">
+          <Input
+            label="Phone Number"
+            type="tel"
+            autoComplete="tel"
+            placeholder="+255 71x xxx xxxx"
+            helper="+255 71x or +255 68x format"
+            error={errors.phone?.message}
+            variant="auth"
+            {...register('phone')}
+          />
+        </div>
 
         {/* Password + strength meter */}
         <div>
-          <Input
-            label="Password"
-            type={showPass ? 'text' : 'password'}
-            autoComplete="new-password"
-            placeholder="••••••••"
-            error={errors.password?.message}
-            rightElement={
-              <button type="button" tabIndex={-1} onClick={() => setShowPass((v) => !v)} aria-label="Toggle password">
-                {showPass ? <EyeOff size={16} /> : <Eye size={16} />}
-              </button>
-            }
-            {...register('password')}
-          />
+          <div className="relative">
+            <Input
+              label="Password"
+              type={showPass ? 'text' : 'password'}
+              autoComplete="new-password"
+              placeholder="••••••••"
+              error={errors.password?.message}
+              variant="auth"
+              rightElement={
+                <button type="button" tabIndex={-1} onClick={() => setShowPass((v) => !v)} aria-label="Toggle password">
+                  <EyeOff className="text-[#E5B972]/60 hover:text-white transition-colors" size={18} />
+                </button>
+              }
+              {...register('password')}
+            />
+          </div>
           <PasswordStrengthMeter password={passwordValue} />
         </div>
 
-        <Input
-          label="Confirm Password"
-          type={showConfirm ? 'text' : 'password'}
-          autoComplete="new-password"
-          placeholder="••••••••"
-          error={errors.confirmPassword?.message}
-          rightElement={
-            <button type="button" tabIndex={-1} onClick={() => setShowConfirm((v) => !v)} aria-label="Toggle confirm password">
-              {showConfirm ? <EyeOff size={16} /> : <Eye size={16} />}
-            </button>
-          }
-          {...register('confirmPassword')}
-        />
+        <div className="relative">
+          <Input
+            label="Confirm Password"
+            type={showConfirm ? 'text' : 'password'}
+            autoComplete="new-password"
+            placeholder="••••••••"
+            error={errors.confirmPassword?.message}
+            variant="auth"
+            rightElement={
+              <button type="button" tabIndex={-1} onClick={() => setShowConfirm((v) => !v)} aria-label="Toggle confirm password">
+                <EyeOff className="text-[#E5B972]/60 hover:text-white transition-colors" size={18} />
+              </button>
+            }
+            {...register('confirmPassword')}
+          />
+        </div>
 
         <LoadingButton
           type="submit"
@@ -143,7 +161,7 @@ export function OwnerRegisterForm({ onSuccess }: OwnerRegisterFormProps) {
           fullWidth
           loading={isSubmitting}
           loadingText="Creating account…"
-          className="mt-1"
+          className="mt-4 bg-gradient-to-r from-[#C89128] to-[#E5B972] text-white border-0 hover:from-[#B8801A] hover:to-[#D4A76A] shadow-lg hover:shadow-[0_0_20px_rgba(200,145,40,0.4)] transform hover:scale-[1.02] transition-all duration-200"
         >
           Create Owner Account
         </LoadingButton>
