@@ -8,9 +8,9 @@ const authLayoutContent = fs.readFileSync(
 );
 
 describe('AuthLayout Component', () => {
-  describe('grid layout', () => {
-    it('should use Tailwind grid for layout', () => {
-      expect(authLayoutContent).toMatch(/grid/);
+  describe('layout', () => {
+    it('should use auth-split CSS class for layout', () => {
+      expect(authLayoutContent).toMatch(/auth-split/);
     });
   });
 

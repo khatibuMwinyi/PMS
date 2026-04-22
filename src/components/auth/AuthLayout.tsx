@@ -30,51 +30,40 @@ export function AuthLayout({ children, branding }: AuthLayoutProps) {
   }
 
   return (
-    <div className="min-h-screen flex">
-      <AnimatePresence mode="wait">
-        <motion.div
-          key="auth-layout"
-          className="w-full min-h-screen grid lg:grid-cols-[1.5fr_1fr] bg-[#0F172A]"
+    <div className="auth-split bg-[#0F172A]">
+      <GradientBackground />
+
+      <motion.div
+        className="auth-panel-left"
+        initial={{ opacity: 0, x: -50 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.5, ease: 'easeOut' }}
+      >
+        <AnimatedBrandingPanel
+          title={branding?.title}
+          tagline={branding?.tagline}
+        />
+      </motion.div>
+
+      <motion.div
+        className="auth-panel-right"
+        initial={{ opacity: 0, x: 50 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.5, ease: 'easeOut', delay: 0.1 }}
+      >
+        <AnimatedFormCard>
+          {children}
+        </AnimatedFormCard>
+
+        <motion.p
+          className="mt-4 text-xs text-white/40 text-center w-full max-w-md"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.3 }}
+          transition={{ delay: 0.6 }}
         >
-          <GradientBackground />
-
-          <motion.div
-            className="auth-panel-left"
-            initial={{ opacity: 0, x: -100 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, ease: 'easeOut' }}
-          >
-            <AnimatedBrandingPanel
-              title={branding?.title}
-              tagline={branding?.tagline}
-            />
-          </motion.div>
-
-          <motion.div
-            className="auth-panel-right"
-            initial={{ opacity: 0, x: 100 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, ease: 'easeOut', delay: 0.2 }}
-          >
-            <AnimatedFormCard>
-              {children}
-            </AnimatedFormCard>
-
-            <motion.p
-              className="mt-6 text-sm text-white/40 text-center"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.8 }}
-            >
-              © 2026 Oweru. All rights reserved.
-            </motion.p>
-          </motion.div>
-        </motion.div>
-      </AnimatePresence>
+          © 2026 Oweru. All rights reserved.
+        </motion.p>
+      </motion.div>
     </div>
   );
 }

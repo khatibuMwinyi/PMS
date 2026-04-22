@@ -29,7 +29,7 @@ export function AnimatedFormCard({ children }: AnimatedFormCardProps) {
       initial="hidden"
       animate="visible"
     >
-      <div className="glass-card p-8 relative overflow-hidden">
+      <div className="glass-card p-6 relative overflow-hidden">
         <motion.div
           className="absolute inset-0 bg-gradient-to-br from-[#C89128]/5 to-transparent"
           initial={{ opacity: 0 }}
