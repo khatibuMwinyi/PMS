@@ -8,39 +8,45 @@
 ───────────────────────────────────────────────────────── */
 
 :root {
-  /* Brand */
-  --brand-primary:     #1D9E75;
-  --brand-primary-dim: #0F6E56;
-  --brand-gold:        #BA7517;
+  /* OWERU BRAND COLORS */
+  /* Primary */
+  --brand-primary:     #0F172A;
+  --brand-gold:        #C89128;
+  --brand-light:       #F8F8F9;
+
+  /* Secondary */
+  --brand-secondary:   #2D3A58;
+  --brand-gold-light:  #E5B972;
+  --brand-gray:        #DDE1E8;
 
   /* Surfaces */
-  --surface-page:      #F7F6F2;
+  --surface-page:      #F8F8F9;
   --surface-card:      #FFFFFF;
-  --surface-overlay:   #F1EFE8;
-  --surface-dark:      #1A1A18;
-  --surface-dark-card: #242422;
+  --surface-overlay:   rgba(15, 23, 42, 0.05);
+  --surface-dark:      #0F172A;
+  --surface-dark-card: rgba(15, 23, 42, 0.95);
 
   /* Text */
-  --text-primary:   #1C1C1A;
-  --text-secondary: #5F5E5A;
-  --text-muted:     #B4B2A9;
-  --text-on-dark:   #F1EFE8;
-  --text-on-brand:  #FFFFFF;
+  --text-primary:   #0F172A;
+  --text-secondary: #2D3A58;
+  --text-muted:     #64748B;
+  --text-on-dark:   #F8F8F9;
+  --text-on-brand:  #F8F8F9;
 
   /* Borders */
-  --border-subtle:  rgba(28, 28, 26, 0.08);
-  --border-default: rgba(28, 28, 26, 0.14);
-  --border-strong:  rgba(28, 28, 26, 0.28);
+  --border-subtle:  rgba(15, 23, 42, 0.08);
+  --border-default: rgba(15, 23, 42, 0.14);
+  --border-strong:  rgba(15, 23, 42, 0.28);
 
   /* Semantic states */
-  --state-success:    #1D9E75;
-  --state-success-bg: #E1F5EE;
-  --state-warning:    #BA7517;
-  --state-warning-bg: #FAEEDA;
-  --state-error:      #A32D2D;
-  --state-error-bg:   #FCEBEB;
-  --state-info:       #185FA5;
-  --state-info-bg:    #E6F1FB;
+  --state-success:    #10B981;
+  --state-success-bg: #D1FAE5;
+  --state-warning:    #C89128;
+  --state-warning-bg: #FEF3C7;
+  --state-error:      #EF4444;
+  --state-error-bg:   #FEE2E2;
+  --state-info:       #3B82F6;
+  --state-info-bg:    #DBEAFE;
 
   /* Spacing scale */
   --space-1:  4px;
@@ -71,6 +77,21 @@
   --transition-base:   200ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-slow:   320ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-spring: 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* BOLD CONTEMPORARY STYLES */
+  /* Enhanced shadows */
+  --shadow-bold:         0 10px 40px rgba(0,0,0,0.1), 0 2px 12px rgba(0,0,0,0.08);
+  --shadow-card-bold:     0 8px 24px rgba(0,0,0,0.12), 0 4px 16px rgba(0,0,0,0.08);
+
+  /* Modern gradients */
+  --gradient-primary:     linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-accent:      linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --gradient-text:        linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-gold) 100%);
+  --gradient-text-reverse: linear-gradient(135deg, var(--brand-gold) 0%, var(--brand-primary) 100%);
+
+  /* Animation keyframes */
+  --animate-float:         float 6s ease-in-out infinite;
+  --animate-pulse-subtle:  pulse-subtle 4s ease-in-out infinite;
 }
 
 /* Dark mode overrides */
@@ -110,10 +131,38 @@ html, body {
   0%, 100% { opacity: 1; }
   50%       { opacity: 0.4; }
 }
+@keyframes blob {
+  0% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(30px, -50px) scale(1.1); }
+  66% { transform: translate(-20px, 20px) scale(0.9); }
+  100% { transform: translate(0px, 0px) scale(1); }
+}
+
+/* NEW ANIMATION KEYFRAMES */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%      { transform: translateY(-20px); }
+}
+
+@keyframes pulse-subtle {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.8; }
+}
+.animate-blob {
+  animation: blob 7s infinite;
+}
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
 
 .animate-spin           { animation: spin var(--transition-base) linear infinite; }
 .animate-fade-up        { animation: fade-up var(--transition-slow) forwards; }
 .animate-pulse-skeleton { animation: pulse-skeleton 1.8s ease-in-out infinite; }
+.animate-float          { animation: float 6s ease-in-out infinite; }
+.animate-pulse-subtle   { animation: pulse-subtle 4s ease-in-out infinite; }
 
 /* ─── Focus ring ─────────────────────────────────────── */
 :focus-visible {
@@ -125,6 +174,45 @@ html, body {
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+
+  /* BOLD UTILITY CLASSES */
+  .shadow-bold {
+    box-shadow: var(--shadow-bold);
+  }
+
+  .shadow-card-bold {
+    box-shadow: var(--shadow-card-bold);
+  }
+
+  .gradient-primary {
+    background: var(--gradient-primary);
+  }
+
+  .gradient-accent {
+    background: var(--gradient-accent);
+  }
+
+  .gradient-text {
+    background: var(--gradient-text);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .gradient-text-reverse {
+    background: var(--gradient-text-reverse);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .animate-float {
+    animation: var(--animate-float);
+  }
+
+  .animate-pulse-subtle {
+    animation: var(--animate-pulse-subtle);
   }
 }
 
