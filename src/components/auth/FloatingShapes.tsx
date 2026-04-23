@@ -19,7 +19,7 @@ export function FloatingShapes() {
       {SHAPES.map((shape, i) => (
         <motion.div
           key={i}
-          className="absolute rounded-full bg-gradient-to-br from-[#C89128]/10 to-[#C89128]/5"
+          className="absolute rounded-full bg-gradient-to-br from-[var(--brand-gold)]/10 to-[var(--brand-gold)]/5"
           style={{
             left: shape.x,
             top: shape.y,
@@ -42,7 +42,7 @@ export function FloatingShapes() {
       ))}
 
       <motion.div
-        className="absolute top-10 left-1/2 w-32 h-32 rounded-2xl bg-[#C89128]/8 rotate-12"
+        className="absolute top-10 left-1/2 w-32 h-32 rounded-2xl bg-[var(--brand-gold)]/8 rotate-12"
         animate={{
           y: [-15, 15, -15],
           rotate: [12, 24, 12],
@@ -56,7 +56,7 @@ export function FloatingShapes() {
       />
 
       <motion.div
-        className="absolute bottom-20 right-20 w-24 h-24 rounded-full bg-[#1E3A5F]/30"
+        className="absolute bottom-20 right-20 w-24 h-24 rounded-full bg-[var(--brand-secondary)]/30"
         animate={{
           y: [10, -10, 10],
           scale: [1, 1.2, 1],

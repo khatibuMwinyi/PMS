@@ -23,14 +23,14 @@ export function AuthLayout({ children, branding }: AuthLayoutProps) {
 
   if (!mounted) {
     return (
-      <div className="min-h-screen bg-[#0F172A] flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-[#C89128] border-t-transparent rounded-full animate-spin" />
+      <div className="min-h-screen bg-[var(--brand-primary)] flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-[var(--brand-gold)] border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="auth-split bg-[#0F172A]">
+    <div className="auth-split bg-[var(--brand-primary)]">
       <GradientBackground />
 
       <motion.div

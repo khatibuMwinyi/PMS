@@ -36,7 +36,7 @@ export function RegisterForm() {
       <RoleToggle value={role} onChange={handleRoleChange} />
 
       <motion.div
-        className="px-3 py-2.5 rounded-lg bg-white/5 border border-[#C89128]/20"
+        className="px-3 py-2.5 rounded-lg bg-white/5 border border-[var(--brand-gold)]/20"
         key={role}
         initial={{ opacity: 0, y: 5 }}
         animate={{ opacity: 1, y: 0 }}
@@ -44,8 +44,8 @@ export function RegisterForm() {
       >
         {role === 'owner' ? (
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-[#C89128]/20 flex items-center justify-center flex-shrink-0">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C89128" strokeWidth="2">
+            <div className="w-8 h-8 rounded-lg bg-[var(--brand-gold)]/20 flex items-center justify-center flex-shrink-0">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--brand-gold)" strokeWidth="2">
                 <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                 <polyline points="9 22 9 12 15 12 15 22"></polyline>
               </svg>
@@ -57,8 +57,8 @@ export function RegisterForm() {
           </div>
         ) : (
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-[#C89128]/20 flex items-center justify-center flex-shrink-0">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C89128" strokeWidth="2">
+            <div className="w-8 h-8 rounded-lg bg-[var(--brand-gold)]/20 flex items-center justify-center flex-shrink-0">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--brand-gold)" strokeWidth="2">
                 <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
               </svg>
             </div>
@@ -93,7 +93,7 @@ export function RegisterForm() {
         transition={{ delay: 0.5 }}
       >
         Already have an account?{' '}
-        <a href="/login" className="text-[#C89128] font-medium hover:text-[#E5B972] transition-colors">
+        <a href="/login" className="text-[var(--brand-gold)] font-medium hover:text-[var(--brand-gold-light)] transition-colors">
           Sign in →
         </a>
       </motion.p>
