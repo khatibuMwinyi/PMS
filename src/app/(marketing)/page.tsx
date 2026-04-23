@@ -54,9 +54,9 @@ export default function MarketingPage() {
         
         {/* Semi-transparent Blue Gradient Overlay */}
         {isMobile ? (
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-950/80 via-blue-900/65 to-blue-950/80" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[var(--brand-primary)]/80 via-[var(--brand-primary-dark)]/60 to-[var(--brand-primary)]/80" />
         ) : (
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-900/70 via-blue-800/50 to-blue-900/70" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[var(--brand-primary)]/70 via-[var(--brand-secondary)]/50 to-[var(--brand-primary)]/70" />
         )}
 
         {/* Animated Background Blobs */}

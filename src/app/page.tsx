@@ -139,8 +139,10 @@ export default function LandingPage() {
       </div>
 
       {/* Hero */}
-      <section className="pt-32 pb-20 px-6">
-        <div className="container mx-auto max-w-6xl">
+      <section className="relative pt-32 pb-20 px-6 overflow-hidden min-h-[50vh] flex items-center">
+        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/uploads/properties/zBuYbVCaGxVJK7wF3CmPV-pexels-angelo-perez-343619529-14083659.jpg')" }} />
+        <div className="absolute inset-0 bg-gradient-to-r from-[var(--brand-primary)]/80 via-[var(--brand-primary)]/60 to-[var(--brand-primary)]/80" />
+        <div className="container mx-auto max-w-6xl relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -153,14 +155,14 @@ export default function LandingPage() {
               transition={{ delay: 0.2 }}
               className="inline-flex items-center gap-2 mb-8"
             >
-              <div className="w-1 h-8 bg-[#C89128] rounded"></div>
-              <span className="text-sm font-semibold text-[#2D3A58] uppercase tracking-wide">Professional Property Management</span>
+              <div className="w-1 h-8 bg-[var(--brand-gold)] rounded"></div>
+              <span className="text-sm font-semibold text-white/80 uppercase tracking-wide">Professional Property Management</span>
             </motion.div>
 
-            <h1 className="text-5xl md:text-7xl font-bold text-[#0F172A] mb-6 leading-tight">
-              Simplify <span className="text-[#C89128]">Property</span> Operations
+            <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
+              Simplify <span className="text-[var(--brand-gold)]">Property</span> Operations
             </h1>
-            <p className="text-xl text-[#2D3A58] mb-12 max-w-2xl mx-auto opacity-80">
+            <p className="text-xl text-white/80 mb-12 max-w-2xl mx-auto">
               The smart way to manage properties and connect with service providers across Tanzania
             </p>
 
@@ -169,7 +171,7 @@ export default function LandingPage() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => handleSignIn('user')}
-                className="px-8 py-4 bg-[#0F172A] text-white rounded-lg font-semibold hover:bg-[#1E293B] transition-colors"
+                className="px-8 py-4 bg-gradient-to-r from-[var(--brand-gold)] to-[var(--brand-gold-light)] text-[var(--brand-primary)] rounded-lg font-semibold shadow-lg hover:shadow-xl hover:shadow-[var(--brand-gold)]/30 transition-all btn-glow"
               >
                 Get Started
                 <ArrowRight className="inline ml-2 w-5 h-5" />
@@ -177,7 +179,7 @@ export default function LandingPage() {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-8 py-4 border-2 border-[#0F172A] text-[#0F172A] rounded-lg font-semibold hover:bg-[#0F172A] hover:text-white transition-colors"
+                className="px-8 py-4 border-2 border-white text-white rounded-lg font-semibold hover:bg-white hover:text-[var(--brand-primary)] transition-colors"
               >
                 Explore Features
               </motion.button>
@@ -211,16 +213,16 @@ export default function LandingPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 * index }}
-                className="bg-white p-8 rounded-2xl border border-[#DDE1E8] hover:border-[#C89128] transition-all cursor-pointer group"
+                className="bg-white/10 backdrop-blur-sm p-8 rounded-2xl border border-white/20 hover:border-[var(--brand-gold)] hover:bg-white/20 transition-all cursor-pointer group"
                 onClick={() => handleSignIn(item.role)}
               >
-                <div className="w-16 h-16 mx-auto mb-6 bg-[#DDE1E8] rounded-xl flex items-center justify-center group-hover:bg-[#C89128] transition-colors">
-                  <item.icon className="w-8 h-8 text-[#0F172A] group-hover:text-white" />
+                <div className="w-16 h-16 mx-auto mb-6 bg-white/20 rounded-xl flex items-center justify-center group-hover:bg-[var(--brand-gold)] transition-colors">
+                  <item.icon className="w-8 h-8 text-white group-hover:text-white" />
                 </div>
-                <h3 className="text-xl font-bold text-[#0F172A] mb-3 text-center">{item.title}</h3>
-                <p className="text-[#2D3A58] opacity-80 text-center mb-6">{item.description}</p>
+                <h3 className="text-xl font-bold text-white mb-3 text-center">{item.title}</h3>
+                <p className="text-white/70 text-center mb-6">{item.description}</p>
                 <div className="text-center">
-                  <span className="text-sm font-medium text-[#C89128]">Sign In →</span>
+                  <span className="text-sm font-medium text-[var(--brand-gold)]">Sign In →</span>
                 </div>
               </motion.div>
             ))}
