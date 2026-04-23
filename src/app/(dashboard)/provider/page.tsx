@@ -5,6 +5,7 @@ import { getProviderDashboardData } from '@/features/analytics/queries';
 import RoleGuard from '@/components/RoleGuard';
 import ProviderDashboardSkeleton from '@/components/dashboard/ProviderDashboardSkeleton';
 import { Suspense } from 'react';
+import { ErrorBoundaryWrapper } from '@/components/ui/ErrorBoundary';
 
 export const dynamic = 'force-dynamic';
 
@@ -12,7 +13,9 @@ export default function ProviderPage() {
   return (
     <RoleGuard allowedRoles={['PROVIDER']}>
       <Suspense fallback={<ProviderDashboardSkeleton />}>
-        <ProviderDashboardContent />
+        <ErrorBoundaryWrapper onRetry={() => window.location.reload()}>
+          <ProviderDashboardContent />
+        </ErrorBoundaryWrapper>
       </Suspense>
     </RoleGuard>
   );

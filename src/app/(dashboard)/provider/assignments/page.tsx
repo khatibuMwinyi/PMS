@@ -11,8 +11,9 @@ async function fetchData(page: number = 1, pageSize: number = 20): Promise<Pagin
   return await getProviderPendingAssignments(page, pageSize);
 }
 
-export default async function ProviderAssignmentsPage({ searchParams }: { searchParams?: { [key: string]: string } }) {
-  const page = parseInt(searchParams?.page ?? '1');
+export default async function ProviderAssignmentsPage({ searchParams }: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
+  const params = await searchParams;
+  const page = parseInt(Array.isArray(params.page) ? params.page[0] : params.page ?? '1');
   const pageSize = 20;
   const data = await fetchData(page, pageSize);
   const totalPages = Math.ceil(data.total / pageSize);

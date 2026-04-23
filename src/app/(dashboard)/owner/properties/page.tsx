@@ -4,6 +4,7 @@ import { getOwnerProperties }  from '@/features/properties/queries';
 import { PropertyGrid }        from '@/features/properties/components/PropertyGrid';
 import { PropertyGridSkeleton } from '@/features/properties/components/PropertyCardSkeleton';
 import { AddPropertyButton }   from '@/features/properties/components/AddPropertyButton';
+import { ErrorBoundaryWrapper } from '@/components/ui/ErrorBoundary';
 
 export const metadata: Metadata = { title: 'My Properties — Oweru' };
 
@@ -31,9 +32,11 @@ export default function OwnerPropertiesPage() {
         <AddPropertyButton />
       </div>
 
-      {/* ── Property grid with Suspense boundary ─────────────── */}
+      {/* ── Property grid with Suspense and Error boundaries ─────────────── */}
       <Suspense fallback={<PropertyGridSkeleton />}>
-        <PropertiesContent />
+        <ErrorBoundaryWrapper onRetry={() => window.location.reload()}>
+          <PropertiesContent />
+        </ErrorBoundaryWrapper>
       </Suspense>
 
     </div>

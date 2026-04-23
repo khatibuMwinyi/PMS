@@ -5,6 +5,7 @@ import { DashboardShell } from '@/components/layout/DashboardShell';
 import { getOwnerDashboardData } from '@/features/analytics/queries';
 import RoleGuard from '@/components/RoleGuard';
 import OwnerDashboardSkeleton from '@/components/dashboard/OwnerDashboardSkeleton';
+import { ErrorBoundaryWrapper } from '@/components/ui/ErrorBoundary';
 import { motion } from 'framer-motion';
 import { AnimatedCard, GradientText } from '@/components/animations/BoldAnimations';
 
@@ -14,7 +15,9 @@ export default function OwnerPage() {
   return (
     <RoleGuard allowedRoles={['OWNER']}>
       <Suspense fallback={<OwnerDashboardSkeleton />}>
-        <OwnerDashboardContent />
+        <ErrorBoundaryWrapper onRetry={() => window.location.reload()}>
+          <OwnerDashboardContent />
+        </ErrorBoundaryWrapper>
       </Suspense>
     </RoleGuard>
   );
