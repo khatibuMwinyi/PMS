@@ -1,37 +1,21 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import Image from 'next/image';
+import { motion } from 'framer-motion';
 import { ArrowRight, Building2, Users, Shield, TrendingUp, Clock, Menu, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useDevice } from '@/components/hooks/useDevice';
-import { ThemeToggle } from '@/components/ui/ThemeToggle';
-import { LandingGradient } from '@/components/landing/LandingGradient';
-import { FloatingShapes } from '@/components/landing/FloatingShapes';
-import { StatCounter } from '@/components/landing/StatCounter';
-import { ServiceCard } from '@/components/landing/ServiceCard';
-import { ShimmerButton } from '@/components/ui/ShimmerButton';
 
 export default function LandingPage() {
-  const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [activeTab, setActiveTab] = useState('owners');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
   const router = useRouter();
   const device = useDevice();
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
-
-  useEffect(() => {
-    if (theme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [theme]);
 
   const isMobile = device === 'mobile' && mounted;
 
@@ -39,83 +23,67 @@ export default function LandingPage() {
     router.push('/login');
   };
 
-  const toggleTheme = () => {
-    setTheme(prev => prev === 'light' ? 'dark' : 'light');
-  };
-
-  const heroWords = "Manage Properties, Not Headaches".split(' ');
-
-  const roles = [
-    { role: 'owner', title: 'Hands-Off Property Ownership', description: 'Maximize your property value with professional management', icon: Building2 },
-    { role: 'provider', title: 'Get Paid, Not Pulled Around', description: 'Grow your business with verified property connections', icon: Users },
-    { role: 'admin', title: 'Oversee Everything', description: 'Full platform control and analytics', icon: Shield },
+  const services = [
+    {
+      title: "Property Management",
+      description: "Comprehensive management solutions for property owners",
+      features: ["Rental Collection", "Maintenance Coordination", "Tenant Relations"]
+    },
+    {
+      title: "Service Provider Network",
+      description: "Connect with verified service professionals",
+      features: ["Background Checks", "Performance Tracking", "Secure Payments"]
+    },
+    {
+      title: "Financial Services",
+      description: "Transparent financial management and reporting",
+      features: ["Digital Payments", "Expense Tracking", "Revenue Reports"]
+    }
   ];
 
   const stats = [
-    { value: '500+', label: 'Properties', icon: Building2 },
-    { value: '200+', label: 'Providers', icon: Users },
-    { value: '10K+', label: 'Transactions', icon: TrendingUp },
-    { value: '2hrs', label: 'Response Time', icon: Clock },
-  ];
-
-  const services = [
-    {
-      title: 'Property Management',
-      description: 'Comprehensive solutions for property owners across Tanzania',
-      features: ['Rental Collection', 'Maintenance Coordination', 'Tenant Relations'],
-    },
-    {
-      title: 'Service Provider Network',
-      description: 'Connect with verified service professionals',
-      features: ['Background Checks', 'Performance Tracking', 'Secure Payments'],
-    },
-    {
-      title: 'Financial Services',
-      description: 'Transparent financial management and reporting',
-      features: ['Digital Payments', 'Expense Tracking', 'Revenue Reports'],
-    },
+    { label: "Properties", value: "500+", icon: Building2 },
+    { label: "Service Providers", value: "200+", icon: Users },
+    { label: "Transactions", value: "10K+", icon: TrendingUp },
+    { label: "Response Time", value: "2hrs", icon: Clock }
   ];
 
   return (
-    <div className={`min-h-screen ${theme === 'dark' ? 'bg-[#0F172A]' : 'bg-[#F8F8F9]'}`}>
-      <LandingGradient variant={theme} />
-      <FloatingShapes />
-
+    <div className="min-h-screen bg-[#F8F8F9]">
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 nav-glass z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
+      <nav className="fixed top-0 left-0 right-0 bg-white/90 backdrop-blur-sm border-b border-[#DDE1E8] z-50">
+        <div className="container mx-auto px-6 py-4">
+          {/* Desktop Navigation */}
+          <div className="flex justify-between items-center">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="flex items-center gap-2"
+              className="text-2xl font-bold text-[#0F172A]"
             >
-              <div className="relative w-10 h-10 rounded-lg overflow-hidden shadow-lg">
-                <Image
-                  src="/images/logo.jpeg"
-                  alt="Oweru Logo"
-                  fill
-                  className="object-cover"
-                />
-              </div>
-              <span className="text-xl font-bold text-[#0F172A] dark:text-white">Oweru</span>
+              Oweru
             </motion.div>
 
+            {/* Desktop Links - Hidden on mobile */}
             {!isMobile && (
-              <div className="flex items-center gap-6">
-                <a href="#features" className="text-[#2D3A58] dark:text-white/80 hover:text-[#C89128] transition-colors text-sm font-medium">Features</a>
-                <a href="#" className="text-[#2D3A58] dark:text-white/80 hover:text-[#C89128] transition-colors text-sm font-medium">Pricing</a>
-                <ThemeToggle theme={theme} onToggle={toggleTheme} />
-                <ShimmerButton onClick={() => handleSignIn('user')} variant="primary" className="py-2 px-4 text-sm">
+              <div className="flex items-center gap-8">
+                <a href="#" className="text-[#2D3A58] hover:text-[#C89128] transition-colors">Features</a>
+                <a href="#" className="text-[#2D3A58] hover:text-[#C89128] transition-colors">Pricing</a>
+                <a href="#" className="text-[#2D3A58] hover:text-[#C89128] transition-colors">Contact</a>
+                <button
+                  onClick={() => handleSignIn('user')}
+                  className="px-6 py-2 bg-[#0F172A] text-white rounded-lg font-medium hover:bg-[#1E293B] transition-colors"
+                >
                   Sign In
-                </ShimmerButton>
+                </button>
               </div>
             )}
 
+            {/* Mobile Hamburger - Hidden on desktop */}
             {isMobile && (
               <button
                 onClick={() => setMobileMenuOpen(true)}
-                className="p-2 text-[#2D3A58] dark:text-white hover:bg-[#DDE1E8]/50 dark:hover:bg-[#1E3A5F]/50 rounded-lg transition-colors"
+                className="md:hidden p-2 text-[#2D3A58] hover:bg-[#DDE1E8] rounded-lg transition-colors"
+                aria-label="Open menu"
               >
                 <Menu size={24} />
               </button>
@@ -124,49 +92,55 @@ export default function LandingPage() {
         </div>
       </nav>
 
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {mobileMenuOpen && isMobile && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 z-50 bg-black/40"
-              onClick={() => setMobileMenuOpen(false)}
-            />
-            <motion.div
-              initial={{ x: '100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              transition={{ type: 'spring', damping: 25 }}
-              className="fixed inset-y-0 right-0 z-50 w-72 bg-white dark:bg-[#0F172A] shadow-xl"
-            >
-              <div className="flex items-center justify-between h-16 px-4 border-b border-[#DDE1E8] dark:border-[#1E3A5F]">
-                <span className="text-lg font-bold text-[#0F172A] dark:text-white">Menu</span>
-                <button
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="p-2 hover:bg-[#DDE1E8]/50 dark:hover:bg-[#1E3A5F]/50 rounded-lg"
-                >
-                  <X size={20} />
-                </button>
-              </div>
-              <div className="p-4 space-y-4">
-                <a href="#features" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-[#2D3A58] dark:text-white">Features</a>
-                <a href="#" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-[#2D3A58] dark:text-white">Pricing</a>
-                <ThemeToggle theme={theme} onToggle={toggleTheme} />
-                <ShimmerButton onClick={() => { setMobileMenuOpen(false); handleSignIn('user'); }} variant="primary" className="w-full justify-center">
-                  Sign In
-                </ShimmerButton>
-              </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
+      {/* Mobile Drawer Backdrop */}
+      {mobileMenuOpen && isMobile && (
+        <div
+          className="fixed inset-0 z-50 bg-black/40"
+          onClick={() => setMobileMenuOpen(false)}
+        />
+      )}
 
-      {/* Hero Section */}
-      <section className="pt-32 pb-20 px-4">
-        <div className="max-w-6xl mx-auto">
+      {/* Mobile Drawer */}
+      <div
+        className={[
+          'fixed inset-y-0 right-0 z-50 flex flex-col bg-white shadow-xl w-64 transform transition-transform duration-300 ease-in-out',
+          mobileMenuOpen && isMobile ? 'translate-x-0' : 'translate-x-full',
+          isMobile || !mounted ? '' : 'hidden'
+        ].join(' ')}
+      >
+        <div className="flex items-center justify-between h-16 px-4 border-b border-[#DDE1E8]">
+          <span className="text-xl font-bold text-[#0F172A]">Menu</span>
+          <button
+            onClick={() => setMobileMenuOpen(false)}
+            className="p-2 text-[#2D3A58] hover:bg-[#DDE1E8] rounded-lg transition-colors"
+            aria-label="Close menu"
+          >
+            <X size={20} />
+          </button>
+        </div>
+        <div className="flex-1 overflow-y-auto p-4">
+          <nav className="flex flex-col gap-4">
+            <a href="#" className="text-[#2D3A58] hover:text-[#C89128] transition-colors py-2">Features</a>
+            <a href="#" className="text-[#2D3A58] hover:text-[#C89128] transition-colors py-2">Pricing</a>
+            <a href="#" className="text-[#2D3A58] hover:text-[#C89128] transition-colors py-2">Contact</a>
+          </nav>
+        </div>
+        <div className="p-4 border-t border-[#DDE1E8]">
+          <button
+            onClick={() => {
+              setMobileMenuOpen(false);
+              handleSignIn('user');
+            }}
+            className="w-full px-6 py-3 bg-[#0F172A] text-white rounded-lg font-medium hover:bg-[#1E293B] transition-colors"
+          >
+            Sign In
+          </button>
+        </div>
+      </div>
+
+      {/* Hero */}
+      <section className="pt-32 pb-20 px-6">
+        <div className="container mx-auto max-w-6xl">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -177,118 +151,123 @@ export default function LandingPage() {
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ delay: 0.2 }}
-              className="inline-flex items-center gap-2 mb-6"
+              className="inline-flex items-center gap-2 mb-8"
             >
               <div className="w-1 h-8 bg-[#C89128] rounded"></div>
-              <span className="text-sm font-semibold text-[#2D3A58] dark:text-white/80 uppercase tracking-widest">Tanzania's Premier Property Platform</span>
+              <span className="text-sm font-semibold text-[#2D3A58] uppercase tracking-wide">Professional Property Management</span>
             </motion.div>
 
-            <h1 className="landing-title text-[#0F172A] dark:text-white mb-6">
-              {heroWords.map((word, i) => (
-                <motion.span
-                  key={i}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 * i, duration: 0.5 }}
-                  className="inline-block mr-3"
-                >
-                  {i === 1 ? <span className="text-gradient">{word}</span> : word}
-                </motion.span>
-              ))}
+            <h1 className="text-5xl md:text-7xl font-bold text-[#0F172A] mb-6 leading-tight">
+              Simplify <span className="text-[#C89128]">Property</span> Operations
             </h1>
-
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.8 }}
-              className="text-lg text-[#2D3A58] dark:text-white/60 mb-10 max-w-2xl mx-auto"
-            >
+            <p className="text-xl text-[#2D3A58] mb-12 max-w-2xl mx-auto opacity-80">
               The smart way to manage properties and connect with service providers across Tanzania
-            </motion.p>
+            </p>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center"
-            >
-              <ShimmerButton onClick={() => handleSignIn('user')} variant="primary">
-                Get Started <ArrowRight className="w-5 h-5" />
-              </ShimmerButton>
-              <ShimmerButton href="#features" variant="outline">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => handleSignIn('user')}
+                className="px-8 py-4 bg-[#0F172A] text-white rounded-lg font-semibold hover:bg-[#1E293B] transition-colors"
+              >
+                Get Started
+                <ArrowRight className="inline ml-2 w-5 h-5" />
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-8 py-4 border-2 border-[#0F172A] text-[#0F172A] rounded-lg font-semibold hover:bg-[#0F172A] hover:text-white transition-colors"
+              >
                 Explore Features
-              </ShimmerButton>
-            </motion.div>
+              </motion.button>
+            </div>
           </motion.div>
 
-          {/* Role Cards */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.2, duration: 0.8 }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-20"
-          >
-            {roles.map((item, index) => (
+          {/* Role Selection Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
+            {[
+              {
+                role: 'owner',
+                title: 'For Property Owners',
+                description: 'Maximize your property value with professional management',
+                icon: Building2
+              },
+              {
+                role: 'provider',
+                title: 'For Service Providers',
+                description: 'Grow your business with verified property connections',
+                icon: Users
+              },
+              {
+                role: 'admin',
+                title: 'For Administrators',
+                description: 'Oversee the entire platform operations',
+                icon: Shield
+              }
+            ].map((item, index) => (
               <motion.div
                 key={item.role}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.4 + 0.1 * index }}
-                whileHover={{ scale: 1.03, y: -8 }}
-                className="role-card p-8 rounded-2xl cursor-pointer text-center group"
+                transition={{ delay: 0.1 * index }}
+                className="bg-white p-8 rounded-2xl border border-[#DDE1E8] hover:border-[#C89128] transition-all cursor-pointer group"
                 onClick={() => handleSignIn(item.role)}
               >
-                <div className="w-16 h-16 mx-auto mb-5 bg-[#DDE1E8]/50 dark:bg-[#1E3A5F]/50 rounded-xl flex items-center justify-center group-hover:bg-[#C89128]/20 transition-colors">
-                  <item.icon className="w-8 h-8 text-[#0F172A] dark:text-white group-hover:text-[#C89128]" />
+                <div className="w-16 h-16 mx-auto mb-6 bg-[#DDE1E8] rounded-xl flex items-center justify-center group-hover:bg-[#C89128] transition-colors">
+                  <item.icon className="w-8 h-8 text-[#0F172A] group-hover:text-white" />
                 </div>
-                <h3 className="text-lg font-bold text-[#0F172A] dark:text-white mb-2">{item.title}</h3>
-                <p className="text-sm text-[#64748B] dark:text-white/60 mb-4">{item.description}</p>
-                <span className="text-sm font-medium text-[#C89128]">Sign In →</span>
+                <h3 className="text-xl font-bold text-[#0F172A] mb-3 text-center">{item.title}</h3>
+                <p className="text-[#2D3A58] opacity-80 text-center mb-6">{item.description}</p>
+                <div className="text-center">
+                  <span className="text-sm font-medium text-[#C89128]">Sign In →</span>
+                </div>
               </motion.div>
             ))}
-          </motion.div>
+          </div>
 
-          {/* Stats */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.8 }}
-            className="grid grid-cols-2 md:grid-cols-4 gap-6 py-12 px-8 rounded-3xl bg-[#0F172A]/5 dark:bg-[#0F172A]/30"
-          >
+          {/* Stats Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {stats.map((stat, index) => (
-              <StatCounter
+              <motion.div
                 key={index}
-                value={stat.value}
-                label={stat.label}
-                icon={stat.icon}
-                delay={index * 0.2}
-              />
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 * index }}
+                className="text-center group"
+              >
+                <div className="w-12 h-12 mx-auto mb-4 bg-[#DDE1E8] rounded-lg flex items-center justify-center group-hover:bg-[#C89128] transition-colors">
+                  <stat.icon className="w-6 h-6 text-[#0F172A] group-hover:text-white" />
+                </div>
+                <div className="text-3xl font-bold text-[#0F172A] mb-1">{stat.value}</div>
+                <div className="text-sm text-[#64748B]">{stat.label}</div>
+              </motion.div>
             ))}
-          </motion.div>
+          </div>
         </div>
       </section>
 
-      {/* Features Tabs */}
-      <section className="py-20 bg-white/50 dark:bg-[#0F172A]/50 backdrop-blur-sm">
-        <div className="max-w-4xl mx-auto px-4">
+      {/* Tabs */}
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-6 max-w-4xl">
           <div className="flex justify-center mb-12">
-            <div className="bg-[#DDE1E8]/50 dark:bg-[#1E3A5F]/50 rounded-full p-1 flex">
+            <div className="bg-[#DDE1E8] rounded-full p-1 flex">
               <button
                 onClick={() => setActiveTab('owners')}
-                className={`px-6 py-3 rounded-full text-sm font-medium transition-all ${
+                className={`px-6 py-3 rounded-full text-sm font-medium transition-colors ${
                   activeTab === 'owners'
-                    ? 'bg-[#0F172A] dark:bg-[#C89128] text-white dark:text-[#0F172A]'
-                    : 'text-[#2D3A58] dark:text-white hover:text-[#0F172A] dark:hover:text-[#C89128]'
+                    ? 'bg-[#0F172A] text-white'
+                    : 'text-[#2D3A58] hover:text-[#0F172A]'
                 }`}
               >
                 For Property Owners
               </button>
               <button
                 onClick={() => setActiveTab('providers')}
-                className={`px-6 py-3 rounded-full text-sm font-medium transition-all ${
+                className={`px-6 py-3 rounded-full text-sm font-medium transition-colors ${
                   activeTab === 'providers'
-                    ? 'bg-[#0F172A] dark:bg-[#C89128] text-white dark:text-[#0F172A]'
-                    : 'text-[#2D3A58] dark:text-white hover:text-[#0F172A] dark:hover:text-[#C89128]'
+                    ? 'bg-[#0F172A] text-white'
+                    : 'text-[#2D3A58] hover:text-[#0F172A]'
                 }`}
               >
                 For Service Providers
@@ -303,103 +282,93 @@ export default function LandingPage() {
             transition={{ duration: 0.3 }}
             className="text-center"
           >
-            <h2 className="text-3xl font-bold text-[#0F172A] dark:text-white mb-4">
+            <h2 className="text-3xl font-bold text-[#0F172A] mb-6">
               {activeTab === 'owners' ? 'Maximize Your Property Value' : 'Grow Your Business'}
             </h2>
-            <p className="text-[#64748B] dark:text-white/60 max-w-xl mx-auto mb-6">
+            <p className="text-lg text-[#2D3A58] opacity-80 max-w-2xl mx-auto">
               {activeTab === 'owners'
                 ? 'Professional management services to maximize your rental income and minimize your workload'
-                : 'Connect with property owners and grow your service business with reliable payments'}
+                : 'Connect with property owners and grow your service business with Oweru platform'
+              }
             </p>
-            <ShimmerButton
+            <button
               onClick={() => handleSignIn(activeTab)}
-              variant="primary"
-              className="py-3 px-6"
+              className="mt-6 px-6 py-3 bg-[#0F172A] text-white rounded-lg font-medium hover:bg-[#1E293B] transition-colors"
             >
               Get Started as {activeTab === 'owners' ? 'Owner' : 'Provider'}
-            </ShimmerButton>
+            </button>
           </motion.div>
         </div>
       </section>
 
       {/* Services */}
-      <section id="features" className="py-20">
-        <div className="max-w-6xl mx-auto px-4">
+      <section className="py-20 bg-[#F8F8F9]">
+        <div className="container mx-auto px-6 max-w-6xl">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-16"
           >
-            <h2 className="text-4xl font-bold text-[#0F172A] dark:text-white mb-4">
-              Our <span className="text-gradient">Services</span>
+            <h2 className="text-4xl font-bold text-[#0F172A] mb-4">
+              Our <span className="text-[#C89128]">Services</span>
             </h2>
-            <p className="text-[#64748B] dark:text-white/60">
+            <p className="text-xl text-[#2D3A58] opacity-80">
               Comprehensive solutions for modern property management
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {services.map((service, index) => (
-              <ServiceCard
+              <motion.div
                 key={index}
-                title={service.title}
-                description={service.description}
-                features={service.features}
-                delay={index * 0.15}
-              />
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 * index, duration: 0.6 }}
+                className="bg-white p-8 rounded-2xl border border-[#DDE1E8] hover:border-[#C89128] transition-all"
+              >
+                <h3 className="text-2xl font-bold text-[#0F172A] mb-4">{service.title}</h3>
+                <p className="text-[#2D3A58] mb-6 opacity-80">{service.description}</p>
+                <ul className="space-y-3">
+                  {service.features.map((feature, idx) => (
+                    <li key={idx} className="flex items-center gap-3">
+                      <div className="w-2 h-2 bg-[#C89128] rounded-full"></div>
+                      <span className="text-[#2D3A58]">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
       {/* CTA */}
-      <section className="py-20 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0F172A] via-[#1E3A5F] to-[#0F172A]" />
-        
-        <motion.div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-[#C89128]/10 blur-3xl"
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.3, 0.5, 0.3],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-        />
-
-        <div className="max-w-3xl mx-auto px-4 text-center relative z-10">
+      <section className="py-20 bg-[#0F172A] text-white">
+        <div className="container mx-auto px-6 text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
           >
-            <h2 className="text-4xl font-bold text-white mb-4">
-              Ready to Get Started?
+            <h2 className="text-4xl font-bold mb-6">
+              Ready to get started?
             </h2>
-            <p className="text-xl text-white/80 mb-8">
-              Join thousands of property owners and service providers across Tanzania
+            <p className="text-xl mb-8 opacity-90 max-w-2xl mx-auto">
+              Join Oweru today and experience professional property management
             </p>
-            <ShimmerButton
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={() => handleSignIn('user')}
-              variant="primary"
+              className="px-8 py-4 bg-[#C89128] text-[#0F172A] rounded-lg font-semibold hover:bg-[#E5B972] transition-colors"
             >
-              Start Your Journey <ArrowRight className="w-5 h-5" />
-            </ShimmerButton>
+              Start Your Journey
+              <ArrowRight className="inline ml-2 w-5 h-5" />
+            </motion.button>
           </motion.div>
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="py-8 bg-white dark:bg-[#0F172A]/80 border-t border-[#DDE1E8]/50 dark:border-[#1E3A5F]/50">
-        <div className="max-w-6xl mx-auto px-4 text-center">
-          <p className="text-sm text-[#64748B] dark:text-white/60">
-            © 2026 Oweru. All rights reserved.
-          </p>
-        </div>
-      </footer>
     </div>
   );
 }

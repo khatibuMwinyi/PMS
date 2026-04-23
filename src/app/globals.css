@@ -20,10 +20,6 @@
   --brand-gold-light:  #E5B972;
   --brand-gray:        #DDE1E8;
 
-  /* Gradient Mesh Colors */
-  --gradient-mesh-2: #1E3A5F;
-  --gradient-mesh-3: #2D4A6F;
-
   /* Surfaces */
   --surface-page:      #F8F8F9;
   --surface-card:      #FFFFFF;
@@ -301,77 +297,65 @@ html, body {
 
 /* ─── Auth Pages Layout (Full Screen) ─────────────────────────────── */
 .auth-split {
-  display: flex;
-  width: 100%;
+  display: grid;
+  grid-template-columns: 45fr 55fr;
+  grid-template-rows: 100vh;
+  width: 100vw;
   min-height: 100vh;
-  overflow: hidden;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-.auth-split::-webkit-scrollbar {
-  display: none;
+  overflow-x: hidden;
 }
 
 @media (min-width: 1024px) {
   .auth-split {
-    display: grid;
-    grid-template-columns: 3fr 2fr; /* Branding 60%, Form 40% */
+    grid-template-columns: 45fr 55fr;
   }
 }
 
 @media (max-width: 1023px) {
   .auth-split {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .auth-panel-left {
-    display: none;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    height: auto;
+    min-height: 100dvh;
   }
 }
 
-/* Left Panel — Branding */
+/* Left Panel — Branding (Light Theme) */
 .auth-panel-left {
   display: flex;
   flex-direction: column;
   justify-content: center;
   padding: 2.5rem;
   overflow: hidden;
+  background: linear-gradient(135deg, var(--surface-card) 0%, var(--surface-page) 50%, var(--surface-card) 100%);
 }
 
 @media (max-width: 1023px) {
   .auth-panel-left {
-    display: none !important;
+    padding: 1.5rem 1.25rem;
+    min-height: auto;
+    border-bottom: 1px solid var(--border-subtle);
   }
 }
 
-/* Right Panel — Form */
+/* Right Panel — Form (Light Theme with Glassmorphism) */
 .auth-panel-right {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 1rem;
+  padding: 2rem;
+  background: linear-gradient(135deg, var(--surface-page) 0%, var(--surface-card) 50%, var(--surface-page) 100%);
   width: 100%;
-  min-height: 100dvh;
-  overflow-y: hidden;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-.auth-panel-right::-webkit-scrollbar {
-  display: none;
+  min-height: 100vh;
+  overflow-y: auto;
 }
 
 @media (max-width: 1023px) {
   .auth-panel-right {
-    flex: 1;
-    min-height: 100dvh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    padding: 1.5rem 1.25rem;
+    min-height: auto;
+    min-height: calc(100dvh - 160px);
   }
 }
 
@@ -440,241 +424,4 @@ html, body {
 
 .animate-slide-up {
   animation: slide-up 0.4s ease-out forwards;
-}
-
-/* ─── Animated Gradients ─────────────────────────────── */
-.gradient-animated {
-  background: linear-gradient(
-    135deg,
-    var(--brand-primary) 0%,
-    var(--gradient-mesh-2) 25%,
-    var(--brand-gold) 50%,
-    var(--gradient-mesh-3) 75%,
-    var(--brand-primary) 100%
-  );
-  background-size: 400% 400%;
-  animation: gradient-shift 15s ease infinite;
-}
-
-@keyframes gradient-shift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-/* ─── Glassmorphism ─────────────────────────────── */
-.glass {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.glass-card {
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 20px;
-  width: 100%;
-  max-width: 480px;
-  overflow-y: hidden;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  box-shadow: 
-    0 25px 50px -12px rgba(0, 0, 0, 0.25),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-}
-
-.glass-card::-webkit-scrollbar {
-  display: none;
-}
-
-/* ─── Shimmer Effect ─────────────────────────────── */
-.shimmer {
-  position: relative;
-  overflow: hidden;
-}
-
-.shimmer::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.1),
-    transparent
-  );
-  animation: shimmer 3s ease-in-out infinite;
-}
-
-@keyframes shimmer {
-  0% { left: -100%; }
-  100% { left: 100%; }
-}
-
-/* ─── Glow Effects ─────────────────────────────── */
-.glow-gold {
-  box-shadow: 
-    0 0 20px rgba(200, 145, 40, 0.3),
-    0 0 40px rgba(200, 145, 40, 0.2),
-    0 0 60px rgba(200, 145, 40, 0.1);
-}
-
-.glow-gold-pulse {
-  animation: glow-pulse 3s ease-in-out infinite;
-}
-
-/* ─── Floating Animation ─────────────────────────────── */
-.float-slow {
-  animation: float-slow 8s ease-in-out infinite;
-}
-
-@keyframes float-slow {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-20px) rotate(3deg); }
-}
-
-/* ─── Text Gradient ─────────────────────────────── */
-.text-gradient-gold {
-  background: linear-gradient(135deg, var(--brand-gold) 0%, #E5B972 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.text-gradient-white {
-  background: linear-gradient(135deg, #ffffff 0%, rgba(255, 255, 255, 0.8) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* ─── Hide All Scrollbars Globally ─────────────────────────────── */
-::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-  display: none;
-}
-
-* {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-*::-webkit-scrollbar {
-  display: none;
-}
-
-/* ─── Landing Page Styles ─────────────────────────────── */
-.landing-gradient {
-  background: linear-gradient(135deg, #F8F8F9 0%, #E8ECF2 100%);
-}
-
-.dark .landing-gradient {
-  background: linear-gradient(135deg, #0F172A 0%, #1E3A5F 100%);
-}
-
-.landing-glass {
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(200, 145, 40, 0.2);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-}
-
-.dark .landing-glass {
-  background: rgba(15, 23, 42, 0.8);
-  border: 1px solid rgba(200, 145, 40, 0.2);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-}
-
-.nav-glass {
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(200, 145, 40, 0.1);
-}
-
-.dark .nav-glass {
-  background: rgba(15, 23, 42, 0.9);
-  border-bottom: 1px solid rgba(200, 145, 40, 0.1);
-}
-
-.landing-title {
-  font-size: 3.5rem;
-  line-height: 1.1;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-}
-
-@media (min-width: 768px) {
-  .landing-title {
-    font-size: 4.5rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  .landing-title {
-    font-size: 5.5rem;
-  }
-}
-
-.text-gradient {
-  background: linear-gradient(135deg, #C89128 0%, #E5B972 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.role-card {
-  background: white;
-  border: 2px solid transparent;
-  transition: all 0.3s ease;
-}
-
-.role-card:hover {
-  border-color: #C89128;
-  box-shadow: 0 0 30px rgba(200, 145, 40, 0.2);
-  transform: translateY(-4px);
-}
-
-.dark .role-card {
-  background: rgba(15, 23, 42, 0.9);
-}
-
-.shimmer::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-  animation: shimmer 2s ease-in-out infinite;
-}
-
-@keyframes shimmer {
-  0% { left: -100%; }
-  100% { left: 100%; }
-}
-
-/* ─── Dark Mode Text Colors ─────────────────────────────── */
-.dark .text-primary {
-  color: #F8F8F9;
-}
-
-.dark .text-secondary {
-  color: #B4B2A9;
-}
-
-.dark .text-muted {
-  color: #8B8980;
-}
-
-/* ─── Hero Animations ─────────────────────────────── */
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-20px); }
-}
-
-.animate-float {
-  animation: float 6s ease-in-out infinite;
 }
