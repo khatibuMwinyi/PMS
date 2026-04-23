@@ -23,7 +23,7 @@
     "framer-motion": "^12.38.0",
     "lucide-react": "^1.8.0",
     "nanoid": "^5.0.0",
-    "next": "^16.0.0",
+    "next": "^16.2.3",
     "next-auth": "^5.0.0-beta",
     "pg-boss": "^8.0.0",
     "prisma": "^5.20.0",
