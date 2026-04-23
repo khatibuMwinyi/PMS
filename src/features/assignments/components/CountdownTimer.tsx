@@ -77,7 +77,7 @@ export function CountdownTimer({ expiresAt, onExpired }: CountdownTimerProps) {
 
   return (
     <div
-      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-pill text-[12px] font-medium font-mono tabular-nums"
+      className="inline-flex items-center gap-1.5 px-[var(--px-2-5)] py-1 rounded-pill text-[var(--text-xs)] font-medium font-mono tabular-nums"
       style={{ background: bg, color }}
       title={expired ? 'Offer expired' : `Offer expires at ${new Date(expiresAt).toLocaleTimeString()}`}
     >

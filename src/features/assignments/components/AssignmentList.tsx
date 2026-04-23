@@ -9,7 +9,7 @@ interface AssignmentListProps {
 function EmptyAssignments() {
   return (
     <div
-      className="flex flex-col items-center justify-center text-center min-h-[420px] rounded-[var(--radius-xl)] border border-dashed"
+      className="flex flex-col items-center justify-center text-center min-h-[var(--min-h-420px)] rounded-[var(--radius-xl)] border border-dashed"
       style={{ borderColor: 'var(--border-default)' }}
     >
       <div
@@ -18,10 +18,10 @@ function EmptyAssignments() {
       >
         <ClipboardList size={24} style={{ color: 'var(--text-muted)' }} />
       </div>
-      <h2 className="font-display text-[20px] text-[var(--text-primary)] mb-2">
+      <h2 className="font-display text-[var(--text-xl)] text-[var(--text-primary)] mb-2">
         No pending assignments
       </h2>
-      <p className="text-[14px] max-w-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+      <p className="text-[var(--text-sm)] max-w-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
         New work offers will appear here when Oweru matches you to a job.
         Make sure your service categories and operational zones are up to date.
       </p>

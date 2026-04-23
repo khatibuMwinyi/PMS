@@ -26,7 +26,7 @@ export function AnimatedButton({
 
   const variants = {
     primary: `
-      bg-gradient-to-r from-[#C89128] to-[#E5B972] text-[#0F172A]
+      bg-gradient-to-r from-[var(--brand-gold)] to-[var(--brand-gold-light)] text-[var(--brand-primary)]
       hover:shadow-[0_0_30px_rgba(200,145,40,0.4)]
       active:scale-[0.98]
     `,
@@ -35,8 +35,8 @@ export function AnimatedButton({
       hover:bg-white/20 active:scale-[0.98]
     `,
     outline: `
-      bg-transparent text-[#C89128] border border-[#C89128]
-      hover:bg-[#C89128]/10 active:scale-[0.98]
+      bg-transparent text-[var(--brand-gold)] border border-[var(--brand-gold)]
+      hover:bg-[var(--brand-gold)]/10 active:scale-[0.98]
     `,
   };
 

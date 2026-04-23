@@ -39,7 +39,7 @@ export function PropertyCard({ property }: PropertyCardProps) {
             style={{ color: 'var(--text-muted)' }}
           >
             <Home size={28} strokeWidth={1.5} />
-            <span className="text-[12px]">No photo</span>
+            <span className="text-[var(--text-xs)]">No photo</span>
           </div>
         )}
       </div>
@@ -48,7 +48,7 @@ export function PropertyCard({ property }: PropertyCardProps) {
 
         {/* Name + status */}
         <div className="flex items-start justify-between gap-2">
-          <h3 className="text-[15px] font-semibold text-[var(--text-primary)] leading-snug line-clamp-1">
+          <h3 className="text-[var(--text-15px)] font-semibold text-[var(--text-primary)] leading-snug line-clamp-1">
             {property.name}
           </h3>
           <StatusBadge status="ACTIVE" className="shrink-0 mt-0.5" />
@@ -59,21 +59,21 @@ export function PropertyCard({ property }: PropertyCardProps) {
           <Tag size={11} style={{ color: 'var(--brand-primary)' }} />
           <span
             className="px-2 py-0.5 rounded-pill font-medium"
-            style={{ background: '#e8f7f2', color: 'var(--brand-primary-dim)' }}
+            style={{ background: 'var(--success-bg)', color: 'var(--text-secondary)' }}
           >
             {property.zone}
           </span>
         </div>
 
         {/* Address — full version (owner-visible only) */}
-        <div className="flex items-center gap-1.5 text-[13px]" style={{ color: 'var(--text-secondary)' }}>
+        <div className="flex items-center gap-1.5 text-[var(--text-13px)]" style={{ color: 'var(--text-secondary)' }}>
           <MapPin size={13} className="shrink-0" style={{ color: 'var(--text-muted)' }} />
           <span className="line-clamp-1">{property.encryptedAddress}</span>
         </div>
 
         {/* Stats row */}
         <div
-          className="flex items-center gap-4 py-2.5 px-3 rounded-[var(--radius-md)] text-[13px]"
+          className="flex items-center gap-4 py-[var(--py-2-5)] px-[var(--px-3)] rounded-[var(--radius-md)] text-[var(--text-13px)]"
           style={{ background: 'var(--surface-overlay)' }}
         >
           <div className="flex items-center gap-1.5" style={{ color: 'var(--text-secondary)' }}>
@@ -90,7 +90,7 @@ export function PropertyCard({ property }: PropertyCardProps) {
         {/* CTA */}
         <Link
           href={`/owner/properties/${property.id}`}
-          className="flex items-center justify-center h-9 rounded-[var(--radius-md)] border text-[13px] font-medium transition-all duration-120 mt-auto hover:bg-[var(--surface-overlay)]"
+          className="flex items-center justify-center h-9 rounded-[var(--radius-md)] border text-[var(--text-13px)] font-medium transition-all duration-120 mt-auto hover:bg-[var(--surface-overlay)]"
           style={{ borderColor: 'var(--border-default)', color: 'var(--text-secondary)' }}
         >
           View Details →

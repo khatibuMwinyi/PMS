@@ -114,7 +114,7 @@ export function ImageUploadField({
       {/* Drop zone (shown when no previews) */}
       {previews.length === 0 && (
         <div
-          className="flex flex-col items-center justify-center gap-3 rounded-[var(--radius-lg)] border-2 border-dashed cursor-pointer transition-all duration-120 py-10 hover:border-[var(--brand-primary)] hover:bg-[#e8f7f2]"
+          className="flex flex-col items-center justify-center gap-3 rounded-[var(--radius-lg)] border-2 border-dashed cursor-pointer transition-all duration-120 py-10 hover:border-[var(--brand-primary)] hover:bg-[var(--success-bg)]"
           style={{ borderColor: error ? 'var(--state-error)' : 'var(--border-default)' }}
           onClick={() => inputRef.current?.click()}
           onDrop={handleDrop}

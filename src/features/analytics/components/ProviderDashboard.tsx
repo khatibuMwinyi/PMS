@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { Button } from '@/components/ui/button';
+import { UnifiedButton } from '@/components/ui/UnifiedButton';
 import {
   TrendingUp,
   TrendingDown,
@@ -292,14 +292,14 @@ export function ProviderDashboard({ providerId }: ProviderDashboardProps) {
         </CardHeader>
         <CardContent>
           <div className="flex gap-2">
-            <Button className="flex-1">
+            <UnifiedButton className="flex-1">
               <Clock className="mr-2 h-4 w-4" />
               View Schedule
-            </Button>
-            <Button variant="outline" className="flex-1">
+            </UnifiedButton>
+            <UnifiedButton variant="outline" className="flex-1">
               <TrendingUp className="mr-2 h-4 w-4" />
               Request Payout
-            </Button>
+            </UnifiedButton>
           </div>
         </CardContent>
       </Card>

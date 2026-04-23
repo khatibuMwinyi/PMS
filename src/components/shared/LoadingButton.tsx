@@ -1,10 +1,10 @@
 'use client';
 
 import { Loader2 } from 'lucide-react';
-import { Button, type ButtonProps } from '@/components/ui/button';
+import { UnifiedButton, type UnifiedButtonProps } from '@/components/ui/UnifiedButton';
 import { cn } from '@/core/lib/utils';
 
-interface LoadingButtonProps extends ButtonProps {
+interface LoadingButtonProps extends UnifiedButtonProps {
   loading?: boolean;
   loadingText?: string;
 }
@@ -18,7 +18,7 @@ export function LoadingButton({
   ...props
 }: LoadingButtonProps) {
   return (
-    <Button
+    <UnifiedButton
       disabled={disabled || loading}
       className={cn(className)}
       {...props}
@@ -33,6 +33,6 @@ export function LoadingButton({
       <span className={loading ? 'opacity-60' : undefined}>
         {loading && loadingText ? loadingText : children}
       </span>
-    </Button>
+    </UnifiedButton>
   );
 }

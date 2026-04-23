@@ -2,6 +2,9 @@ import './globals.css';
 import type { Metadata } from 'next';
 import { DM_Serif_Display, DM_Sans } from 'next/font/google';
 import { SessionProvider } from '@/components/providers/SessionProvider';
+import { ToastProvider } from '@/providers/ToastProvider';
+import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
+import { ErrorBoundaryWrapper } from '@/components/ui/ErrorBoundaryWrapper';
 
 const display = DM_Serif_Display({
   subsets: ['latin'],
@@ -30,7 +33,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${display.variable} ${sans.variable}`}>
       <body className="font-sans">
-        <SessionProvider>{children}</SessionProvider>
+        <SessionProvider>
+          <ErrorBoundary>
+            <ToastProvider>
+              <ErrorBoundaryWrapper>{children}</ErrorBoundaryWrapper>
+            </ToastProvider>
+          </ErrorBoundary>
+        </SessionProvider>
       </body>
     </html>
   );

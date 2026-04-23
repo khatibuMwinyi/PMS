@@ -26,10 +26,10 @@ export function AnimatedInput({ label, error, helper, className, ...props }: Ani
             top: isFocused || hasValue ? '8px' : '50%',
             transform: isFocused || hasValue ? 'translateY(0) scale(0.75)' : 'translateY(-50%)',
             transformOrigin: 'left',
-            color: error ? '#EF4444' : isFocused ? '#C89128' : 'rgba(255,255,255,0.6)',
+            color: error ? 'var(--state-error)' : isFocused ? 'var(--brand-gold)' : 'rgba(255,255,255,0.6)',
           }}
           animate={{
-            color: error ? '#EF4444' : isFocused ? '#C89128' : 'rgba(255,255,255,0.6)',
+            color: error ? 'var(--state-error)' : isFocused ? 'var(--brand-gold)' : 'rgba(255,255,255,0.6)',
           }}
         >
           {label}
@@ -43,7 +43,7 @@ export function AnimatedInput({ label, error, helper, className, ...props }: Ani
             text-white placeholder:text-transparent
             transition-all duration-200
             focus:outline-none
-            ${error ? 'border-red-500' : 'border-white/10 focus:border-[#C89128]'}
+            ${error ? 'border-red-500' : 'border-white/10 focus:border-[var(--brand-gold)]'}
             ${className || ''}
           `}
           onFocus={() => setIsFocused(true)}
@@ -57,7 +57,7 @@ export function AnimatedInput({ label, error, helper, className, ...props }: Ani
           animate={isFocused ? { opacity: 1 } : { opacity: 0 }}
         >
           <motion.div
-            className="absolute inset-0 border-2 border-[#C89128]/30 rounded-xl"
+            className="absolute inset-0 border-2 border-[var(--brand-gold)]/30 rounded-xl"
             initial={{ scaleX: 0 }}
             animate={isFocused ? { scaleX: 1 } : { scaleX: 0 }}
             transition={{ duration: 0.3 }}
