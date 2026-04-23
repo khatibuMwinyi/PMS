@@ -2,7 +2,8 @@
 
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import { Shield, Zap, Home, Building2 } from 'lucide-react';
+import Link from 'next/link';
+import { Shield, Zap, Home as HomeIcon, Building2, ArrowLeft } from 'lucide-react';
 
 interface AnimatedBrandingPanelProps {
   title?: string;
@@ -48,7 +49,7 @@ const logoVariants = {
 
 const FEATURES = [
   {
-    icon: <Home size={20} className="text-[#C89128]" />,
+    icon: <HomeIcon size={20} className="text-[#C89128]" />,
     label: 'Property Management',
     description: 'Professional services tracked in real-time',
   },
@@ -80,6 +81,16 @@ export function AnimatedBrandingPanel({ title = 'Oweru', tagline }: AnimatedBran
         initial="hidden"
         animate="visible"
       >
+        <motion.div variants={itemVariants}>
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 text-sm text-white/60 hover:text-white transition-colors group"
+          >
+            <ArrowLeft size={16} className="transition-transform group-hover:-translate-x-1" />
+            Back to home
+          </Link>
+        </motion.div>
+
         <motion.div variants={logoVariants} className="flex items-center gap-4">
           <div className="relative w-14 h-14 rounded-xl overflow-hidden shadow-lg">
             <Image
