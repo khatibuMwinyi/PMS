@@ -8,8 +8,8 @@ import { useRouter } from 'next/navigation';
 import { z } from 'zod';
 import { Eye, EyeOff } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { AnimatedInput } from '@/components/ui/AnimatedInput';
-import { AnimatedButton } from '@/components/ui/AnimatedButton';
+import { UnifiedInput } from '@/components/ui/UnifiedInput';
+import { UnifiedButton } from '@/components/ui/UnifiedButton';
 
 const LoginSchema = z.object({
   email: z.string().email('Enter a valid email address'),
@@ -93,25 +93,28 @@ export function LoginForm() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6 }}
         >
-          <AnimatedInput
+          <UnifiedInput
             label="Email Address"
             type="email"
             autoComplete="email"
+            state={errors.email ? 'error' : 'default'}
             error={errors.email?.message}
             {...register('email')}
           />
 
           <div className="relative">
-            <AnimatedInput
+            <UnifiedInput
               label="Password"
               type={showPassword ? 'text' : 'password'}
               autoComplete="current-password"
+              state={errors.password ? 'error' : 'default'}
               error={errors.password?.message}
               {...register('password')}
+              leftIcon={showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
             />
             <button
               type="button"
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-[#C89128] transition-colors"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-[var(--brand-gold)] transition-colors"
               onClick={() => setShowPassword((v) => !v)}
             >
               {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -121,19 +124,21 @@ export function LoginForm() {
           <div className="text-right">
             <a
               href="/forgot-password"
-              className="text-sm text-[#C89128] hover:text-[#E5B972] transition-colors"
+              className="text-sm text-[var(--brand-gold)] hover:text-[var(--brand-gold-light)] transition-colors"
             >
               Forgot password?
             </a>
           </div>
 
-          <AnimatedButton
+          <UnifiedButton
             type="submit"
-            isLoading={isSubmitting}
+            state={isSubmitting ? 'loading' : 'default'}
+            variant="primary"
             className="mt-2"
+            leftIcon={isSubmitting ? <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> : undefined}
           >
             Sign In
-          </AnimatedButton>
+          </UnifiedButton>
         </motion.div>
       </form>
 
@@ -143,9 +148,9 @@ export function LoginForm() {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.8 }}
       >
-        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#C89128]/30 to-transparent" />
+        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[var(--brand-gold)]/30 to-transparent" />
         <span className="text-xs text-white/40">or</span>
-        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#C89128]/30 to-transparent" />
+        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[var(--brand-gold)]/30 to-transparent" />
       </motion.div>
 
       <motion.p
@@ -155,7 +160,7 @@ export function LoginForm() {
         transition={{ delay: 0.9 }}
       >
         Don&apos;t have an account?{' '}
-        <a href="/register" className="text-[#C89128] font-medium hover:text-[#E5B972] transition-colors">
+        <a href="/register" className="text-[var(--brand-gold)] font-medium hover:text-[var(--brand-gold-light)] transition-colors">
           Register →
         </a>
       </motion.p>

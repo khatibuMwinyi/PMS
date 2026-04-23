@@ -7,8 +7,8 @@ import { z } from 'zod';
 import { Eye, EyeOff } from 'lucide-react';
 import { OwnerRegisterSchema } from '@/features/users/types';
 import { registerOwner } from '@/features/users/actions';
-import { Input } from '@/components/ui/input';
-import { LoadingButton } from '@/components/shared/LoadingButton';
+import { UnifiedInput } from '@/components/ui/UnifiedInput';
+import { UnifiedButton } from '@/components/ui/UnifiedButton';
 import { PasswordStrengthMeter } from '@/components/shared/PasswordStrengthMeter';
 
 // Extend schema to add confirmPassword
@@ -60,15 +60,15 @@ export function OwnerRegisterForm({ onSuccess }: OwnerRegisterFormProps) {
       <fieldset disabled={isSubmitting} className="border-none p-0 m-0 min-w-0 flex flex-col gap-6">
 
         {serverError && (
-          <div className="px-4 py-3 rounded-xl bg-[#DC2626]/10 border border-[#DC2626]/30 backdrop-blur-sm">
-            <p className="text-sm text-[#DC2626] font-medium">{serverError}</p>
+          <div className="px-4 py-3 rounded-xl bg-[var(--state-error)]/10 border border-[var(--state-error)]/30 backdrop-blur-sm">
+            <p className="text-sm text-[var(--state-error)] font-medium">{serverError}</p>
           </div>
         )}
 
         {/* First + Last name row */}
         <div className="grid grid-cols-2 gap-4">
           <div className="relative">
-            <Input
+            <UnifiedInput
               label="First Name"
               type="text"
               autoComplete="given-name"
@@ -79,7 +79,7 @@ export function OwnerRegisterForm({ onSuccess }: OwnerRegisterFormProps) {
             />
           </div>
           <div className="relative">
-            <Input
+            <UnifiedInput
               label="Last Name"
               type="text"
               autoComplete="family-name"
@@ -92,7 +92,7 @@ export function OwnerRegisterForm({ onSuccess }: OwnerRegisterFormProps) {
         </div>
 
         <div className="relative">
-          <Input
+          <UnifiedInput
             label="Email Address"
             type="email"
             autoComplete="email"
@@ -104,7 +104,7 @@ export function OwnerRegisterForm({ onSuccess }: OwnerRegisterFormProps) {
         </div>
 
         <div className="relative">
-          <Input
+          <UnifiedInput
             label="Phone Number"
             type="tel"
             autoComplete="tel"
@@ -119,7 +119,7 @@ export function OwnerRegisterForm({ onSuccess }: OwnerRegisterFormProps) {
         {/* Password + strength meter */}
         <div>
           <div className="relative">
-            <Input
+            <UnifiedInput
               label="Password"
               type={showPass ? 'text' : 'password'}
               autoComplete="new-password"
@@ -128,7 +128,7 @@ export function OwnerRegisterForm({ onSuccess }: OwnerRegisterFormProps) {
               variant="auth"
               rightElement={
                 <button type="button" tabIndex={-1} onClick={() => setShowPass((v) => !v)} aria-label="Toggle password">
-                  <EyeOff className="text-[#E5B972]/60 hover:text-white transition-colors" size={18} />
+                  <EyeOff className="text-[var(--brand-gold-light)]/60 hover:text-white transition-colors" size={18} />
                 </button>
               }
               {...register('password')}
@@ -138,7 +138,7 @@ export function OwnerRegisterForm({ onSuccess }: OwnerRegisterFormProps) {
         </div>
 
         <div className="relative">
-          <Input
+          <UnifiedInput
             label="Confirm Password"
             type={showConfirm ? 'text' : 'password'}
             autoComplete="new-password"
@@ -147,24 +147,24 @@ export function OwnerRegisterForm({ onSuccess }: OwnerRegisterFormProps) {
             variant="auth"
             rightElement={
               <button type="button" tabIndex={-1} onClick={() => setShowConfirm((v) => !v)} aria-label="Toggle confirm password">
-                <EyeOff className="text-[#E5B972]/60 hover:text-white transition-colors" size={18} />
+                <EyeOff className="text-[var(--brand-gold-light)]/60 hover:text-white transition-colors" size={18} />
               </button>
             }
             {...register('confirmPassword')}
           />
         </div>
 
-        <LoadingButton
+        <UnifiedButton
           type="submit"
+          state={isSubmitting ? 'loading' : 'default'}
           variant="primary"
           size="lg"
           fullWidth
-          loading={isSubmitting}
-          loadingText="Creating account…"
-          className="mt-4 bg-gradient-to-r from-[#C89128] to-[#E5B972] text-white border-0 hover:from-[#B8801A] hover:to-[#D4A76A] shadow-lg hover:shadow-[0_0_20px_rgba(200,145,40,0.4)] transform hover:scale-[1.02] transition-all duration-200"
+          className="mt-4"
+          leftIcon={isSubmitting ? <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> : undefined}
         >
           Create Owner Account
-        </LoadingButton>
+        </UnifiedButton>
 
       </fieldset>
     </form>
