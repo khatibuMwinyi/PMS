@@ -42,12 +42,12 @@ export default function DesignPreview() {
     setTimeout(() => setSelectedOption(null), 300);
   };
 
-  const SelectedComponent = selectedOption ? designOptions.find(opt => opt.id === selectedOption)?.component : null;
+  const selectedDesign = selectedOption ? designOptions.find(opt => opt.id === selectedOption) : null;
 
   return (
     <>
       {/* Preview Panel */}
-      {showPreview && SelectedComponent && (
+      {showPreview && selectedDesign && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -65,10 +65,10 @@ export default function DesignPreview() {
             <div className="sticky top-0 z-10 bg-white border-b border-[#DDE1E8] p-4 flex items-center justify-between">
               <div>
                 <h3 className="text-xl font-bold text-[#0F172A]">
-                  {designOptions.find(opt => opt.id === selectedOption)?.name}
+                  {selectedDesign.name}
                 </h3>
                 <p className="text-sm text-[#64748B]">
-                  {designOptions.find(opt => opt.id === selectedOption)?.description}
+                  {selectedDesign.description}
                 </p>
               </div>
               <button
@@ -81,7 +81,7 @@ export default function DesignPreview() {
 
             {/* Preview Content */}
             <div className="h-[calc(100vh-80px)] overflow-auto">
-              <SelectedComponent />
+              <selectedDesign.component />
             </div>
           </motion.div>
         </motion.div>

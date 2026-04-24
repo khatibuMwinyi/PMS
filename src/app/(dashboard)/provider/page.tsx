@@ -13,7 +13,7 @@ export default function ProviderPage() {
   return (
     <RoleGuard allowedRoles={['PROVIDER']}>
       <Suspense fallback={<ProviderDashboardSkeleton />}>
-        <ErrorBoundaryWrapper onRetry={() => window.location.reload()}>
+        <ErrorBoundaryWrapper>
           <ProviderDashboardContent />
         </ErrorBoundaryWrapper>
       </Suspense>

@@ -15,7 +15,7 @@ export default function OwnerPage() {
   return (
     <RoleGuard allowedRoles={['OWNER']}>
       <Suspense fallback={<OwnerDashboardSkeleton />}>
-        <ErrorBoundaryWrapper onRetry={() => window.location.reload()}>
+        <ErrorBoundaryWrapper>
           <OwnerDashboardContent />
         </ErrorBoundaryWrapper>
       </Suspense>

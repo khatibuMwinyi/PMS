@@ -34,7 +34,7 @@ export default function OwnerPropertiesPage() {
 
       {/* ── Property grid with Suspense and Error boundaries ─────────────── */}
       <Suspense fallback={<PropertyGridSkeleton />}>
-        <ErrorBoundaryWrapper onRetry={() => window.location.reload()}>
+        <ErrorBoundaryWrapper>
           <PropertiesContent />
         </ErrorBoundaryWrapper>
       </Suspense>
