@@ -1,9 +1,9 @@
 'use client';
 
-import { Home, Wrench } from 'lucide-react';
+import { Home, Wrench, Shield } from 'lucide-react';
 import { cn } from '@/core/lib/utils';
 
-type Role = 'owner' | 'provider';
+type Role = 'owner' | 'provider' | 'admin';
 
 interface RoleToggleProps {
   value: Role;
@@ -13,6 +13,7 @@ interface RoleToggleProps {
 const OPTIONS: { value: Role; label: string; icon: React.ReactNode; bgColor: string }[] = [
   { value: 'owner', label: "I'm a Property Owner", icon: <Home size={15} />, bgColor: 'from-[var(--gradient-dark-primary)]/50 to-[var(--gradient-dark-secondary)]/50' },
   { value: 'provider', label: "I'm a Service Provider", icon: <Wrench size={15} />, bgColor: 'from-[var(--gradient-dark-secondary)]/50 to-[var(--gradient-dark-tertiary)]/50' },
+  { value: 'admin', label: "I'm an Administrator", icon: <Shield size={15} />, bgColor: 'from-[var(--gradient-dark-tertiary)]/50 to-purple-600/50' },
 ];
 
 export function RoleToggle({ value, onChange }: RoleToggleProps) {

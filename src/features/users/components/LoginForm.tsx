@@ -100,6 +100,7 @@ export function LoginForm() {
             state={errors.email ? 'error' : 'default'}
             error={errors.email?.message}
             {...register('email')}
+            aria-describedby={errors.email ? 'email-error' : undefined}
           />
 
           <div className="relative">
@@ -111,11 +112,14 @@ export function LoginForm() {
               error={errors.password?.message}
               {...register('password')}
               leftIcon={showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              aria-describedby={errors.password ? 'password-error' : undefined}
             />
             <button
               type="button"
               className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-[var(--brand-gold)] transition-colors"
               onClick={() => setShowPassword((v) => !v)}
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
+              aria-pressed={showPassword}
             >
               {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
             </button>

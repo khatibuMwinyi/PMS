@@ -205,6 +205,19 @@ export function ProviderRegisterForm({ onSuccess }: ProviderRegisterFormProps) {
           Create Provider Account
         </UnifiedButton>
 
+        <div className="mt-6 text-center">
+          <p className="text-xs text-white/60">
+            By registering, you agree to our{' '}
+            <a href="/terms" className="text-[var(--brand-gold)] hover:text-[var(--brand-gold-light)] transition-colors">
+              Terms
+            </a>{' '}
+            &{' '}
+            <a href="/privacy" className="text-[var(--brand-gold)] hover:text-[var(--brand-gold-light)] transition-colors">
+              Privacy
+            </a>
+          </p>
+        </div>
+
       </fieldset>
     </form>
   );

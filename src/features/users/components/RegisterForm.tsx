@@ -1,20 +1,57 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
+import { z } from 'zod';
+import { useSearchParams } from 'next/navigation';
+import { Input } from '@/components/ui/Input';
+
+// Import role-specific forms
 import { RoleToggle } from './RoleToggle';
 import { OwnerRegisterForm } from './OwnerRegisterForm';
 import { ProviderRegisterForm } from './ProviderRegisterForm';
 
+// Validation schema for base fields
+const RegisterSchema = z.object({
+  email: z.string().email('Enter a valid email'),
+  password: z.string().min(8, 'Password must be at least 8 characters'),
+});
+
 type Role = 'owner' | 'provider';
 
-export function RegisterForm() {
+export default function RegisterForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [role, setRole] = useState<Role>('owner');
+  const [selectedPlan, setSelectedPlan] = useState<string>('');
+  const [password, setPassword] = useState('');
+  const [passwordStrength, setPasswordStrength] = useState<'weak' | 'medium' | 'strong'>('weak');
 
-  const handleRoleChange = (next: Role) => {
-    setRole(next);
+  // Preselect plan from URL query param
+  useEffect(() => {
+    const plan = searchParams.get('plan');
+    if (plan) setSelectedPlan(plan);
+  }, [searchParams]);
+
+  // Calculate password strength (UI only)
+  useEffect(() => {
+    const strength = calculatePasswordStrength(password);
+    setPasswordStrength(strength);
+  }, [password]);
+
+  const calculatePasswordStrength = (pwd: string): 'weak' | 'medium' | 'strong' => {
+    if (pwd.length >= 12) return 'strong';
+    if (pwd.length >= 8) return 'medium';
+    return 'weak';
+  };
+
+  const getStrengthColor = (strength: 'weak' | 'medium' | 'strong') => {
+    switch (strength) {
+      case 'strong': return 'text-[var(--state-success)]';
+      case 'medium': return 'text-[var(--state-warning)]';
+      default: return 'text-[var(--text-muted)]';
+    }
   };
 
   const handleSuccess = () => {
@@ -22,81 +59,74 @@ export function RegisterForm() {
   };
 
   return (
-    <div className="w-full space-y-4">
+    <div className="w-full max-w-2xl mx-auto space-y-6">
       <motion.div
         className="text-center"
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
       >
-        <h2 className="text-xl font-bold text-white">Create Account</h2>
-        <p className="text-xs text-white/50">Join Oweru today</p>
+        <h2 className="text-2xl font-bold text-white mb-2">Create Account</h2>
+        <p className="text-[var(--text-muted)]">Join Oweru today</p>
       </motion.div>
 
-      <RoleToggle value={role} onChange={handleRoleChange} />
-
       <motion.div
-        className="px-3 py-2.5 rounded-lg bg-white/5 border border-[var(--brand-gold)]/20"
-        key={role}
-        initial={{ opacity: 0, y: 5 }}
+        className="relative bg-[var(--surface-card)] p-6 rounded-2xl shadow-card border border-[var(--border-default)]"
+        initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.2 }}
+        exit={{ opacity: 0, y: -10 }}
       >
-        {role === 'owner' ? (
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-[var(--brand-gold)]/20 flex items-center justify-center flex-shrink-0">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--brand-gold)" strokeWidth="2">
-                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                <polyline points="9 22 9 12 15 12 15 22"></polyline>
-              </svg>
-            </div>
-            <div>
-              <h3 className="text-sm text-white font-medium">Property Owner</h3>
-              <p className="text-[10px] text-white/50">Get instant quotes, track work, pay securely</p>
-            </div>
+        {/* Role Toggle */}
+        <div className="mb-6">
+          <RoleToggle value={role} onChange={setRole} />
+        </div>
+
+        {/* Role-Specific Forms */}
+        <div className="space-y-6">
+          {role === 'owner' && (
+            <OwnerRegisterForm onSuccess={handleSuccess} />
+          )}
+          {role === 'provider' && (
+            <ProviderRegisterForm onSuccess={handleSuccess} />
+          )}
+        </div>
+
+        {/* Password Strength Indicator */}
+        <div className="mt-4 pt-4 border-t border-[var(--border-default)]">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-sm font-medium text-white">Password Strength: </span>
+            <div className={`h-2 rounded-full transition-all ${getStrengthColor(passwordStrength)}`} style={{ width: '100px' }} />
+            <span className="text-xs text-[var(--text-muted)]">{passwordStrength}</span>
           </div>
-        ) : (
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-[var(--brand-gold)]/20 flex items-center justify-center flex-shrink-0">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--brand-gold)" strokeWidth="2">
-                <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
-              </svg>
-            </div>
-            <div>
-              <h3 className="text-sm text-white font-medium">Service Provider</h3>
-              <p className="text-[10px] text-white/50">Receive work orders, build rating</p>
-            </div>
+          {password && (
+            <motion.span
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className={`text-xs ${getStrengthColor(passwordStrength)}`}
+            >
+              {passwordStrength === 'weak' && 'Consider adding uppercase, numbers, or symbols'}
+              {passwordStrength === 'medium' && 'Good strength, but can be stronger'}
+              {passwordStrength === 'strong' && 'Strong password! ✅'}
+            </motion.span>
+          )}
+        </div>
+
+        {/* Plan Selection */}
+        {selectedPlan && (
+          <div className="mt-4 p-3 bg-[var(--surface-overlay)] rounded-lg border border-[var(--brand-gold)]/20">
+            <p className="text-sm text-white font-medium">Selected Plan: <span className="text-[var(--brand-gold)]">{selectedPlan}</span></p>
+            <p className="text-xs text-[var(--text-muted)] mt-1">Plan will be applied during registration</p>
           </div>
         )}
       </motion.div>
-
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={role}
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
-          transition={{ duration: 0.2 }}
-        >
-          {role === 'owner' ? (
-            <OwnerRegisterForm onSuccess={handleSuccess} />
-          ) : (
-            <ProviderRegisterForm onSuccess={handleSuccess} />
-          )}
-        </motion.div>
-      </AnimatePresence>
-
-      <motion.p
-        className="text-center text-xs text-white/50"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.5 }}
-      >
-        Already have an account?{' '}
-        <a href="/login" className="text-[var(--brand-gold)] font-medium hover:text-[var(--brand-gold-light)] transition-colors">
-          Sign in →
-        </a>
-      </motion.p>
     </div>
   );
 }
+
+// Helper component for role indicator pins
+const RolePin: React.FC<{ icon: string; label: string }> = ({ icon, label }) => (
+  <div className="flex items-center gap-2 text-white/70 text-xs">
+    <span>{icon}</span>
+    <span>{label}</span>
+  </div>
+);

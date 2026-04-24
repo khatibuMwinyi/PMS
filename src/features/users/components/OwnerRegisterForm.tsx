@@ -23,9 +23,10 @@ type FormData = z.infer<typeof Schema>;
 
 interface OwnerRegisterFormProps {
   onSuccess: () => void;
+  selectedPlan?: string;
 }
 
-export function OwnerRegisterForm({ onSuccess }: OwnerRegisterFormProps) {
+export function OwnerRegisterForm({ onSuccess, selectedPlan }: OwnerRegisterFormProps) {
   const [showPass, setShowPass]    = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
@@ -165,6 +166,19 @@ export function OwnerRegisterForm({ onSuccess }: OwnerRegisterFormProps) {
         >
           Create Owner Account
         </UnifiedButton>
+
+        <div className="mt-6 text-center">
+          <p className="text-xs text-white/60">
+            By registering, you agree to our{' '}
+            <a href="/terms" className="text-[var(--brand-gold)] hover:text-[var(--brand-gold-light)] transition-colors">
+              Terms
+            </a>{' '}
+            &{' '}
+            <a href="/privacy" className="text-[var(--brand-gold)] hover:text-[var(--brand-gold-light)] transition-colors">
+              Privacy
+            </a>
+          </p>
+        </div>
 
       </fieldset>
     </form>
