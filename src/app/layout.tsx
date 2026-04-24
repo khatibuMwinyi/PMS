@@ -1,21 +1,13 @@
 import './globals.css';
 import type { Metadata } from 'next';
-import { DM_Serif_Display, DM_Sans } from 'next/font/google';
+import { Inter } from 'next/font/google';
 import { SessionProvider } from '@/components/providers/SessionProvider';
 import { ToastProvider } from '@/providers/ToastProvider';
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
-import { ErrorBoundaryWrapper } from '@/components/ui/ErrorBoundaryWrapper';
 
-const display = DM_Serif_Display({
+const inter = Inter({
   subsets: ['latin'],
-  weight: ['400'],
-  variable: '--font-display',
-  display: 'swap',
-});
-
-const sans = DM_Sans({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600'],
+  weight: ['300', '400', '500', '600', '700'],
   variable: '--font-sans',
   display: 'swap',
 });
@@ -27,16 +19,19 @@ export const metadata: Metadata = {
     icon: '/images/logo.jpeg',
     apple: '/images/logo.jpeg',
   },
+  other: {
+    preconnect: 'https://fonts.googleapis.com',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${display.variable} ${sans.variable}`}>
-      <body className="font-sans">
+    <html lang="en" className={`${inter.variable}`}>
+      <body className="font-sans antialiased">
         <SessionProvider>
           <ErrorBoundary>
             <ToastProvider>
-              <ErrorBoundaryWrapper>{children}</ErrorBoundaryWrapper>
+              {children}
             </ToastProvider>
           </ErrorBoundary>
         </SessionProvider>

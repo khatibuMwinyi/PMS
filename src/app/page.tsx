@@ -1,10 +1,15 @@
 'use client';
 
+import Hero from '@/components/Hero/Hero';
+import PricingGrid from '@/components/Pricing/PricingGrid';
+import Footer from '@/components/Footer/Footer';
+
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { ArrowRight, Building2, Users, Shield, TrendingUp, Clock, Menu, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useDevice } from '@/components/hooks/useDevice';
+import { Building2, Users, TrendingUp, Clock, X, Menu, ArrowRight, Shield } from 'lucide-react';
+import { motion } from 'framer-motion';
+import Image from 'next/image';
 
 export default function LandingPage() {
   const [activeTab, setActiveTab] = useState('owners');
@@ -49,7 +54,7 @@ export default function LandingPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#F8F8F9]">
+    <div className="min-h-screen bg-[var(--surface-page)]">
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 bg-white/90 backdrop-blur-sm border-b border-[#DDE1E8] z-50">
         <div className="container mx-auto px-6 py-4">
@@ -60,7 +65,14 @@ export default function LandingPage() {
               animate={{ opacity: 1, x: 0 }}
               className="text-2xl font-bold text-[#0F172A]"
             >
-              Oweru
+              <Image
+                src="/images/logo.jpeg"
+                alt="Oweru Logo"
+                width={120}
+                height={40}
+                style={{ width: 'auto', height: 'auto' }}
+                priority
+              />
             </motion.div>
 
             {/* Desktop Links - Hidden on mobile */}
@@ -138,56 +150,16 @@ export default function LandingPage() {
         </div>
       </div>
 
-      {/* Hero */}
-      <section className="relative pt-32 pb-20 px-6 overflow-hidden min-h-[50vh] flex items-center">
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/uploads/properties/zBuYbVCaGxVJK7wF3CmPV-pexels-angelo-perez-343619529-14083659.jpg')" }} />
-        <div className="absolute inset-0 bg-gradient-to-r from-[var(--brand-primary)]/80 via-[var(--brand-primary)]/60 to-[var(--brand-primary)]/80" />
-        <div className="container mx-auto max-w-6xl relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-16"
-          >
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ delay: 0.2 }}
-              className="inline-flex items-center gap-2 mb-8"
-            >
-              <div className="w-1 h-8 bg-[var(--brand-gold)] rounded"></div>
-              <span className="text-sm font-semibold text-white/80 uppercase tracking-wide">Professional Property Management</span>
-            </motion.div>
+      <Hero
+        title="Simplify Property Operations"
+        subtitle="The smart way to manage properties and connect with service providers across Tanzania"
+        onGetStarted={() => handleSignIn('user')}
+      />
 
-            <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
-              Simplify <span className="text-[var(--brand-gold)]">Property</span> Operations
-            </h1>
-            <p className="text-xl text-white/80 mb-12 max-w-2xl mx-auto">
-              The smart way to manage properties and connect with service providers across Tanzania
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => handleSignIn('user')}
-                className="px-8 py-4 bg-gradient-to-r from-[var(--brand-gold)] to-[var(--brand-gold-light)] text-[var(--brand-primary)] rounded-lg font-semibold shadow-lg hover:shadow-xl hover:shadow-[var(--brand-gold)]/30 transition-all btn-glow"
-              >
-                Get Started
-                <ArrowRight className="inline ml-2 w-5 h-5" />
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-8 py-4 border-2 border-white text-white rounded-lg font-semibold hover:bg-white hover:text-[var(--brand-primary)] transition-colors"
-              >
-                Explore Features
-              </motion.button>
-            </div>
-          </motion.div>
-
-          {/* Role Selection Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
+      {/* Role Selection Cards */}
+      <section className="py-20 bg-[var(--surface-card)]">
+        <div className="container mx-auto px-6 max-w-6xl">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
                 role: 'owner',
@@ -213,14 +185,14 @@ export default function LandingPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 * index }}
-                className="bg-white/10 backdrop-blur-sm p-8 rounded-2xl border border-white/20 hover:border-[var(--brand-gold)] hover:bg-white/20 transition-all cursor-pointer group"
+                className="bg-[var(--surface-card)] p-8 rounded-2xl border border-[var(--border-default)] hover:border-[var(--brand-gold)] hover:shadow-lg transition-all cursor-pointer group"
                 onClick={() => handleSignIn(item.role)}
               >
-                <div className="w-16 h-16 mx-auto mb-6 bg-white/20 rounded-xl flex items-center justify-center group-hover:bg-[var(--brand-gold)] transition-colors">
-                  <item.icon className="w-8 h-8 text-white group-hover:text-white" />
+                <div className="w-16 h-16 mx-auto mb-6 bg-[var(--surface-overlay)] rounded-xl flex items-center justify-center group-hover:bg-[var(--brand-gold)] transition-colors">
+                  <item.icon className="w-8 h-8 text-[var(--text-primary)] group-hover:text-white" />
                 </div>
-                <h3 className="text-xl font-bold text-white mb-3 text-center">{item.title}</h3>
-                <p className="text-white/70 text-center mb-6">{item.description}</p>
+                <h3 className="text-xl font-bold text-[var(--text-primary)] mb-3 text-center">{item.title}</h3>
+                <p className="text-[var(--text-secondary)] text-center mb-6">{item.description}</p>
                 <div className="text-center">
                   <span className="text-sm font-medium text-[var(--brand-gold)]">Sign In →</span>
                 </div>
@@ -229,7 +201,7 @@ export default function LandingPage() {
           </div>
 
           {/* Stats Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16">
             {stats.map((stat, index) => (
               <motion.div
                 key={index}
@@ -238,11 +210,11 @@ export default function LandingPage() {
                 transition={{ delay: 0.1 * index }}
                 className="text-center group"
               >
-                <div className="w-12 h-12 mx-auto mb-4 bg-[#DDE1E8] rounded-lg flex items-center justify-center group-hover:bg-[#C89128] transition-colors">
-                  <stat.icon className="w-6 h-6 text-[#0F172A] group-hover:text-white" />
+                <div className="w-12 h-12 mx-auto mb-4 bg-[var(--surface-overlay)] rounded-lg flex items-center justify-center group-hover:bg-[var(--brand-gold)] transition-colors">
+                  <stat.icon className="w-6 h-6 text-[var(--text-primary)] group-hover:text-white" />
                 </div>
-                <div className="text-3xl font-bold text-[#0F172A] mb-1">{stat.value}</div>
-                <div className="text-sm text-[#64748B]">{stat.label}</div>
+                <div className="text-3xl font-bold text-[var(--text-primary)] mb-1">{stat.value}</div>
+                <div className="text-sm text-[var(--text-muted)]">{stat.label}</div>
               </motion.div>
             ))}
           </div>
@@ -345,8 +317,11 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Pricing */}
+      <PricingGrid />
+
       {/* CTA */}
-      <section className="py-20 bg-[#0F172A] text-white">
+      <section className="py-20 bg-[var(--brand-primary)] text-white">
         <div className="container mx-auto px-6 text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -363,7 +338,7 @@ export default function LandingPage() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => handleSignIn('user')}
-              className="px-8 py-4 bg-[#C89128] text-[#0F172A] rounded-lg font-semibold hover:bg-[#E5B972] transition-colors"
+              className="px-8 py-4 bg-[var(--brand-gold)] text-[var(--brand-primary)] rounded-lg font-semibold hover:bg-[var(--brand-gold-light)] transition-colors"
             >
               Start Your Journey
               <ArrowRight className="inline ml-2 w-5 h-5" />
@@ -371,6 +346,8 @@ export default function LandingPage() {
           </motion.div>
         </div>
       </section>
+
+      <Footer />
     </div>
   );
 }
