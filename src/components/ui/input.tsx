@@ -1,93 +1,63 @@
-import * as React from 'react';
+'use client';
+
+import { motion } from 'framer-motion';
+import { useState } from 'react';
 import { cn } from '@/core/lib/utils';
 
-export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface AnimatedInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   error?: string;
   helper?: string;
-  rightElement?: React.ReactNode;
-  inputSize?: 'md' | 'lg';
-  variant?: 'default' | 'bold' | 'auth';
-  dataTheme?: 'light' | 'dark';
 }
 
-export const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, label, error, helper, rightElement, inputSize = 'md', variant = 'default', dataTheme = 'dark', id, ...props }, ref) => {
-    const inputId = id ?? label?.toLowerCase().replace(/\s+/g, '-');
-    const isLightTheme = dataTheme === 'light';
-    const borderColor = isLightTheme ? 'var(--brand-gold)' : 'var(--border-default)';
+export function AnimatedInput({ label, error, helper, className, ...props }: AnimatedInputProps) {
+  const [isFocused, setIsFocused] = useState(false);
+  const hasValue = props.value && String(props.value).length > 0;
 
-    return (
-      <div className="flex flex-col mt-2">
-        {label && (
-          <label
-            htmlFor={inputId}
-            className="text-[13px] font-medium text-[var(--text-secondary)] leading-none"
-          >
-            {label}
-          </label>
+  return (
+    <motion.div
+      className="relative"
+      animate={error ? { x: [0, -5, 5, -5, 5, 0] } : {}}
+      transition={{ duration: 0.4 }}
+    >
+      {label && (
+        <motion.label
+          className="absolute left-3 text-sm"
+          style={{
+            top: isFocused || hasValue ? '8px' : '50%',
+            transform: isFocused || hasValue ? 'translateY(0) scale(0.75)' : 'translateY(-50%)',
+          }}
+          animate={{
+            color: error ? 'var(--state-error)' : isFocused ? 'var(--brand-gold)' : 'rgba(255,255,255,0.6)',
+          }}
+        >
+          {label}
+        </motion.label>
+      )}
+
+      <input
+        className={cn(
+          'w-full bg-transparent border-none shadow-none outline-none'
         )}
+        {...props}
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
+      />
 
-        <div className="relative flex items-center">
-          <input
-            ref={ref}
-            id={inputId}
-            data-theme={dataTheme}
-            className={cn(
-              'w-full rounded-[var(--radius-md)] border',
-              `border-[${borderColor}]`,
-              'text-[var(--text-primary)] placeholder:text-[var(--text-muted)]',
-              'transition-all duration-200',
-              // Focus and hover effects based on variant
-              variant === 'default' && [
-                'focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)] focus:border-transparent',
-                !error && 'border-[var(--border-default)]',
-                error && 'border-[var(--state-error)] focus:ring-[var(--state-error)]',
-                'hover:shadow-[var(--shadow-bold)]',
-              ],
-              variant === 'bold' && [
-                'focus:outline-none focus:ring-2 focus:ring-[var(--brand-gold)] focus:border-transparent',
-                !error && 'border-[var(--border-subtle)]',
-                error && 'border-[var(--state-error)] focus:ring-[var(--state-error)]',
-                'hover:shadow-[var(--shadow-bold)]',
-              ],
-              // Sizes
-              inputSize === 'md' && 'h-10 px-3 text-[14px]',
-              inputSize === 'lg' && 'h-12 px-4 text-[15px]',
-              // Right padding when there's a right element
-              rightElement && 'pr-10',
-              // Auth variant (Light Theme)
-              variant === 'auth' && [
-                'bg-white/80 text-[var(--text-primary)] placeholder:text-[var(--text-muted)]',
-                !error && `border-[${borderColor}]`,
-                error && 'border-[var(--state-error)] focus:ring-[var(--state-error)]',
-                'focus:outline-none focus:ring-2 focus:ring-[var(--brand-gold)] focus:border-transparent',
-                'backdrop-blur-md',
-              ],
-              className,
-            )}
-            {...props}
-          />
-          {rightElement && (
-            <div className="absolute right-3 flex items-center text-[var(--text-muted)]">
-              {rightElement}
-            </div>
-          )}
-        </div>
-
-        {error && (
-          <p className="text-[13px] text-[var(--state-error)] leading-snug animate-fade-up">
-            {error}
-          </p>
-        )}
-        {helper && !error && (
-          <p className="text-[12px] text-[var(--text-muted)] leading-snug">
-            {helper}
-          </p>
-        )}
-      </div>
-    );
-  }
-);
-
-Input.displayName = 'Input';
+      {error && (
+        <motion.p
+          className="text-xs text-red-500 mt-1.5 ml-1"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          {error}
+        </motion.p>
+      )}
+      {helper && !error && (
+        <p className="text-xs text-white/40 mt-1.5 ml-1">
+          {helper}
+        </p>
+      )}
+    </motion.div>
+  );
+}

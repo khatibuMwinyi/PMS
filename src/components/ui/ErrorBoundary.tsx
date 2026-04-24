@@ -184,19 +184,15 @@ export const useErrorBoundary = () => {
 export const ErrorBoundaryWrapper = ({
   children,
   fallback,
-  onError,
-  onRetry,
 }: {
   children: React.ReactNode;
   fallback?: React.ReactNode;
-  onError?: (error: Error) => void;
-  onRetry?: () => void;
 }) => {
   const { error, resetError } = useErrorBoundary();
 
   const handleRetry = () => {
     resetError();
-    onRetry?.();
+    window.location.reload();
   };
 
   if (error) {

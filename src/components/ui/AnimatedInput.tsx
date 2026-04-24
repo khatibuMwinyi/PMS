@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useState, cn } from 'react';
 
 interface AnimatedInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -36,16 +36,20 @@ export function AnimatedInput({ label, error, helper, className, ...props }: Ani
         </motion.label>
       )}
 
-      <div className="relative">
+      <div
+        className={cn(
+          'relative flex items-center',
+          'focus-within:ring-2 focus-within:ring-[var(--brand-gold)] focus-within:ring-offset-2 focus-within:rounded-xl',
+          error && 'focus-within:ring-[var(--state-error)]',
+        )}
+      >
         <input
-          className={`
-            w-full bg-white/5 border rounded-xl px-4 py-3 
-            text-white placeholder:text-transparent
-            transition-all duration-200
-            focus:outline-none
-            ${error ? 'border-red-500' : 'border-white/10 focus:border-[var(--brand-gold)]'}
-            ${className || ''}
-          `}
+          className={cn(
+            'w-full bg-transparent border-none shadow-none outline-none ring-none',
+            'text-white placeholder:text-transparent',
+            'transition-all duration-200',
+            className,
+          )}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           {...props}
