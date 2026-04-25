@@ -6,6 +6,8 @@ import bcrypt from 'bcryptjs'; // For password comparison
 import { UserRole } from '@prisma/client'; // For session typing
 import type { DefaultSession } from 'next-auth'; // For session typing
 
+import { jwtCallback, sessionCallback } from './callbacks';
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma), // Use PrismaAdapter for session management
   session: { strategy: 'jwt' }, // Keep JWT strategy for statelessness
@@ -43,24 +45,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
     }),
   ],
-  callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        token.role = (user as any).role; // Ensure role is passed to token
-        token.status = (user as any).status; // Ensure status is passed to token
-        token.id = user.id; // Ensure user ID is in token
-      }
-      return token;
-    },
-    async session({ session, token }) {
-      if (token) {
-        session.user.role = token.role as UserRole; // Type role correctly
-        session.user.status = token.status as string; // Type status correctly
-        session.user.id = token.id as string; // Ensure user ID is in session
-      }
-      return session;
-    },
-  },
+  callbacks: { jwt: jwtCallback, session: sessionCallback },
   pages: {
     signIn: '/login',
   },
