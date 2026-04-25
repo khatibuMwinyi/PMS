@@ -10,9 +10,11 @@ OPSMP_Combined_Analysis.md
 .next/
 next-env.d.ts
 tsconfig.tsbuildinfo
+.worktrees/
 .env
 .next/
 node_modules/
 .env
 *.log
 tsconfig.tsbuildinfo
+.worktrees/
