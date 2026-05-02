@@ -6,6 +6,31 @@ import { auth }            from '@/core/auth';
 import { uploadImage }     from '@/core/storage/upload';
 import { CreatePropertySchema, DAR_ES_SALAAM_LAT, DAR_ES_SALAAM_LNG } from './types';
 
+// Helper to write audit event
+async function writeAudit(params: {
+  actorId: string;
+  entityType: string;
+  entityId: string;
+  action: 'CREATE' | 'UPDATE' | 'DELETE' | 'STATUS_CHANGE';
+  oldValue?: any;
+  newValue?: any;
+}) {
+  try {
+    await prisma.auditEvent.create({
+      data: {
+        actorId: params.actorId,
+        entityType: params.entityType,
+        entityId: params.entityId,
+        action: params.action,
+        oldValue: params.oldValue ?? null,
+        newValue: params.newValue ?? null,
+      },
+    });
+  } catch (error) {
+    console.error('Failed to write audit event:', error);
+  }
+}
+
 export async function createProperty(formData: FormData): Promise<{ success: boolean; error?: string }> {
   const session = await auth();
   if (!session?.user || session.user.role !== 'OWNER') {
@@ -65,6 +90,15 @@ export async function createProperty(formData: FormData): Promise<{ success: boo
     },
   });
 
+  // Write audit event
+  await writeAudit({
+    actorId: session.user.id,
+    entityType: 'Property',
+    entityId: property.id,
+    action: 'CREATE',
+    newValue: { name: property.name, zone: property.zone },
+  });
+
   // ── Set PostGIS geometry via raw query (Unsupported type workaround) ─
   await prisma.$executeRaw`
     UPDATE properties
@@ -100,7 +134,7 @@ export async function addUnit(formData: FormData): Promise<{ success: boolean; e
   return { success: true };
 }
 
-// ─── Update Property Status (Owner) ─────────────────────────────
+// ─── Update Property Status (Owner) ─────────────────────
 
 export async function updatePropertyStatus(
   propertyId: string,
@@ -120,20 +154,31 @@ export async function updatePropertyStatus(
     return { success: false, error: 'Owner profile not found' };
   }
 
-  const property = await prisma.property.findFirst({
+  const propertyBefore = await prisma.property.findFirst({
     where: {
       id:      propertyId,
       ownerId: ownerProfile.id,
     },
+    select: { id: true, status: true },
   });
 
-  if (!property) {
+  if (!propertyBefore) {
     return { success: false, error: 'Property not found or access denied' };
   }
 
   await prisma.property.update({
     where: { id: propertyId },
     data: { status },
+  });
+
+  // Write audit event for status change
+  await writeAudit({
+    actorId: session.user.id,
+    entityType: 'Property',
+    entityId: propertyId,
+    action: 'STATUS_CHANGE',
+    oldValue: { status: propertyBefore.status },
+    newValue: { status },
   });
 
   revalidatePath('/owner/properties');

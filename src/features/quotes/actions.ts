@@ -4,6 +4,31 @@ import { QuoteStatus, CreateQuoteSchema, UpdateQuoteStatusSchema } from './types
 import { calculateQuote, createPriceLock, isLockActive } from '@/features/pricing/engine';
 import { validatePricingParams } from '@/features/pricing/engine';
 
+// Helper to write audit event
+async function writeAudit(params: {
+  actorId: string;
+  entityType: string;
+  entityId: string;
+  action: 'CREATE' | 'UPDATE' | 'DELETE' | 'STATUS_CHANGE';
+  oldValue?: any;
+  newValue?: any;
+}) {
+  try {
+    await prisma.auditEvent.create({
+      data: {
+        actorId: params.actorId,
+        entityType: params.entityType,
+        entityId: params.entityId,
+        action: params.action,
+        oldValue: params.oldValue ?? null,
+        newValue: params.newValue ?? null,
+      },
+    });
+  } catch (error) {
+    console.error('Failed to write audit event:', error);
+  }
+}
+
 /**
  * Quote Server Actions for OPSMP Platform
  * 
@@ -86,6 +111,29 @@ export async function requestQuote(params: RequestQuoteParams): Promise<QuoteRes
       priceLockedUntil,
       status: QuoteStatus.QUOTED,
     },
+  });
+
+  // Write audit event
+  await writeAudit({
+    actorId: params.ownerId,
+    entityType: 'Quote',
+    entityId: quote.id,
+    action: 'CREATE',
+    newValue: {
+      quotedPrice: quote.quotedPrice,
+      propertyName: property.name,
+      serviceType: serviceType.name,
+    },
+  });
+
+  // Fire QUOTE_REQUESTED event
+  const { fireQuoteRequestedEvent } = await import('@/core/events');
+  await fireQuoteRequestedEvent({
+    userId: params.ownerId,
+    quoteId: quote.id,
+    propertyName: property.name,
+    serviceType: serviceType.name,
+    quotedPrice: quotedPrice.toNumber(),
   });
 
   return {
@@ -184,14 +232,37 @@ export async function acceptQuote(quoteId: string): Promise<void> {
     throw new Error('Quote has expired');
   }
 
+  // Capture old status for audit
+  const oldStatus = quote.status;
+
   // Update status to ACCEPTED
-  await prisma.quote.update({
+  const updatedQuote = await prisma.quote.update({
     where: { id: quoteId },
     data: { 
       status: QuoteStatus.ACCEPTED,
       updatedAt: new Date(),
     },
   });
+
+  // Write audit event for status change
+  await writeAudit({
+    actorId: quote.ownerId,
+    entityType: 'Quote',
+    entityId: quote.id,
+    action: 'STATUS_CHANGE',
+    oldValue: { status: oldStatus },
+    newValue: { status: QuoteStatus.ACCEPTED },
+  });
+
+  // Fire QUOTE_ACCEPTED event
+  const { fireQuoteAcceptedEvent } = await import('@/core/events');
+  await fireQuoteAcceptedEvent({
+    userId: quote.ownerId,
+    quoteId: quote.id,
+    quotedPrice: quote.quotedPrice,
+  });
+
+  return;
 }
 
 /**
@@ -203,6 +274,11 @@ export async function updateQuoteStatus(quoteId: string, status: QuoteStatus): P
     throw new Error(`Invalid status update: ${validation.error.message}`);
   }
 
+  const quoteBefore = await prisma.quote.findUnique({
+    where: { id: quoteId },
+    select: { status: true },
+  });
+
   await prisma.quote.update({
     where: { id: quoteId },
     data: { 
@@ -210,6 +286,18 @@ export async function updateQuoteStatus(quoteId: string, status: QuoteStatus): P
       updatedAt: new Date(),
     },
   });
+
+  // Write audit event
+  if (quoteBefore) {
+    await writeAudit({
+      actorId: 'system', // Or pass in the actual actorId
+      entityType: 'Quote',
+      entityId: quoteId,
+      action: 'UPDATE',
+      oldValue: { status: quoteBefore.status },
+      newValue: { status },
+    });
+  }
 }
 
 /**
