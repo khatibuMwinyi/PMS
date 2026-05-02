@@ -5,11 +5,16 @@ import { QuoteList } from '@/features/quotes/components/QuoteList';
 import { ErrorBoundaryWrapper } from '@/components/ui/ErrorBoundary';
 import { UnifiedButton } from '@/components/ui/UnifiedButton';
 import Link from 'next/link';
+import { auth } from '@/core/auth';
 
 export const metadata: Metadata = { title: 'My Quotes — Oweru' };
 
 async function QuotesContent() {
-  const quotes = await listOwnerQuotes(''); // TODO: Get actual ownerId from session
+  const session = await auth();
+  if (!session?.user) {
+    throw new Error('Unauthorized');
+  }
+  const quotes = await listOwnerQuotes(session.user.id);
   
   return (
     <div>

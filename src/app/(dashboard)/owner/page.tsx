@@ -30,21 +30,23 @@ async function OwnerDashboardContent() {
       {/* Portfolio Overview Section */}
       <PortfolioOverview
         title="Portfolio Overview"
-        subtitle="Manage your properties and services"
+        subtitle="Real-time status of your real estate investments"
       />
 
       {/* Financial Summary Cards */}
-      <FinancialSummaryCards
-        totalSpend="$428,950.00"
-        activeRequests={24}
-        maintenanceROI="94.2%"
-      />
+      <Suspense fallback={<div>Loading financials...</div>}>
+        <FinancialSummaryCards />
+      </Suspense>
 
       {/* Property Card Grid */}
-      <PropertyCardGrid />
+      <Suspense fallback={<div>Loading properties...</div>}>
+        <PropertyCardGrid />
+      </Suspense>
 
       {/* Service Requests Table */}
-      <ServiceRequestsTable />
+      <Suspense fallback={<div>Loading service requests...</div>}>
+        <ServiceRequestsTable />
+      </Suspense>
     </DashboardShell>
   );
 }

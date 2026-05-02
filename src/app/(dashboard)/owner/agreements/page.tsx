@@ -5,11 +5,16 @@ import { AgreementList } from '@/features/agreements/components/AgreementList';
 import { ErrorBoundaryWrapper } from '@/components/ui/ErrorBoundary';
 import { UnifiedButton } from '@/components/ui/UnifiedButton';
 import Link from 'next/link';
+import { auth } from '@/core/auth';
 
 export const metadata: Metadata = { title: 'My Agreements — Oweru' };
 
 async function AgreementsContent() {
-  const agreements = await listOwnerAgreements(''); // TODO: Get actual ownerId from session
+  const session = await auth();
+  if (!session?.user) {
+    throw new Error('Unauthorized');
+  }
+  const agreements = await listOwnerAgreements(session.user.id);
   
   return (
     <div>

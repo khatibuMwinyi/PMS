@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { cn } from '@/core/lib/utils';
+import { getDashboardProperties } from '@/features/dashboard/actions';
 
 interface Property {
   id: string;
@@ -16,37 +17,8 @@ interface PropertyCardGridProps {
   properties?: Property[];
 }
 
-const defaultProperties: Property[] = [
-  {
-    id: '1',
-    name: 'The Heights',
-    type: 'RESIDENTIAL',
-    address: '123 Main St, Cityville',
-    units: 24,
-    occupancy: 92,
-    imageUrl: '/images/properties/the-heights.jpg',
-  },
-  {
-    id: '2',
-    name: 'Ironwood',
-    type: 'COMMERCIAL',
-    address: '456 Oak Ave, Townsville',
-    units: 12,
-    occupancy: 85,
-    imageUrl: '/images/properties/ironwood.jpg',
-  },
-  {
-    id: '3',
-    name: 'Nexus',
-    type: 'RESIDENTIAL',
-    address: '789 Pine Rd, Villagetown',
-    units: 36,
-    occupancy: 78,
-    imageUrl: '/images/properties/nexus.jpg',
-  },
-];
-
-function PropertyCard({ property }: { property: Property }) {
+export async function PropertyCardGrid() {
+  const properties = await getDashboardProperties();
   return (
     <Link href={`/owner/properties/${property.id}`}>
       <div className="rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-card)] overflow-hidden transition-all duration-200 hover:border-[var(--brand-gold)] hover:shadow-md">
@@ -95,7 +67,26 @@ function PropertyCard({ property }: { property: Property }) {
   );
 }
 
-export function PropertyCardGrid({ properties = defaultProperties }: PropertyCardGridProps) {
+export async function PropertyCardGrid() {
+  const properties = await getDashboardProperties();
+
+  return (
+    <div className="mb-6">
+      <h2 className="mb-4 text-[var(--font-h2)] text-[var(--text-primary)]">Properties</h2>
+      {properties.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {properties.map((property) => (
+            <PropertyCard key={property.id} property={property} />
+          ))}
+        </div>
+      ) : (
+        <div className="text-center py-12 text-[var(--text-muted)]">
+          No properties yet. Add your first property to get started.
+        </div>
+      )}
+    </div>
+  );
+}
   return (
     <div className="mb-6">
       <h2 className="mb-4 text-[var(--font-h2)] text-[var(--text-primary)]">Properties</h2>

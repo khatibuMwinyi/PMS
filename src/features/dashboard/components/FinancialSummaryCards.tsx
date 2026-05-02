@@ -1,17 +1,10 @@
 import { BentoCard } from '@/components/ui/BentoCard';
 import { DollarSign, ClipboardList, TrendingUp } from 'lucide-react';
+import { getDashboardFinancials } from '@/features/dashboard/actions';
 
-interface FinancialSummaryCardsProps {
-  totalSpend?: string;
-  activeRequests?: number;
-  maintenanceROI?: string;
-}
+export async function FinancialSummaryCards() {
+  const { totalSpend, activeRequests, maintenanceROI } = await getDashboardFinancials();
 
-export function FinancialSummaryCards({
-  totalSpend = '$428,950.00',
-  activeRequests = 24,
-  maintenanceROI = '94.2%',
-}: FinancialSummaryCardsProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
       <BentoCard

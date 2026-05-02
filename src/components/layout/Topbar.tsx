@@ -6,6 +6,7 @@ import { LogOut, ChevronDown, User, Bell, HelpCircle, Settings } from 'lucide-re
 import { RoleBadge } from '@/components/shared/RoleBadge';
 import { Logo } from '@/components/ui/Logo';
 import { cn } from '@/core/lib/utils';
+import { NotificationBell } from '@/features/notifications/components';
 
 interface TopbarUserMenuProps {
   userName?: string | null;
@@ -80,14 +81,8 @@ export function TopbarUserMenu({ userName, userRole }: TopbarUserMenuProps) {
 
   return (
     <div className="flex items-center gap-3">
-      {/* Notification Icon */}
-      <button
-        type="button"
-        aria-label="Notifications"
-        className="rounded-full p-2 hover:bg-[var(--surface-overlay)] transition-colors duration-120"
-      >
-        <Bell size={18} className="text-[var(--text-muted)]" />
-      </button>
+      {/* Notification Bell */}
+      <NotificationBell />
 
       {/* Help Icon */}
       <button
