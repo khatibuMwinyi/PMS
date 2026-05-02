@@ -63,3 +63,48 @@ export async function registerProvider(data: ProviderRegisterInput) {
 
   return { success: true };
 }
+
+// ─── Account Lifecycle Actions (Admin) ─────────────────────────────
+
+export async function activateUser(userId: string) {
+  const session = await auth();
+  if (!session?.user || session.user.role !== 'ADMIN') {
+    throw new Error('Unauthorized: Admin access required');
+  }
+
+  await prisma.user.update({
+    where: { id: userId },
+    data: { status: 'ACTIVE' },
+  });
+
+  return { success: true };
+}
+
+export async function suspendUser(userId: string) {
+  const session = await auth();
+  if (!session?.user || session.user.role !== 'ADMIN') {
+    throw new Error('Unauthorized: Admin access required');
+  }
+
+  await prisma.user.update({
+    where: { id: userId },
+    data: { status: 'SUSPENDED' },
+  });
+
+  return { success: true };
+}
+
+export async function getUsers() {
+  const session = await auth();
+  if (!session?.user || session.user.role !== 'ADMIN') {
+    throw new Error('Unauthorized: Admin access required');
+  }
+
+  return await prisma.user.findMany({
+    include: {
+      ownerProfile: true,
+      providerProfile: true,
+    },
+    orderBy: { createdAt: 'desc' },
+  });
+}
