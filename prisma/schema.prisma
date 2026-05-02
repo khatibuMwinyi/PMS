@@ -77,6 +77,10 @@ model User {
   sessions        Session[]
   ownerProfile    OwnerProfile?
   providerProfile ProviderProfile?
+  quotes         Quote[]
+  agreements     Agreement[]
+  sentNotifications Notification[] @relation("Sender")
+  auditEvents    AuditEvent[] @relation("Actor")
 
   @@index([role, status])
   @@map("users")
@@ -123,6 +127,8 @@ model Property {
   units       Unit[]
   assignments Assignment[]
   priceLocks PriceLock[]
+  quotes      Quote[]
+  agreements  Agreement[]
 
   @@map("properties")
 }
@@ -148,11 +154,10 @@ model ServiceType {
   description  String
   basePrice    Decimal  @map("base_price") @db.Decimal(10, 2)
   pricingRules Json     @map("pricing_rules")
-  createdAt    DateTime @default(now()) @map("created_at")
-  updatedAt    DateTime @updatedAt @map("updated_at")
-
+  isActive     Boolean  @default(true) @map("is_active")
+  quotes       Quote[]
   assignments Assignment[]
-  priceLocks PriceLock[]
+  priceLocks   PriceLock[]
 
   @@map("service_types")
 }
@@ -395,4 +400,73 @@ model StaffTicket {
   @@index([status, assignedTo])
   @@index([priority, status])
   @@map("staff_tickets")
+}
+
+// ─── Quotes ────────────────────────────────────────────────────────
+
+model Quote {
+  id             String   @id @default(cuid())
+  ownerId        String   @map("owner_id")
+  owner          User     @relation(fields: [ownerId], references: [id])
+  propertyId     String   @map("property_id")
+  property       Property @relation(fields: [propertyId], references: [id])
+  serviceTypeId  String   @map("service_type_id")
+  serviceType    ServiceType @relation(fields: [serviceTypeId], references: [id])
+  quotedPrice    Decimal  @map("quoted_price") @db.Decimal(10, 2)
+  priceLockedUntil DateTime? @map("price_locked_until") // 24-hour lock
+  status         String   @default("DRAFT") // DRAFT, QUOTED, EXPIRED, ACCEPTED
+  agreement      Agreement?
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  @@map("quotes")
+}
+
+// ─── Agreements ─────────────────────────────────────────────────────
+
+model Agreement {
+  id             String   @id @default(cuid())
+  quoteId        String   @unique @map("quote_id")
+  quote          Quote     @relation(fields: [quoteId], references: [id])
+  ownerId        String   @map("owner_id")
+  owner          User      @relation(fields: [ownerId], references: [id])
+  propertyId     String   @map("property_id")
+  property       Property  @relation(fields: [propertyId], references: [id])
+  quotedPrice    Decimal   @map("quoted_price") @db.Decimal(10, 2) // Immutable after submission
+  status         String    @default("QUOTED") // QUOTED, PENDING_ASSIGNMENT, ACTIVE, COMPLETED, CANCELLED
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  @@map("agreements")
+}
+
+// ─── Notifications ─────────────────────────────────────────────────
+
+model Notification {
+  id         String   @id @default(cuid())
+  userId     String   @map("user_id")
+  user       User     @relation("Sender", fields: [userId], references: [id])
+  type       String   // EMAIL, SMS, IN_APP
+  event      String   // AUTH_REGISTER, QUOTE_REQUESTED, etc.
+  payload    Json     // Event-specific data
+  isRead     Boolean  @default(false) @map("is_read")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@map("notifications")
+}
+
+// ─── Audit Events ──────────────────────────────────────────────────
+
+model AuditEvent {
+  id          String   @id @default(cuid())
+  actorId     String?  @map("actor_id")
+  actor       User?    @relation("Actor", fields: [actorId], references: [id])
+  entityType  String   @map("entity_type") // User, Property, Quote, Agreement, etc.
+  entityId    String   @map("entity_id")
+  action      String   // CREATE, UPDATE, DELETE, STATUS_CHANGE
+  oldValue    Json?    @map("old_value")
+  newValue    Json?    @map("new_value")
+  timestamp   DateTime @default(now()) @map("timestamp")
+
+  @@map("audit_events")
 }
