@@ -1,0 +1,36 @@
+import Image from 'next/image';
+import Link from 'next/link';
+
+interface LogoProps {
+  width?: number;
+  height?: number;
+  className?: string;
+}
+
+export function Logo({ width = 120, height = 40, className = '' }: LogoProps) {
+  return (
+    <Link href="/dashboard" className={`flex items-center gap-2 ${className}`}>
+      <Image
+        src="/oweru.jpeg"
+        alt="Oweru Logo"
+        width={width}
+        height={height}
+        className="object-contain"
+        priority
+      />
+    </Link>
+  );
+}
+
+export function LogoIcon({ size = 32, className = '' }: { size?: number; className?: string }) {
+  return (
+    <Image
+      src="/oweru.jpeg"
+      alt="Oweru"
+      width={size}
+      height={size}
+      className={`rounded object-contain ${className}`}
+      priority
+    />
+  );
+}

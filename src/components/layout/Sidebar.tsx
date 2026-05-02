@@ -3,58 +3,75 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
-  Settings, Users, Home, AlertTriangle, BarChart2,
-  ClipboardList, Wrench, Receipt, CheckSquare, Wallet, Star,
-  LucideIcon,
+  LayoutDashboard,
+  Home,
+  ClipboardList,
+  Wrench,
+  BarChart3,
+  FileText,
+  PlusCircle,
+  LifeBuoy,
+  BookOpen,
 } from 'lucide-react';
 import { cn } from '@/core/lib/utils';
 
 interface NavItem {
   href: string;
   label: string;
-  icon: LucideIcon;
+  icon: React.ElementType;
 }
 
 const NAV_ITEMS: Record<string, NavItem[]> = {
   ADMIN: [
-    { href: '/admin/services',   label: 'Services',   icon: Settings },
-    { href: '/admin/providers',  label: 'Providers',  icon: Users },
-    { href: '/admin/owners',     label: 'Owners',     icon: Home },
-    { href: '/admin/disputes',   label: 'Disputes',   icon: AlertTriangle },
-    { href: '/admin/analytics',  label: 'Analytics',  icon: BarChart2 },
+    { href: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { href: '/admin/properties', label: 'Properties', icon: Home },
+    { href: '/admin/workflows', label: 'Workflows', icon: ClipboardList },
+    { href: '/admin/financials', label: 'Financials', icon: BarChart3 },
+    { href: '/admin/operations', label: 'Operations', icon: Wrench },
+    { href: '/admin/reports', label: 'Reports', icon: FileText },
   ],
   STAFF: [
-    { href: '/staff/disputes',    label: 'Disputes',    icon: AlertTriangle },
+    { href: '/staff/disputes', label: 'Disputes', icon: ClipboardList },
     { href: '/staff/assignments', label: 'Assignments', icon: ClipboardList },
   ],
   OWNER: [
+    { href: '/owner/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { href: '/owner/properties', label: 'Properties', icon: Home },
-    { href: '/owner/services',   label: 'Services',   icon: Wrench },
-    { href: '/owner/invoices',   label: 'Invoices',   icon: Receipt },
-    { href: '/owner/analytics',  label: 'Analytics',  icon: BarChart2 },
+    { href: '/owner/services', label: 'Services', icon: Wrench },
+    { href: '/owner/leases', label: 'Leases', icon: FileText },
+    { href: '/owner/analytics', label: 'Analytics', icon: BarChart3 },
   ],
   PROVIDER: [
     { href: '/provider/assignments', label: 'Assignments', icon: ClipboardList },
-    { href: '/provider/tasks',       label: 'Tasks',       icon: CheckSquare },
-    { href: '/provider/wallet',      label: 'Wallet',      icon: Wallet },
-    { href: '/provider/ratings',     label: 'Ratings',     icon: Star },
+    { href: '/provider/tasks', label: 'Tasks', icon: ClipboardList },
+    { href: '/provider/wallet', label: 'Wallet', icon: BarChart3 },
+    { href: '/provider/ratings', label: 'Ratings', icon: FileText },
   ],
 };
 
 interface SidebarProps {
   role: string;
+  userName?: string;
 }
 
-export function Sidebar({ role }: SidebarProps) {
+export function Sidebar({ role, userName }: SidebarProps) {
   const pathname = usePathname();
   const items = NAV_ITEMS[role] ?? [];
 
   return (
     <aside
-      className="w-[240px] shrink-0 border-r border-[var(--border-subtle)] bg-[var(--surface-page)] flex flex-col"
-      style={{ minHeight: 'calc(100vh - 64px)' }}
+      className="w-[240px] shrink-0 border-r border-[var(--border-subtle)] bg-[var(--surface-page)] flex flex-col min-h-screen"
     >
-      <nav className="flex flex-col gap-0.5 p-3">
+      {/* Header */}
+      <div className="p-4 border-b border-[var(--border-subtle)]">
+        <h2 className="text-sm font-semibold text-[var(--text-primary)]">Management Console</h2>
+        {userName && (
+          <p className="text-xs text-[var(--text-muted)] mt-0.5">{userName}</p>
+        )}
+      </div>
+
+      {/* Navigation */}
+      <nav className="flex-1 flex flex-col gap-0.5 p-3">
         {items.map(({ href, label, icon: Icon }) => {
           const active = pathname === href || pathname.startsWith(href + '/');
           return (
@@ -63,21 +80,52 @@ export function Sidebar({ role }: SidebarProps) {
               href={href}
               className={cn(
                 'flex items-center gap-3 px-3 py-2 rounded-[var(--radius-md)]',
-                'text-[14px] font-sans transition-all duration-120',
+                'text-[14px] transition-all duration-120',
                 active
-                  ? 'bg-[#e8f7f2] text-[var(--brand-primary-dim)] font-medium border-l-2 border-[var(--brand-primary)] pl-[10px]'
+                  ? 'bg-[var(--secondary-container)] text-[var(--on-secondary-container)] font-medium border-l-2 border-[var(--brand-gold)] pl-[10px]'
                   : 'text-[var(--text-secondary)] hover:bg-[var(--surface-overlay)] hover:text-[var(--text-primary)]',
               )}
             >
               <Icon
                 size={16}
-                className={active ? 'text-[var(--brand-primary)]' : 'text-[var(--text-muted)]'}
+                className={active ? 'text-[var(--brand-gold)]' : 'text-[var(--text-muted)]'}
               />
               {label}
             </Link>
           );
         })}
       </nav>
+
+      {/* New Service Request Button (Owner only) */}
+      {role === 'OWNER' && (
+        <div className="p-3 border-t border-[var(--border-subtle)]">
+          <Link
+            href="/owner/services/new"
+            className="flex items-center justify-center gap-2 w-full rounded-lg bg-[var(--brand-gold)] px-4 py-2.5 text-sm font-medium text-[var(--on-accent)] hover:bg-[var(--brand-gold-dark)] transition-colors duration-120"
+          >
+            <PlusCircle size={16} />
+            New Service Request
+          </Link>
+        </div>
+      )}
+
+      {/* Bottom Links */}
+      <div className="p-3 border-t border-[var(--border-subtle)] space-y-1">
+        <Link
+          href="/support"
+          className="flex items-center gap-3 px-3 py-2 rounded-[var(--radius-md)] text-[14px] text-[var(--text-muted)] hover:bg-[var(--surface-overlay)] transition-colors duration-120"
+        >
+          <LifeBuoy size={16} />
+          Support
+        </Link>
+        <Link
+          href="/documentation"
+          className="flex items-center gap-3 px-3 py-2 rounded-[var(--radius-md)] text-[14px] text-[var(--text-muted)] hover:bg-[var(--surface-overlay)] transition-colors duration-120"
+        >
+          <BookOpen size={16} />
+          Documentation
+        </Link>
+      </div>
     </aside>
   );
 }
