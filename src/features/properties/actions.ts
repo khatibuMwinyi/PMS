@@ -99,3 +99,79 @@ export async function addUnit(formData: FormData): Promise<{ success: boolean; e
   revalidatePath('/owner/properties');
   return { success: true };
 }
+
+// ─── Update Property Status (Owner) ─────────────────────────────
+
+export async function updatePropertyStatus(
+  propertyId: string,
+  status: 'ACTIVE' | 'INACTIVE' | 'MAINTENANCE'
+): Promise<{ success: boolean; error?: string }> {
+  const session = await auth();
+  if (!session?.user || session.user.role !== 'OWNER') {
+    return { success: false, error: 'Unauthorized' };
+  }
+
+  // Verify ownership
+  const ownerProfile = await prisma.ownerProfile.findUnique({
+    where: { userId: session.user.id },
+  });
+
+  if (!ownerProfile) {
+    return { success: false, error: 'Owner profile not found' };
+  }
+
+  const property = await prisma.property.findFirst({
+    where: {
+      id:      propertyId,
+      ownerId: ownerProfile.id,
+    },
+  });
+
+  if (!property) {
+    return { success: false, error: 'Property not found or access denied' };
+  }
+
+  await prisma.property.update({
+    where: { id: propertyId },
+    data: { status },
+  });
+
+  revalidatePath('/owner/properties');
+  revalidatePath(`/owner/properties/${propertyId}`);
+  return { success: true };
+}
+
+// ─── Get Single Property by ID (Owner-scoped) ───────────────────
+
+export async function getPropertyForOwner(propertyId: string) {
+  const session = await auth();
+  if (!session?.user || session.user.role !== 'OWNER') {
+    throw new Error('Unauthorized');
+  }
+
+  const ownerProfile = await prisma.ownerProfile.findUnique({
+    where: { userId: session.user.id },
+  });
+
+  if (!ownerProfile) {
+    throw new Error('Owner profile not found');
+  }
+
+  const property = await prisma.property.findFirst({
+    where: {
+      id:      propertyId,
+      ownerId: ownerProfile.id,
+    },
+    include: {
+      units:        true,
+      quotes:       true,
+      agreements:   true,
+    },
+  });
+
+  if (!property) {
+    throw new Error('Property not found or access denied');
+  }
+
+  return property;
+}
