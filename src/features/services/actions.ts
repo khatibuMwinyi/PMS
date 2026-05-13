@@ -2,7 +2,8 @@
 
 import { prisma } from '@/core/database/client';
 import { auth } from '@/core/auth';
-import { CreateServiceTypeSchema, UpdateServiceTypeSchema } from './types';
+import { serviceRepository } from './repositories';
+import { CreateServiceTypeSchema, UpdateServiceTypeSchema } from './schemas';
 
 export async function acceptAssignment(assignmentId: string) {
   const session = await auth();
@@ -14,34 +15,11 @@ export async function acceptAssignment(assignmentId: string) {
 
   if (!provider) throw new Error('Provider context missing');
 
-  return await prisma.$transaction(async (tx) => {
-    const assignment = await tx.assignment.findUnique({ where: { id: assignmentId } });
-
-    if (!assignment || assignment.status !== 'PENDING_ACCEPTANCE') {
-      throw new Error("Assignment no longer available");
-    }
-
-    // Safe Update via Version Check (Optimistic Concurrency)
-    const updated = await tx.assignment.updateMany({
-      where: {
-        id: assignmentId,
-        version: assignment.version,
-        status: 'PENDING_ACCEPTANCE'
-      },
-      data: {
-        status: 'ACCEPTED',
-        providerId: provider.id,
-        transitionedAt: new Date(),
-        version: { increment: 1 }
-      }
-    });
-
-    if (updated.count === 0) throw new Error("Conflict: Assignment accepted by another provider.");
-    return { success: true };
-  });
+  const { serviceService } = await import('./services');
+  return serviceService.acceptAssignment(assignmentId, provider.id);
 }
 
-// ─── Admin Service Type CRUD ─────────────────────────────
+// Admin Service Type CRUD
 
 export async function createServiceType(formData: FormData) {
   const session = await auth();
@@ -64,17 +42,15 @@ export async function createServiceType(formData: FormData) {
     rules: raw.rules ? JSON.parse(raw.rules as string) : undefined,
   });
 
-  const serviceType = await prisma.serviceType.create({
-    data: {
-      name:        validated.name,
-      description: validated.description,
-      basePrice:   validated.basePrice,
-      priceUnit:   validated.priceUnit,
-      frequency:   validated.frequency,
-      category:    validated.category,
-      rules:       validated.rules || {},
-      isActive:    validated.isActive ?? true,
-    },
+  const serviceType = await serviceRepository.createServiceType({
+    name:        validated.name,
+    description: validated.description,
+    basePrice:   validated.basePrice,
+    priceUnit:   validated.priceUnit,
+    frequency:   validated.frequency,
+    category:    validated.category,
+    rules:       validated.rules || {},
+    isActive:    validated.isActive ?? true,
   });
 
   return { success: true, serviceType };
@@ -103,19 +79,7 @@ export async function updateServiceType(id: string, formData: FormData) {
     isActive: raw.isActive === 'true' ? true : raw.isActive === 'false' ? false : undefined,
   });
 
-  const serviceType = await prisma.serviceType.update({
-    where: { id },
-    data: {
-      ...(validated.name !== undefined && { name: validated.name }),
-      ...(validated.description !== undefined && { description: validated.description }),
-      ...(validated.basePrice !== undefined && { basePrice: validated.basePrice }),
-      ...(validated.priceUnit !== undefined && { priceUnit: validated.priceUnit }),
-      ...(validated.frequency !== undefined && { frequency: validated.frequency }),
-      ...(validated.category !== undefined && { category: validated.category }),
-      ...(validated.rules !== undefined && { rules: validated.rules }),
-      ...(validated.isActive !== undefined && { isActive: validated.isActive }),
-    },
-  });
+  const serviceType = await serviceRepository.updateServiceType(id, validated);
 
   return { success: true, serviceType };
 }
@@ -126,10 +90,7 @@ export async function deactivateServiceType(id: string) {
     throw new Error('Unauthorized: Admin access required');
   }
 
-  await prisma.serviceType.update({
-    where: { id },
-    data: { isActive: false },
-  });
+  await serviceRepository.updateServiceType(id, { isActive: false });
 
   return { success: true };
 }
@@ -140,8 +101,5 @@ export async function getServiceTypes(includeInactive: boolean = false) {
     throw new Error('Unauthorized');
   }
 
-  return await prisma.serviceType.findMany({
-    where: includeInactive ? {} : { isActive: true },
-    orderBy: { createdAt: 'desc' },
-  });
+  return serviceRepository.getServiceTypes(includeInactive);
 }

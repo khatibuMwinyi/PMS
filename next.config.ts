@@ -6,10 +6,6 @@ const nextConfig: NextConfig = {
       bodySizeLimit: "10mb",
     },
   },
-  // Exclude worktree from build
-  turbopack: {
-    root: __dirname,
-  },
 };
 
 export default nextConfig;
