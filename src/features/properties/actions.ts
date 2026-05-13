@@ -1,35 +1,10 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { prisma }          from '@/core/database/client';
-import { auth }            from '@/core/auth';
-import { uploadImage }     from '@/core/storage/upload';
-import { CreatePropertySchema, DAR_ES_SALAAM_LAT, DAR_ES_SALAAM_LNG } from './types';
-
-// Helper to write audit event
-async function writeAudit(params: {
-  actorId: string;
-  entityType: string;
-  entityId: string;
-  action: 'CREATE' | 'UPDATE' | 'DELETE' | 'STATUS_CHANGE';
-  oldValue?: any;
-  newValue?: any;
-}) {
-  try {
-    await prisma.auditEvent.create({
-      data: {
-        actorId: params.actorId,
-        entityType: params.entityType,
-        entityId: params.entityId,
-        action: params.action,
-        oldValue: params.oldValue ?? null,
-        newValue: params.newValue ?? null,
-      },
-    });
-  } catch (error) {
-    console.error('Failed to write audit event:', error);
-  }
-}
+import { prisma } from '@/core/database/client';
+import { auth } from '@/core/auth';
+import { propertyService } from './services';
+import { CreatePropertySchema, DAR_ES_SALAAM_LAT, DAR_ES_SALAAM_LNG } from './schemas';
 
 export async function createProperty(formData: FormData): Promise<{ success: boolean; error?: string }> {
   const session = await auth();
@@ -37,12 +12,12 @@ export async function createProperty(formData: FormData): Promise<{ success: boo
     return { success: false, error: 'Unauthorized' };
   }
 
-  // ── Parse & validate text fields ────────────────────────────────────
+  // Parse & validate
   const raw = {
-    name:      formData.get('name'),
-    address:   formData.get('address'),
-    zone:      formData.get('zone'),
-    latitude:  formData.get('latitude')  ?? DAR_ES_SALAAM_LAT,
+    name: formData.get('name'),
+    address: formData.get('address'),
+    zone: formData.get('zone'),
+    latitude: formData.get('latitude') ?? DAR_ES_SALAAM_LAT,
     longitude: formData.get('longitude') ?? DAR_ES_SALAAM_LNG,
   };
 
@@ -54,7 +29,7 @@ export async function createProperty(formData: FormData): Promise<{ success: boo
 
   const data = parsed.data;
 
-  // ── Owner profile ────────────────────────────────────────────────────
+  // Get owner profile
   const ownerProfile = await prisma.ownerProfile.findUnique({
     where: { userId: session.user.id },
   });
@@ -62,36 +37,22 @@ export async function createProperty(formData: FormData): Promise<{ success: boo
     return { success: false, error: 'Owner profile not found' };
   }
 
-  // ── Upload images ────────────────────────────────────────────────────
-  const imageFiles  = formData.getAll('images') as File[];
-  const imageUrls: string[] = [];
+  // Get image files from form
+  const imageFiles = formData.getAll('images') as File[];
 
-  for (const file of imageFiles) {
-    if (file && file.size > 0) {
-      try {
-        const url = await uploadImage(file, 'properties');
-        imageUrls.push(url);
-      } catch {
-        // Non-fatal: skip failed images
-      }
-    }
-  }
-
-  // ── Create property record ───────────────────────────────────────────
-  const property = await prisma.property.create({
-    data: {
-      name:             data.name,
-      encryptedAddress: data.address,   // Prisma extension encrypts this at write time
-      zone:             data.zone,
-      latitude:         data.latitude,
-      longitude:        data.longitude,
-      imageUrls,
-      ownerId:          ownerProfile.id,
-    },
+  // Create property via service
+  const property = await propertyService.createProperty({
+    name: data.name,
+    address: data.address,
+    zone: data.zone,
+    latitude: data.latitude,
+    longitude: data.longitude,
+    ownerId: ownerProfile.id,
+    imageFiles,
   });
 
-  // Write audit event
-  await writeAudit({
+  // Write audit
+  await propertyService.writeAudit({
     actorId: session.user.id,
     entityType: 'Property',
     entityId: property.id,
@@ -99,16 +60,7 @@ export async function createProperty(formData: FormData): Promise<{ success: boo
     newValue: { name: property.name, zone: property.zone },
   });
 
-  // ── Set PostGIS geometry via raw query (Unsupported type workaround) ─
-  await prisma.$executeRaw`
-    UPDATE properties
-    SET    location = ST_SetSRID(ST_MakePoint(${data.longitude}, ${data.latitude}), 4326)
-    WHERE  id = ${property.id}
-  `;
-
-  // ── Bust cache so the grid re-fetches immediately ────────────────────
   revalidatePath('/owner/properties');
-
   return { success: true };
 }
 
@@ -118,23 +70,38 @@ export async function addUnit(formData: FormData): Promise<{ success: boolean; e
     return { success: false, error: 'Unauthorized' };
   }
 
-  const property = await prisma.property.create({
+  const ownerProfile = await prisma.ownerProfile.findUnique({
+    where: { userId: session.user.id },
+  });
+  if (!ownerProfile) {
+    return { success: false, error: 'Owner profile not found' };
+  }
+
+  const propertyId = formData.get('propertyId') as string;
+  const unitName = formData.get('name') as string;
+  const unitType = formData.get('type') as 'APARTMENT' | 'HOUSE' | 'COMMERCIAL';
+  const squareFootage = Number(formData.get('squareFootage'));
+
+  const property = await prisma.property.findFirst({
+    where: { id: propertyId, ownerId: ownerProfile.id },
+  });
+
+  if (!property) {
+    return { success: false, error: 'Property not found or access denied' };
+  }
+
+  await prisma.unit.create({
     data: {
-      name:             formData.get('name') as string,
-      encryptedAddress: formData.get('address') as string,
-      zone:             formData.get('zone') as string,
-      latitude:         DAR_ES_SALAAM_LAT,
-      longitude:        DAR_ES_SALAAM_LNG,
-      imageUrls:        [],
-      ownerId:          formData.get('ownerId') as string,
+      name: unitName,
+      type: unitType,
+      squareFootage,
+      propertyId: property.id,
     },
   });
 
   revalidatePath('/owner/properties');
   return { success: true };
 }
-
-// ─── Update Property Status (Owner) ─────────────────────
 
 export async function updatePropertyStatus(
   propertyId: string,
@@ -145,39 +112,30 @@ export async function updatePropertyStatus(
     return { success: false, error: 'Unauthorized' };
   }
 
-  // Verify ownership
   const ownerProfile = await prisma.ownerProfile.findUnique({
     where: { userId: session.user.id },
   });
-
   if (!ownerProfile) {
     return { success: false, error: 'Owner profile not found' };
   }
 
-  const propertyBefore = await prisma.property.findFirst({
-    where: {
-      id:      propertyId,
-      ownerId: ownerProfile.id,
-    },
+  const property = await prisma.property.findFirst({
+    where: { id: propertyId, ownerId: ownerProfile.id },
     select: { id: true, status: true },
   });
 
-  if (!propertyBefore) {
+  if (!property) {
     return { success: false, error: 'Property not found or access denied' };
   }
 
-  await prisma.property.update({
-    where: { id: propertyId },
-    data: { status },
-  });
+  await propertyService.updatePropertyStatus(propertyId, status, ownerProfile.id);
 
-  // Write audit event for status change
-  await writeAudit({
+  await propertyService.writeAudit({
     actorId: session.user.id,
     entityType: 'Property',
     entityId: propertyId,
     action: 'STATUS_CHANGE',
-    oldValue: { status: propertyBefore.status },
+    oldValue: { status: property.status },
     newValue: { status },
   });
 
@@ -185,8 +143,6 @@ export async function updatePropertyStatus(
   revalidatePath(`/owner/properties/${propertyId}`);
   return { success: true };
 }
-
-// ─── Get Single Property by ID (Owner-scoped) ───────────────────
 
 export async function getPropertyForOwner(propertyId: string) {
   const session = await auth();
@@ -197,23 +153,11 @@ export async function getPropertyForOwner(propertyId: string) {
   const ownerProfile = await prisma.ownerProfile.findUnique({
     where: { userId: session.user.id },
   });
-
   if (!ownerProfile) {
     throw new Error('Owner profile not found');
   }
 
-  const property = await prisma.property.findFirst({
-    where: {
-      id:      propertyId,
-      ownerId: ownerProfile.id,
-    },
-    include: {
-      units:        true,
-      quotes:       true,
-      agreements:   true,
-    },
-  });
-
+  const property = await propertyService.getPropertyById(propertyId, ownerProfile.id);
   if (!property) {
     throw new Error('Property not found or access denied');
   }

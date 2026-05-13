@@ -45,19 +45,24 @@ export function PropertyCard({ property }: PropertyCardProps) {
 
       <CardContent className="flex flex-col gap-3 p-4 flex-1">
 
-        {/* Name (font-bold) + Type badge (uppercase, 10px, rounded) */}
+        {/* Name (font-bold) + Type badge + Status badge */}
         <div className="flex items-start justify-between gap-2">
           <h3 className="text-[var(--font-h2)] font-bold text-[var(--text-primary)] leading-snug line-clamp-1">
             {property.name}
           </h3>
-          {property.type && (
-            <span
-              className="px-2 py-0.5 rounded-[var(--radius-pill)] text-[10px] font-medium uppercase tracking-wider shrink-0 mt-0.5"
-              style={{ background: 'var(--surface-overlay)', color: 'var(--text-secondary)' }}
-            >
-              {property.type}
-            </span>
-          )}
+          <div className="flex items-center gap-1.5 shrink-0">
+            {property.status && (
+              <StatusBadge status={property.status} className="text-[10px]" />
+            )}
+            {property.type && (
+              <span
+                className="px-2 py-0.5 rounded-[var(--radius-pill)] text-[10px] font-medium uppercase tracking-wider"
+                style={{ background: 'var(--surface-overlay)', color: 'var(--text-secondary)' }}
+              >
+                {property.type}
+              </span>
+            )}
+          </div>
         </div>
 
         {/* Zone badge (10px, uppercase) */}
