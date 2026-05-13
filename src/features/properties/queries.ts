@@ -1,7 +1,8 @@
-"use server";
+'use server';
 
 import { prisma } from '@/core/database/client';
 import { auth } from '@/core/auth';
+import { propertyRepository } from './repositories';
 
 export async function getOwnerProperties() {
   const session = await auth();
@@ -11,20 +12,14 @@ export async function getOwnerProperties() {
 
   const user = await prisma.user.findUnique({
     where: { id: session.user.id },
-    include: {
-      ownerProfile: {
-        include: {
-          properties: {
-            include: {
-              units: true,
-            },
-          },
-        },
-      },
-    },
+    include: { ownerProfile: true },
   });
 
-  return user?.ownerProfile?.properties || [];
+  if (!user?.ownerProfile) {
+    return [];
+  }
+
+  return propertyRepository.findByOwner(user.ownerProfile.id);
 }
 
 export async function getPropertyById(propertyId: string) {
@@ -33,44 +28,21 @@ export async function getPropertyById(propertyId: string) {
     throw new Error('Unauthorized');
   }
 
-  // Non-admin users can only see their own properties
   if (session.user.role === 'OWNER') {
     const ownerProfile = await prisma.ownerProfile.findUnique({
       where: { userId: session.user.id },
     });
-
     if (!ownerProfile) {
       throw new Error('Owner profile not found');
     }
-
-    return await prisma.property.findFirst({
-      where: {
-        id:      propertyId,
-        ownerId: ownerProfile.id,
-      },
-      include: {
-        units:        true,
-        owner:        true,
-        quotes:       true,
-        agreements:   true,
-      },
-    });
+    return propertyRepository.findByIdAndOwner(propertyId, ownerProfile.id);
   }
 
-  // Admin and staff can see all properties
   if (!['ADMIN', 'STAFF'].includes(session.user.role)) {
     throw new Error('Unauthorized');
   }
 
-  return await prisma.property.findUnique({
-    where: { id: propertyId },
-    include: {
-      units:      true,
-      owner:       true,
-      quotes:      true,
-      agreements:  true,
-    },
-  });
+  return propertyRepository.findById(propertyId);
 }
 
 export async function getAllProperties() {
@@ -79,10 +51,5 @@ export async function getAllProperties() {
     throw new Error('Unauthorized');
   }
 
-  return await prisma.property.findMany({
-    include: {
-      owner: true,
-      units: true,
-    },
-  });
+  return propertyRepository.findAllWithOwner();
 }
