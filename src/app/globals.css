@@ -9,9 +9,7 @@
 
 /* Import Inter font from Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-
-/* Import Material Symbols Outlined */
-@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap');
 
 :root {
   /* ─── OPSMP BRAND COLORS ─────────────────── */
@@ -28,10 +26,6 @@
   --surface-overlay:   rgba(19, 27, 46, 0.05);
   --surface-dark:      #131b2e;
   --surface-dark-card: rgba(19, 27, 46, 0.95);
-  --surface-100:      #f8f9fa;
-  --surface-200:      #e9ecef;
-  --surface-300:      #dee2e6;
-  --surface-variant:  #f5f5f5;
 
   /* ─── Text ─────────────────────────────────── */
   --text-primary:     #131b2e;
@@ -39,24 +33,20 @@
   --text-muted:       #64748B;
   --text-on-dark:     #F8F8F9;
   --text-on-brand:    #F8F8F9;
-  --on-primary:       #ffffff;
-  --on-accent:        #000000;
-  --on-surface:       #131b2e;
-  --on-surface-variant: #64748B;
 
   /* ─── Borders ──────────────────────────────── */
   --border-subtle:    rgba(19, 27, 46, 0.08);
   --border-default:   rgba(19, 27, 46, 0.14);
   --border-strong:    rgba(19, 27, 46, 0.28);
   --border-focus:     var(--brand-gold);
-  --outline:          rgba(19, 27, 46, 0.14);
-  --outline-variant: rgba(19, 27, 46, 0.08);
 
   /* ─── Semantic states ──────────────────────── */
   --state-success:     #10B981;
   --state-success-bg: #D1FAE5;
-  --state-warning:    #3B82F6;
-  --state-warning-bg: #DBEAFE;
+  --state-warning:    #F59E0B;
+  --state-warning-bg: #FEF3C7;
+  --state-info:       #3B82F6;
+  --state-info-bg:    #DBEAFE;
   --state-error:      #EF4444;
   --state-error-bg:   #FEE2E2;
 
@@ -65,12 +55,6 @@
   --status-in-progress: #3B82F6;
   --status-scheduled: #8B5CF6;
   --status-completed: #6B7280;
-
-  /* ─── Secondary & Tertiary containers ─────── */
-  --secondary-container: #E8F7F2;
-  --on-secondary-container: #0F766E;
-  --tertiary-container: #F3E8FF;
-  --on-tertiary-container: #6B21A8;
 
   /* ─── Spacing scale ────────────────────────── */
   --space-1:  4px;
@@ -84,13 +68,13 @@
   --space-12: 48px;
 
   /* ─── Border Radius ───────────────────────── */
-  --radius-sm:   6px;
-  --radius-md:   10px;
-  --radius-lg:   16px;
-  --radius-xl:   24px;
-  --radius-xl:   0.5rem;
-  --radius-pill: 9999px;
-  --radius-full: 0.75rem;
+  --radius-sm:    6px;
+  --radius-md:    10px;
+  --radius-lg:    16px;
+  --radius-xl:    24px;
+  --radius-2xl:   32px;
+  --radius-card:  12px;
+  --radius-pill:  9999px;
 
   /* ─── Shadows ─────────────────────────────── */
   --shadow-card:     0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
@@ -103,19 +87,32 @@
   --transition-base:   200ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-slow:   320ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-spring: 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ─── Fonts ────────────────────────────────────── */
+  --font-serif:  'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-mono:   'JetBrains Mono', ui-monospace, Menlo, monospace;
+
+  /* ─── Section rhythm ───────────────────────────── */
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+
+  /* ─── Containers ──────────────────────────────── */
+  --container-editorial: 1200px;
+  --container-dashboard: 1280px;
+
+  /* ─── Focus ───────────────────────────────────── */
+  --shadow-focus: 0 0 0 3px rgba(240, 165, 0, 0.35);
 }
 
-/* Dark mode overrides */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --surface-page:    #111110;
-    --surface-card:    #1A1A18;
-    --surface-overlay: #242422;
-    --text-primary:    #F1EFE8;
-    --text-secondary:  #B4B2A9;
-    --border-subtle:   rgba(241, 239, 232, 0.06);
-    --border-default:  rgba(241, 239, 232, 0.12);
-  }
+[data-theme="dark"] {
+  --surface-page:    #111110;
+  --surface-card:    #1A1A18;
+  --surface-overlay: #242422;
+  --text-primary:    #F1EFE8;
+  --text-secondary:  #B4B2A9;
+  --border-subtle:   rgba(241, 239, 232, 0.06);
+  --border-default:  rgba(241, 239, 232, 0.12);
 }
 
 /* ─── Reset ─────────────────────────────────── */
@@ -189,23 +186,6 @@ html, body {
   font-size: 14px;
   line-height: 20px;
   font-weight: 500;
-}
-
-/* ─── Material Symbols Outlined base ─────────── */
-.material-symbols-outlined {
-  font-family: 'Material Symbols Outlined';
-  font-weight: normal;
-  font-style: normal;
-  font-size: 24px;
-  line-height: 1;
-  letter-spacing: normal;
-  text-transform: none;
-  display: inline-block;
-  white-space: nowrap;
-  word-wrap: normal;
-  direction: ltr;
-  -webkit-font-smoothing: antialiased;
-  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
 }
 
 /* ─── Utility Classes ──────────────────────── */
