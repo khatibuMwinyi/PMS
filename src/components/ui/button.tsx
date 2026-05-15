@@ -1,49 +1,104 @@
-import * as React from 'react';
-import { cn } from '@/core/lib/utils';
+'use client';
 
-export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'bold';
-  size?: 'sm' | 'md' | 'lg';
+import { forwardRef, type ButtonHTMLAttributes, type AnchorHTMLAttributes, type ReactNode } from 'react';
+import { Loader2 } from 'lucide-react';
+import { cn } from '@/lib/cn';
+
+type Variant = 'primary' | 'gold' | 'secondary' | 'ghost' | 'danger' | 'outline';
+type Size = 'sm' | 'md' | 'lg';
+
+interface BaseProps {
+  variant?: Variant;
+  size?: Size;
+  loading?: boolean;
   fullWidth?: boolean;
+  iconLeft?: ReactNode;
+  iconRight?: ReactNode;
+  children?: ReactNode;
+  className?: string;
 }
 
-export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant = 'primary', size = 'md', fullWidth = false, disabled, children, ...props }, ref) => {
+type ButtonAsButton = BaseProps & Omit<ButtonHTMLAttributes<HTMLButtonElement>, keyof BaseProps> & { as?: 'button' };
+type ButtonAsAnchor = BaseProps & Omit<AnchorHTMLAttributes<HTMLAnchorElement>, keyof BaseProps> & { as: 'a'; href: string };
+type ButtonProps = ButtonAsButton | ButtonAsAnchor;
+
+const VARIANT_CLASSES: Record<Variant, string> = {
+  primary:   'bg-primary text-text-on-brand hover:bg-primary-light active:translate-y-px',
+  gold:      'bg-accent text-accent-foreground hover:bg-accent-light active:translate-y-px shadow-card',
+  secondary: 'bg-transparent text-text-primary border border-border-default hover:bg-surface-overlay',
+  ghost:     'bg-transparent text-text-primary hover:bg-surface-overlay',
+  danger:    'bg-state-error text-text-on-brand hover:opacity-90',
+  outline:   'bg-transparent border border-border-default text-text-primary hover:bg-surface-overlay',
+};
+
+const SIZE_CLASSES: Record<Size, string> = {
+  sm: 'h-8 px-3 text-body-sm gap-1.5',
+  md: 'h-10 px-4 text-body gap-2',
+  lg: 'h-12 px-6 text-body-lg gap-2',
+};
+
+export const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(function Button(
+  props,
+  ref,
+) {
+  const {
+    variant = 'primary',
+    size = 'md',
+    loading = false,
+    fullWidth = false,
+    iconLeft,
+    iconRight,
+    children,
+    className,
+    as = 'button',
+    ...rest
+  } = props as ButtonAsButton & { as?: 'a'; href?: string };
+
+  const classes = cn(
+    'inline-flex items-center justify-center rounded-md font-medium transition-all duration-base',
+    'focus-visible:outline-none focus-visible:shadow-focus',
+    'disabled:opacity-50 disabled:pointer-events-none',
+    VARIANT_CLASSES[variant],
+    SIZE_CLASSES[size],
+    fullWidth && 'w-full',
+    className,
+  );
+
+  const content = (
+    <>
+      {loading ? <Loader2 data-testid="spinner" className="animate-spin" size={16} /> : iconLeft}
+      {children}
+      {!loading && iconRight}
+    </>
+  );
+
+  if (as === 'a') {
+    const { href, onClick, ...anchorRest } = rest as AnchorHTMLAttributes<HTMLAnchorElement>;
     return (
-      <button
-        ref={ref}
-        disabled={disabled}
-        className={cn(
-          // Base
-          'inline-flex items-center justify-center font-sans font-medium rounded-md',
-          'transition-all duration-200 cursor-pointer select-none',
-          'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-primary)]',
-          // Disabled
-          'disabled:opacity-40 disabled:cursor-not-allowed disabled:pointer-events-none',
-          // Variants
-          variant === 'primary'   && 'bg-[var(--brand-primary)] text-white hover:bg-[var(--brand-primary-dim)] active:scale-[0.98]',
-          variant === 'secondary' && 'bg-[var(--surface-overlay)] text-[var(--text-primary)] border border-[var(--border-default)] hover:bg-[var(--surface-card)]',
-          variant === 'outline'   && 'bg-transparent border border-[var(--border-default)] text-[var(--text-primary)] hover:bg-[var(--surface-overlay)]',
-          variant === 'ghost'     && 'bg-transparent text-[var(--text-secondary)] hover:bg-[var(--surface-overlay)] hover:text-[var(--text-primary)]',
-          variant === 'danger'    && 'bg-[var(--state-error-bg)] text-[var(--state-error)] hover:brightness-95',
-          variant === 'bold'      && [
-            'gradient-primary text-white',
-            'hover:shadow-lg hover:shadow-bold hover:scale-105',
-            'active:scale-[0.98]',
-          ],
-          // Sizes
-          size === 'sm' && 'h-8  px-3   text-[13px] gap-1.5 rounded-[var(--radius-sm)]',
-          size === 'md' && 'h-10 px-4   text-[14px] gap-2   rounded-[var(--radius-md)]',
-          size === 'lg' && 'h-12 px-6   text-[15px] gap-2   rounded-[var(--radius-md)]',
-          fullWidth && 'w-full',
-          className,
-        )}
-        {...props}
+      <a
+        ref={ref as React.Ref<HTMLAnchorElement>}
+        href={href}
+        className={classes}
+        onClick={loading ? (e) => e.preventDefault() : onClick}
+        aria-disabled={loading || undefined}
+        {...anchorRest}
       >
-        {children}
-      </button>
+        {content}
+      </a>
     );
   }
-);
 
-Button.displayName = 'Button';
+  const { onClick, disabled, type = 'button', ...buttonRest } = rest as ButtonHTMLAttributes<HTMLButtonElement>;
+  return (
+    <button
+      ref={ref as React.Ref<HTMLButtonElement>}
+      type={type}
+      disabled={disabled || loading}
+      className={classes}
+      onClick={loading ? undefined : onClick}
+      {...buttonRest}
+    >
+      {content}
+    </button>
+  );
+});

@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import { getAgreementDetails } from '@/features/agreements/actions';
 import { AgreementCard } from '@/features/agreements/components/AgreementCard';
 import { ErrorBoundaryWrapper } from '@/components/ui/ErrorBoundary';
-import { UnifiedButton } from '@/components/ui/UnifiedButton';
+import { Button } from '@/components/ui/Button';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { Decimal } from 'decimal.js';
@@ -24,9 +24,9 @@ async function AgreementDetailContent({ agreementId }: { agreementId: string }) 
       <div className="text-center py-12">
         <p className="text-[var(--text-muted)] mb-4">Agreement not found</p>
         <Link href="/owner/agreements">
-          <UnifiedButton variant="outline">
+          <Button variant="outline">
             Back to Agreements
-          </UnifiedButton>
+          </Button>
         </Link>
       </div>
     );
@@ -125,7 +125,7 @@ async function AgreementDetailContent({ agreementId }: { agreementId: string }) 
         {/* Actions */}
         <div className="flex gap-3 mt-6 pt-4 border-t border-[var(--border-default)]">
           {agreement.status === 'QUOTED' && (
-            <UnifiedButton 
+            <Button 
               variant="primary"
               onClick={async () => {
                 // Server action to submit agreement
@@ -135,12 +135,12 @@ async function AgreementDetailContent({ agreementId }: { agreementId: string }) 
               }}
             >
               Submit Agreement
-            </UnifiedButton>
+            </Button>
           )}
           <Link href="/owner/agreements">
-            <UnifiedButton variant="outline">
+            <Button variant="outline">
               Back to List
-            </UnifiedButton>
+            </Button>
           </Link>
         </div>
       </div>

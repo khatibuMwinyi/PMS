@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { Decimal } from 'decimal.js';
 import { UnifiedInput } from '@/components/ui/UnifiedInput';
-import { UnifiedButton } from '@/components/ui/UnifiedButton';
+import { Button } from '@/components/ui/Button';
 import { requestQuote, listOwnerQuotes } from '../actions';
 import { QuoteStatus } from '../types';
 
@@ -230,7 +230,7 @@ export function QuoteRequestForm({ ownerId, onSuccess }: QuoteRequestFormProps) 
         )}
 
         {/* Submit Button */}
-        <UnifiedButton
+        <Button
           type="submit"
           variant="primary"
           size="lg"
@@ -238,7 +238,7 @@ export function QuoteRequestForm({ ownerId, onSuccess }: QuoteRequestFormProps) 
           fullWidth
         >
           Request Quote
-        </UnifiedButton>
+        </Button>
       </form>
     </motion.div>
   );

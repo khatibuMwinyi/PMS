@@ -5,7 +5,7 @@ import { useRouter }               from 'next/navigation';
 import { MapPin, Briefcase, AlertCircle, CheckCircle2 } from 'lucide-react';
 import { acceptAssignment }    from '@/features/assignments/actions';
 import { CountdownTimer }      from './CountdownTimer';
-import { LoadingButton }       from '@/components/shared/LoadingButton';
+import { Button } from '@/components/ui/Button';
 import type { AssignmentWithDetails } from '../types';
 
 interface AssignmentCardProps {
@@ -169,17 +169,16 @@ export function AssignmentCard({ assignment }: AssignmentCardProps) {
             Offer expired
           </div>
         ) : (
-          <LoadingButton
+          <Button
             onClick={handleAccept}
             variant="primary"
             size="md"
             fullWidth
             loading={isPending}
-            loadingText="Accepting…"
             disabled={state.type === 'conflict'}
           >
             Accept Assignment
-          </LoadingButton>
+          </Button>
         )}
       </div>
     </div>

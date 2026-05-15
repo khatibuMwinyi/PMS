@@ -7,7 +7,7 @@ import { z } from 'zod';
 import { createProperty } from '@/features/properties/actions';
 import { DAR_ES_SALAAM_LAT, DAR_ES_SALAAM_LNG } from '@/features/properties/types';
 import { UnifiedInput }          from '@/components/ui/UnifiedInput';
-import { LoadingButton }  from '@/components/shared/LoadingButton';
+import { Button } from '@/components/ui/Button';
 import { ImageUploadField } from './ImageUploadField';
 
 // ─── Client-side Zod schema (mirrors server schema) ─────────────────
@@ -115,16 +115,15 @@ export function CreatePropertyForm({ onSuccess }: CreatePropertyFormProps) {
         />
 
         {/* Submit */}
-        <LoadingButton
+        <Button
           type="submit"
           variant="primary"
           size="lg"
           fullWidth
           loading={isSubmitting}
-          loadingText="Creating property…"
         >
           Create Property
-        </LoadingButton>
+        </Button>
 
       </fieldset>
     </form>

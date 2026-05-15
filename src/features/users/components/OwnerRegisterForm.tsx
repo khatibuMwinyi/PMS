@@ -8,7 +8,7 @@ import { Eye, EyeOff } from 'lucide-react';
 import { OwnerRegisterSchema } from '@/features/users/types';
 import { registerOwner } from '@/features/users/actions';
 import { UnifiedInput } from '@/components/ui/UnifiedInput';
-import { UnifiedButton } from '@/components/ui/UnifiedButton';
+import { Button } from '@/components/ui/Button';
 import { PasswordStrengthMeter } from '@/components/shared/PasswordStrengthMeter';
 
 // Extend schema to add confirmPassword
@@ -155,17 +155,16 @@ export function OwnerRegisterForm({ onSuccess, selectedPlan }: OwnerRegisterForm
           />
         </div>
 
-        <UnifiedButton
+        <Button
           type="submit"
-          state={isSubmitting ? 'loading' : 'default'}
+          loading={isSubmitting}
           variant="primary"
           size="lg"
           fullWidth
           className="mt-4"
-          leftIcon={isSubmitting ? <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> : undefined}
         >
           Create Owner Account
-        </UnifiedButton>
+        </Button>
 
         <div className="mt-6 text-center">
           <p className="text-xs text-white/60">

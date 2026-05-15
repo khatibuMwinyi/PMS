@@ -1,7 +1,7 @@
 import { MapPin, Home, Wrench, Tag, Calendar, Activity } from 'lucide-react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { StatusBadge } from '@/components/shared/StatusBadge';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/Button';
 import { updatePropertyStatus } from '@/features/properties/actions';
 
 interface PropertyDetailProps {

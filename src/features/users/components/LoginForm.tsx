@@ -9,7 +9,7 @@ import { z } from 'zod';
 import { Eye, EyeOff } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { UnifiedInput } from '@/components/ui/UnifiedInput';
-import { UnifiedButton } from '@/components/ui/UnifiedButton';
+import { Button } from '@/components/ui/Button';
 
 const LoginSchema = z.object({
   email: z.string().email('Enter a valid email address'),
@@ -134,15 +134,14 @@ export function LoginForm() {
             </a>
           </div>
 
-          <UnifiedButton
+          <Button
             type="submit"
-            state={isSubmitting ? 'loading' : 'default'}
+            loading={isSubmitting}
             variant="primary"
             className="mt-2"
-            leftIcon={isSubmitting ? <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> : undefined}
           >
             Sign In
-          </UnifiedButton>
+          </Button>
         </motion.div>
       </form>
 

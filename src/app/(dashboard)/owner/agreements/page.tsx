@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import { listOwnerAgreements } from '@/features/agreements/actions';
 import { AgreementList } from '@/features/agreements/components/AgreementList';
 import { ErrorBoundaryWrapper } from '@/components/ui/ErrorBoundary';
-import { UnifiedButton } from '@/components/ui/UnifiedButton';
+import { Button } from '@/components/ui/Button';
 import Link from 'next/link';
 import { auth } from '@/core/auth';
 
@@ -42,9 +42,9 @@ async function AgreementsContent() {
         <div className="text-center py-12">
           <p className="text-[var(--text-muted)] mb-4">No agreements yet</p>
           <Link href="/owner/quotes">
-            <UnifiedButton variant="primary">
+            <Button variant="primary">
               View Quotes to Accept
-            </UnifiedButton>
+            </Button>
           </Link>
         </div>
       )}
@@ -69,9 +69,9 @@ export default function OwnerAgreementsPage() {
 
         {/* Link to quotes page to create new agreement */}
         <Link href="/owner/quotes">
-          <UnifiedButton variant="outline">
+          <Button variant="outline">
             View Quotes
-          </UnifiedButton>
+          </Button>
         </Link>
       </div>
 

@@ -7,7 +7,7 @@ import { z } from 'zod';
 import { createServiceType, updateServiceType } from '@/features/services/actions';
 import { PriceUnitSchema } from '@/features/services/types';
 import { UnifiedInput } from '@/components/ui/UnifiedInput';
-import { LoadingButton } from '@/components/shared/LoadingButton';
+import { Button } from '@/components/ui/Button';
 import { TextArea } from '@/components/ui/TextArea';
 
 const FormSchema = z.object({
@@ -169,16 +169,15 @@ export function ServiceForm({ initialData, onSuccess, isEditing = false }: Servi
           </label>
         </div>
 
-        <LoadingButton
+        <Button
           type="submit"
           variant="primary"
           size="lg"
           fullWidth
           loading={isSubmitting}
-          loadingText={isEditing ? 'Updating...' : 'Creating...'}
         >
           {isEditing ? 'Update Service' : 'Create Service'}
-        </LoadingButton>
+        </Button>
       </fieldset>
     </form>
   );
