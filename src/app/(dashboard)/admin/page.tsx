@@ -5,9 +5,9 @@ import { DashboardShell } from '@/components/layout/DashboardShell';
 import { RoleGuard } from '@/components/RoleGuard';
 import { Stat } from '@/components/ui/Stat';
 import { Card } from '@/components/ui/Card';
-import { DataTable } from '@/components/ui/DataTable';
+import { Table } from '@/components/ui/Table';
 import { StatusBadge } from '@/components/ui/Badge';
-import type { Column } from '@/components/ui/DataTable';
+import type { Column } from '@/components/ui/Table';
 import { Users, Building2, ClipboardList, DollarSign } from 'lucide-react';
 
 interface UserStats {
@@ -127,11 +127,11 @@ async function AdminDashboardContent() {
       {/* Recent Users Table */}
       <div className="mt-6">
         <h2 className="mb-4 text-[var(--font-h2)] text-[var(--text-primary)]">Recent Users</h2>
-        <DataTable
+        <Table
           columns={columns}
           data={recentUsers}
           keyExtractor={(row) => row.id}
-          emptyMessage="No users found."
+          emptyState="No users found."
         />
       </div>
     </DashboardShell>
