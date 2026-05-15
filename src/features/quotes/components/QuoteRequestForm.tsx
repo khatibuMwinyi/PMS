@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { Decimal } from 'decimal.js';
-import { UnifiedInput } from '@/components/ui/UnifiedInput';
+import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { requestQuote, listOwnerQuotes } from '../actions';
 import { QuoteStatus } from '../types';
@@ -159,7 +159,7 @@ export function QuoteRequestForm({ ownerId, onSuccess }: QuoteRequestFormProps) 
             <label className="block text-sm font-medium text-[var(--text-primary)] mb-2">
               Location Factor
             </label>
-            <UnifiedInput
+            <Input
               type="number"
               step="0.1"
               min="0.1"
@@ -177,7 +177,7 @@ export function QuoteRequestForm({ ownerId, onSuccess }: QuoteRequestFormProps) 
             <label className="block text-sm font-medium text-[var(--text-primary)] mb-2">
               Frequency Multiplier
             </label>
-            <UnifiedInput
+            <Input
               type="number"
               step="0.1"
               min="0.1"
@@ -195,7 +195,7 @@ export function QuoteRequestForm({ ownerId, onSuccess }: QuoteRequestFormProps) 
             <label className="block text-sm font-medium text-[var(--text-primary)] mb-2">
               Unit Count
             </label>
-            <UnifiedInput
+            <Input
               type="number"
               min="1"
               value={unitCount.toString()}

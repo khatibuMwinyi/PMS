@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { createProperty } from '@/features/properties/actions';
 import { DAR_ES_SALAAM_LAT, DAR_ES_SALAAM_LNG } from '@/features/properties/types';
-import { UnifiedInput }          from '@/components/ui/UnifiedInput';
+import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { ImageUploadField } from './ImageUploadField';
 
@@ -72,7 +72,7 @@ export function CreatePropertyForm({ onSuccess }: CreatePropertyFormProps) {
         )}
 
         {/* Property name */}
-        <UnifiedInput
+        <Input
           label="Property Name"
           placeholder="e.g. Msasani Apartments Block A"
           error={errors.name?.message}
@@ -80,7 +80,7 @@ export function CreatePropertyForm({ onSuccess }: CreatePropertyFormProps) {
         />
 
         {/* Full address — encrypted, never shown to providers */}
-        <UnifiedInput
+        <Input
           label="Full Address"
           placeholder="e.g. 12 Haile Selassie Road, Msasani, Dar es Salaam"
           helper="Encrypted and stored securely — never shared with service providers"
@@ -89,7 +89,7 @@ export function CreatePropertyForm({ onSuccess }: CreatePropertyFormProps) {
         />
 
         {/* Zone — shown to providers instead of exact address */}
-        <UnifiedInput
+        <Input
           label="Neighbourhood / Zone"
           placeholder="e.g. Msasani Area, Kinondoni, Masaki"
           helper="This is what providers will see — keep it to the neighbourhood level"

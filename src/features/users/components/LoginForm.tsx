@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import { z } from 'zod';
 import { Eye, EyeOff } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { UnifiedInput } from '@/components/ui/UnifiedInput';
+import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 
 const LoginSchema = z.object({
@@ -93,7 +93,7 @@ export function LoginForm() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6 }}
         >
-          <UnifiedInput
+          <Input
             label="Email Address"
             type="email"
             autoComplete="email"
@@ -104,7 +104,7 @@ export function LoginForm() {
           />
 
           <div className="relative">
-            <UnifiedInput
+            <Input
               label="Password"
               type={showPassword ? 'text' : 'password'}
               autoComplete="current-password"

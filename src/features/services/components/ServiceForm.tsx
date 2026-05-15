@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { createServiceType, updateServiceType } from '@/features/services/actions';
 import { PriceUnitSchema } from '@/features/services/types';
-import { UnifiedInput } from '@/components/ui/UnifiedInput';
+import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { TextArea } from '@/components/ui/TextArea';
 
@@ -98,7 +98,7 @@ export function ServiceForm({ initialData, onSuccess, isEditing = false }: Servi
           </div>
         )}
 
-        <UnifiedInput
+        <Input
           label="Service Name"
           placeholder="e.g., Standard Cleaning"
           error={errors.name?.message}
@@ -117,7 +117,7 @@ export function ServiceForm({ initialData, onSuccess, isEditing = false }: Servi
         </div>
 
         <div className="grid grid-cols-2 gap-4">
-          <UnifiedInput
+          <Input
             label="Base Price ($)"
             type="number"
             step="0.01"
@@ -150,7 +150,7 @@ export function ServiceForm({ initialData, onSuccess, isEditing = false }: Servi
           </div>
         </div>
 
-        <UnifiedInput
+        <Input
           label="Category"
           placeholder="e.g., Cleaning, Maintenance, Landscaping"
           error={errors.category?.message}
