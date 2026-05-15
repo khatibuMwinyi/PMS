@@ -38,7 +38,7 @@ export function DataTable<T>({
             {columns.map((column) => (
               <th
                 key={column.key}
-                className={`px-[var(--space-3)] py-[var(--space-2)] text-left text-[var(--font-table-header)] text-[var(--on-surface-variant)] ${column.className || ''}`}
+                className={`px-[var(--space-3)] py-[var(--space-2)] text-left text-[var(--font-table-header)] text-[var(--text-muted)] ${column.className || ''}`}
               >
                 {column.header}
               </th>
@@ -49,7 +49,7 @@ export function DataTable<T>({
           {data.map((row) => (
             <tr
               key={keyExtractor(row)}
-              className="border-b border-[var(--border-subtle)] transition-colors duration-120 hover:bg-[var(--surface-100)]"
+              className="border-b border-[var(--border-subtle)] transition-colors duration-120 hover:bg-[var(--surface-overlay)]"
             >
               {columns.map((column) => (
                 <td

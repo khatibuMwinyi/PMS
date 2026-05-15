@@ -23,7 +23,7 @@ export async function PropertyCardGrid() {
     <Link href={`/owner/properties/${property.id}`}>
       <div className="rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-card)] overflow-hidden transition-all duration-200 hover:border-[var(--brand-gold)] hover:shadow-md">
         {/* Property Image */}
-        <div className="relative h-32 w-full bg-[var(--surface-200)] overflow-hidden">
+        <div className="relative h-32 w-full bg-[var(--border-subtle)] overflow-hidden">
           {property.imageUrl ? (
             <Image
               src={property.imageUrl}
@@ -41,10 +41,10 @@ export async function PropertyCardGrid() {
         {/* Property Details */}
         <div className="p-4">
           <h3 className="font-bold text-[var(--text-primary)]">{property.name}</h3>
-          <span className="mt-1 inline-block rounded-full bg-[var(--surface-200)] px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-[var(--text-secondary)]">
+          <span className="mt-1 inline-block rounded-full bg-[var(--border-subtle)] px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-[var(--text-secondary)]">
             {property.type}
           </span>
-          <p className="mt-2 text-[var(--font-body-sm)] text-[var(--on-surface-variant)]">
+          <p className="mt-2 text-[var(--font-body-sm)] text-[var(--text-muted)]">
             {property.address}
           </p>
 

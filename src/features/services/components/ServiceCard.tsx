@@ -26,7 +26,7 @@ export function ServiceCard({ service, href }: ServiceCardProps) {
   return (
     <Card
       {...wrapperProps}
-      className="overflow-hidden border rounded-[var(--radius-lg)] transition-all duration-200 hover:border-[var(--on-surface)] hover:shadow-[var(--shadow-modal)] flex flex-col"
+      className="overflow-hidden border rounded-[var(--radius-lg)] transition-all duration-200 hover:border-[var(--text-primary)] hover:shadow-[var(--shadow-modal)] flex flex-col"
     >
       <CardContent className="flex flex-col gap-3 p-4 flex-1">
         {/* Header: Service name (font-h2, 14px, font-bold) + Status */}

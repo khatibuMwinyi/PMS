@@ -16,7 +16,7 @@ export function BentoCard({ icon, label, value, trend, className = '' }: BentoCa
     <div className={`rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4 shadow-[var(--shadow-card)] transition-all duration-200 hover:shadow-md ${className}`}>
       <div className="flex items-start justify-between">
         {icon && (
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[var(--surface-100)] text-[var(--brand-gold)]">
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[var(--surface-overlay)] text-[var(--brand-gold)]">
             {icon}
           </div>
         )}
