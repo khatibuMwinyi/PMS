@@ -209,7 +209,7 @@ html, body {
   .input {
     @apply w-full px-4 py-2.5 rounded-md border border-border-subtle;
     @apply bg-surface-card text-text-primary placeholder:text-text-muted;
-    @apply focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent;
+    @apply focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent;
     @apply transition-all duration-base;
   }
 

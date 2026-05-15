@@ -10,145 +10,126 @@ const config: Config = {
     extend: {
       // ─── Font Family ────────────────────────────────
       fontFamily: {
-        sans: ['var(--font-sans)', 'Inter', 'system-ui', 'sans-serif'],
-        h1: ['Inter', 'system-ui', 'sans-serif'],
-        h2: ['Inter', 'system-ui', 'sans-serif'],
-        'body-md': ['Inter', 'system-ui', 'sans-serif'],
-        'body-sm': ['Inter', 'system-ui', 'sans-serif'],
-        'table-header': ['Inter', 'system-ui', 'sans-serif'],
-        'data-tabular': ['Inter', 'system-ui', 'sans-serif'],
-        label: ['Inter', 'system-ui', 'sans-serif'],
+        sans:  ['var(--font-sans)',  'Inter',     'system-ui', 'sans-serif'],
+        serif: ['var(--font-serif)', 'Georgia',   'serif'],
+        mono:  ['var(--font-mono)',  'ui-monospace', 'monospace'],
       },
 
-      // ─── Font Size (with lineHeight and letterSpacing) ──
+      // ─── Font Size ──────────────────────────────────
       fontSize: {
-        'h1': ['24px', { lineHeight: '32px', fontWeight: '700' }],
-        'h2': ['18px', { lineHeight: '28px', fontWeight: '600' }],
-        'body-md': ['14px', { lineHeight: '20px' }],
-        'body-sm': ['13px', { lineHeight: '18px' }],
-        'table-header': ['12px', { lineHeight: '16px', fontWeight: '600', letterSpacing: '0.05em', textTransform: 'uppercase' }],
-        'data-tabular': ['14px', { lineHeight: '20px', fontVariantNumeric: 'tabular-nums' }],
-        'label': ['14px', { lineHeight: '20px', fontWeight: '500' }],
+        display:    ['64px', { lineHeight: '72px',  fontWeight: '500', letterSpacing: '-0.02em' }],
+        h1:         ['44px', { lineHeight: '52px',  fontWeight: '500', letterSpacing: '-0.01em' }],
+        h2:         ['28px', { lineHeight: '36px',  fontWeight: '600', letterSpacing: '-0.005em' }],
+        h3:         ['20px', { lineHeight: '28px',  fontWeight: '600' }],
+        h4:         ['16px', { lineHeight: '24px',  fontWeight: '600' }],
+        'body-lg':  ['18px', { lineHeight: '28px' }],
+        body:       ['15px', { lineHeight: '24px' }],
+        'body-sm':  ['13px', { lineHeight: '20px' }],
+        caption:    ['12px', { lineHeight: '16px',  fontWeight: '500', letterSpacing: '0.04em' }],
+        data:       ['15px', { lineHeight: '20px',  fontWeight: '500', fontVariantNumeric: 'tabular-nums' }],
+        mono:       ['13px', { lineHeight: '20px' }],
       },
 
       // ─── Colors ────────────────────────────────────
       colors: {
-        // Primary palette (dark navy)
         primary: {
-          DEFAULT: '#131b2e',
-          light: '#1B2A4A',
-          dark: '#000000',
-          foreground: '#ffffff',
+          DEFAULT:    'var(--brand-primary)',
+          light:      'var(--brand-primary-light)',
+          dark:       'var(--brand-primary-dark)',
+          foreground: 'var(--text-on-brand)',
         },
-        // Accent gold
         accent: {
-          DEFAULT: '#F0A500',
-          light: '#F5C542',
-          dark: '#D49400',
-          foreground: '#000000',
+          DEFAULT:    'var(--brand-gold)',
+          light:      'var(--brand-gold-light)',
+          dark:       'var(--brand-gold-dark)',
+          foreground: 'var(--brand-primary)',
         },
-        // Background
-        background: {
-          DEFAULT: '#fcf8fa',
-          card: '#ffffff',
-          overlay: 'rgba(19, 27, 46, 0.05)',
-        },
-        // Surface variants
         surface: {
-          DEFAULT: '#ffffff',
-          '100': '#f8f9fa',
-          '200': '#e9ecef',
-          '300': '#dee2e6',
-          variant: '#f5f5f5',
-        },
-        // On-colors (text on colored backgrounds)
-        'on-primary': '#ffffff',
-        'on-accent': '#000000',
-        'on-surface': {
-          DEFAULT: '#131b2e',
-          variant: '#64748B',
-        },
-        // Secondary container
-        'secondary-container': '#E8F7F2',
-        'on-secondary-container': '#0F766E',
-        // Tertiary container
-        'tertiary-container': '#F3E8FF',
-        'on-tertiary-container': '#6B21A8',
-        // Outline
-        outline: 'rgba(19, 27, 46, 0.14)',
-        'outline-variant': 'rgba(19, 27, 46, 0.08)',
-        // Status colors
-        status: {
-          urgent: '#EF4444',
-          'in-progress': '#3B82F6',
-          scheduled: '#8B5CF6',
-          completed: '#6B7280',
-        },
-        // Brand (keeping existing for compatibility)
-        brand: {
-          primary: 'var(--brand-primary)',
-          gold: 'var(--brand-gold)',
-          goldLight: 'var(--brand-gold-light)',
+          page:      'var(--surface-page)',
+          card:      'var(--surface-card)',
+          overlay:   'var(--surface-overlay)',
+          dark:      'var(--surface-dark)',
+          'dark-card': 'var(--surface-dark-card)',
         },
         text: {
-          primary: 'var(--text-primary)',
-          secondary: 'var(--text-secondary)',
-          muted: 'var(--text-muted)',
-          onBrand: 'var(--text-on-brand)',
+          primary:    'var(--text-primary)',
+          secondary:  'var(--text-secondary)',
+          muted:      'var(--text-muted)',
+          'on-dark':  'var(--text-on-dark)',
+          'on-brand': 'var(--text-on-brand)',
         },
         border: {
-          DEFAULT: 'var(--border-default)',
-          subtle: 'var(--border-subtle)',
+          DEFAULT:  'var(--border-default)',
+          subtle:   'var(--border-subtle)',
+          strong:   'var(--border-strong)',
+          focus:    'var(--border-focus)',
         },
         state: {
-          success: 'var(--state-success)',
-          successBg: 'var(--state-success-bg)',
-          error: 'var(--state-error)',
-          errorBg: 'var(--state-error-bg)',
+          success:      'var(--state-success)',
+          'success-bg': 'var(--state-success-bg)',
+          warning:      'var(--state-warning)',
+          'warning-bg': 'var(--state-warning-bg)',
+          error:        'var(--state-error)',
+          'error-bg':   'var(--state-error-bg)',
+          info:         'var(--state-info)',
+          'info-bg':    'var(--state-info-bg)',
+        },
+        status: {
+          urgent:       'var(--status-urgent)',
+          'in-progress': 'var(--status-in-progress)',
+          scheduled:    'var(--status-scheduled)',
+          completed:    'var(--status-completed)',
         },
       },
 
       // ─── Spacing ───────────────────────────────────
       spacing: {
-        '1': '4px',
-        '2': '8px',
-        '3': '12px',
-        '4': '16px',
-        '5': '20px',
-        '6': '24px',
-        '8': '32px',
-        '10': '40px',
-        xl: '32px',
-        lg: '24px',
-        md: '16px',
-        base: '4px',
-        'table-cell-padding-x': '12px',
-        'table-cell-padding-y': '8px',
+        '1':  'var(--space-1)',
+        '2':  'var(--space-2)',
+        '3':  'var(--space-3)',
+        '4':  'var(--space-4)',
+        '5':  'var(--space-5)',
+        '6':  'var(--space-6)',
+        '8':  'var(--space-8)',
+        '10': 'var(--space-10)',
+        '12': 'var(--space-12)',
+        '16': 'var(--space-16)',
+        '20': 'var(--space-20)',
+        '24': 'var(--space-24)',
       },
 
       // ─── Border Radius ──────────────────────────────
       borderRadius: {
-        DEFAULT: '0.125rem',
-        lg: '0.25rem',
-        xl: '0.5rem',
-        full: '0.75rem',
-        sm: 'var(--radius-sm)',
-        md: 'var(--radius-md)',
+        sm:   'var(--radius-sm)',
+        md:   'var(--radius-md)',
+        lg:   'var(--radius-lg)',
+        xl:   'var(--radius-xl)',
+        '2xl': 'var(--radius-2xl)',
+        card: 'var(--radius-card)',
         pill: 'var(--radius-pill)',
       },
 
       // ─── Box Shadow ────────────────────────────────
       boxShadow: {
-        card: 'var(--shadow-card)',
-        primary: '0 10px 40px rgba(0,0,0,0.1), 0 2px 12px rgba(0,0,0,0.08)',
-        focus: '0 0 0 3px var(--border-focus)',
+        card:     'var(--shadow-card)',
+        modal:    'var(--shadow-modal)',
+        dropdown: 'var(--shadow-dropdown)',
+        bold:     'var(--shadow-bold)',
+        focus:    'var(--shadow-focus)',
+      },
+
+      // ─── Max Width ─────────────────────────────────
+      maxWidth: {
+        editorial: 'var(--container-editorial)',
+        dashboard: 'var(--container-dashboard)',
       },
 
       // ─── Transition Duration ────────────────────────
       transitionDuration: {
-        fast: '120ms',
-        base: '200ms',
-        slow: '320ms',
+        fast:   '120ms',
+        base:   '200ms',
+        slow:   '320ms',
+        spring: '400ms',
       },
     },
   },
