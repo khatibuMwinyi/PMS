@@ -49,22 +49,22 @@ const logoVariants = {
 
 const FEATURES = [
   {
-    icon: <HomeIcon size={20} className="text-[#C89128]" />,
+    icon: <HomeIcon size={20} className="text-accent" />,
     label: 'Property Management',
     description: 'Professional services tracked in real-time',
   },
   {
-    icon: <Zap size={20} className="text-[#C89128]" />,
+    icon: <Zap size={20} className="text-accent" />,
     label: 'Instant Quotes',
     description: 'Get price estimates within seconds',
   },
   {
-    icon: <Shield size={20} className="text-[#C89128]" />,
+    icon: <Shield size={20} className="text-accent" />,
     label: 'Secure Payments',
     description: 'Pay safely via mobile money',
   },
   {
-    icon: <Building2 size={20} className="text-[#C89128]" />,
+    icon: <Building2 size={20} className="text-accent" />,
     label: 'Provider Ratings',
     description: 'Choose from rated professionals',
   },
@@ -124,7 +124,7 @@ export function AnimatedBrandingPanel({ title = 'Oweru', tagline }: AnimatedBran
               whileHover={{ x: 10 }}
               transition={{ type: 'spring', stiffness: 300 }}
             >
-              <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-[#C89128]/10 flex items-center justify-center">
+              <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center">
                 {feature.icon}
               </div>
               <div>
@@ -143,7 +143,7 @@ export function AnimatedBrandingPanel({ title = 'Oweru', tagline }: AnimatedBran
             {['★', '★', '★', '★', '★'].map((star, i) => (
               <motion.span
                 key={i}
-                className="text-[#C89128]"
+                className="text-accent"
                 initial={{ opacity: 0, scale: 0 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 1 + i * 0.1 }}
@@ -157,7 +157,7 @@ export function AnimatedBrandingPanel({ title = 'Oweru', tagline }: AnimatedBran
       </motion.div>
 
       <motion.div
-        className="absolute -bottom-20 -left-20 w-64 h-64 rounded-full bg-[#C89128]/5 blur-3xl"
+        className="absolute -bottom-20 -left-20 w-64 h-64 rounded-full bg-accent/5 blur-3xl"
         animate={{
           scale: [1, 1.2, 1],
           opacity: [0.3, 0.5, 0.3],
@@ -176,7 +176,7 @@ function FloatingShapes() {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
       <motion.div
-        className="absolute top-0 right-0 w-40 h-40 rounded-full bg-[#C89128]/5"
+        className="absolute top-0 right-0 w-40 h-40 rounded-full bg-accent/5"
         animate={{
           y: [-30, 30, -30],
           x: [-20, 20, -20],
@@ -188,7 +188,7 @@ function FloatingShapes() {
         }}
       />
       <motion.div
-        className="absolute bottom-0 left-0 w-60 h-60 rounded-full bg-[#1E3A5F]/20"
+        className="absolute bottom-0 left-0 w-60 h-60 rounded-full bg-primary-light/20"
         animate={{
           y: [20, -20, 20],
           x: [15, -15, 15],

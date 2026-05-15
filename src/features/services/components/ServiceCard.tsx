@@ -45,7 +45,7 @@ export function ServiceCard({ service, href }: ServiceCardProps) {
           <Tag size={11} style={{ color: 'var(--brand-primary)' }} />
           <span
             className="px-2 py-0.5 rounded-[var(--radius-pill)] text-[10px] font-medium uppercase tracking-wider"
-            style={{ background: '#f1f5f9', color: 'var(--text-secondary)' }}
+            style={{ background: 'var(--surface-page)', color: 'var(--text-secondary)' }}
           >
             {service.category}
           </span>

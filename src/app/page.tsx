@@ -56,14 +56,14 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-[var(--surface-page)]">
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 bg-white/90 backdrop-blur-sm border-b border-[#DDE1E8] z-50">
+      <nav className="fixed top-0 left-0 right-0 bg-white/90 backdrop-blur-sm border-b border-border z-50">
         <div className="container mx-auto px-6 py-4">
           {/* Desktop Navigation */}
           <div className="flex justify-between items-center">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="text-2xl font-bold text-[#0F172A]"
+              className="text-2xl font-bold text-primary"
             >
               <Image
                 src="/images/logo.jpeg"
@@ -78,12 +78,12 @@ export default function LandingPage() {
             {/* Desktop Links - Hidden on mobile */}
             {!isMobile && (
               <div className="flex items-center gap-8">
-                <a href="#" className="text-[#2D3A58] hover:text-[#C89128] transition-colors">Features</a>
-                <a href="#" className="text-[#2D3A58] hover:text-[#C89128] transition-colors">Pricing</a>
-                <a href="#" className="text-[#2D3A58] hover:text-[#C89128] transition-colors">Contact</a>
+                <a href="#" className="text-text-secondary hover:text-accent transition-colors">Features</a>
+                <a href="#" className="text-text-secondary hover:text-accent transition-colors">Pricing</a>
+                <a href="#" className="text-text-secondary hover:text-accent transition-colors">Contact</a>
                 <button
                   onClick={() => handleSignIn('user')}
-                  className="px-6 py-2 bg-[#0F172A] text-white rounded-lg font-medium hover:bg-[#1E293B] transition-colors"
+                  className="px-6 py-2 bg-primary text-white rounded-lg font-medium hover:bg-primary-light transition-colors"
                 >
                   Sign In
                 </button>
@@ -94,7 +94,7 @@ export default function LandingPage() {
             {isMobile && (
               <button
                 onClick={() => setMobileMenuOpen(true)}
-                className="md:hidden p-2 text-[#2D3A58] hover:bg-[#DDE1E8] rounded-lg transition-colors"
+                className="md:hidden p-2 text-text-secondary hover:bg-surface-overlay rounded-lg transition-colors"
                 aria-label="Open menu"
               >
                 <Menu size={24} />
@@ -120,11 +120,11 @@ export default function LandingPage() {
           isMobile || !mounted ? '' : 'hidden'
         ].join(' ')}
       >
-        <div className="flex items-center justify-between h-16 px-4 border-b border-[#DDE1E8]">
-          <span className="text-xl font-bold text-[#0F172A]">Menu</span>
+        <div className="flex items-center justify-between h-16 px-4 border-b border-border">
+          <span className="text-xl font-bold text-primary">Menu</span>
           <button
             onClick={() => setMobileMenuOpen(false)}
-            className="p-2 text-[#2D3A58] hover:bg-[#DDE1E8] rounded-lg transition-colors"
+            className="p-2 text-text-secondary hover:bg-surface-overlay rounded-lg transition-colors"
             aria-label="Close menu"
           >
             <X size={20} />
@@ -132,18 +132,18 @@ export default function LandingPage() {
         </div>
         <div className="flex-1 overflow-y-auto p-4">
           <nav className="flex flex-col gap-4">
-            <a href="#" className="text-[#2D3A58] hover:text-[#C89128] transition-colors py-2">Features</a>
-            <a href="#" className="text-[#2D3A58] hover:text-[#C89128] transition-colors py-2">Pricing</a>
-            <a href="#" className="text-[#2D3A58] hover:text-[#C89128] transition-colors py-2">Contact</a>
+            <a href="#" className="text-text-secondary hover:text-accent transition-colors py-2">Features</a>
+            <a href="#" className="text-text-secondary hover:text-accent transition-colors py-2">Pricing</a>
+            <a href="#" className="text-text-secondary hover:text-accent transition-colors py-2">Contact</a>
           </nav>
         </div>
-        <div className="p-4 border-t border-[#DDE1E8]">
+        <div className="p-4 border-t border-border">
           <button
             onClick={() => {
               setMobileMenuOpen(false);
               handleSignIn('user');
             }}
-            className="w-full px-6 py-3 bg-[#0F172A] text-white rounded-lg font-medium hover:bg-[#1E293B] transition-colors"
+            className="w-full px-6 py-3 bg-primary text-white rounded-lg font-medium hover:bg-primary-light transition-colors"
           >
             Sign In
           </button>
@@ -225,13 +225,13 @@ export default function LandingPage() {
       <section className="py-20 bg-white">
         <div className="container mx-auto px-6 max-w-4xl">
           <div className="flex justify-center mb-12">
-            <div className="bg-[#DDE1E8] rounded-full p-1 flex">
+            <div className="bg-border rounded-full p-1 flex">
               <button
                 onClick={() => setActiveTab('owners')}
                 className={`px-6 py-3 rounded-full text-sm font-medium transition-colors ${
                   activeTab === 'owners'
-                    ? 'bg-[#0F172A] text-white'
-                    : 'text-[#2D3A58] hover:text-[#0F172A]'
+                    ? 'bg-primary text-white'
+                    : 'text-text-secondary hover:text-primary'
                 }`}
               >
                 For Property Owners
@@ -240,8 +240,8 @@ export default function LandingPage() {
                 onClick={() => setActiveTab('providers')}
                 className={`px-6 py-3 rounded-full text-sm font-medium transition-colors ${
                   activeTab === 'providers'
-                    ? 'bg-[#0F172A] text-white'
-                    : 'text-[#2D3A58] hover:text-[#0F172A]'
+                    ? 'bg-primary text-white'
+                    : 'text-text-secondary hover:text-primary'
                 }`}
               >
                 For Service Providers
@@ -256,10 +256,10 @@ export default function LandingPage() {
             transition={{ duration: 0.3 }}
             className="text-center"
           >
-            <h2 className="text-3xl font-bold text-[#0F172A] mb-6">
+            <h2 className="text-3xl font-bold text-primary mb-6">
               {activeTab === 'owners' ? 'Maximize Your Property Value' : 'Grow Your Business'}
             </h2>
-            <p className="text-lg text-[#2D3A58] opacity-80 max-w-2xl mx-auto">
+            <p className="text-lg text-text-secondary opacity-80 max-w-2xl mx-auto">
               {activeTab === 'owners'
                 ? 'Professional management services to maximize your rental income and minimize your workload'
                 : 'Connect with property owners and grow your service business with Oweru platform'
@@ -267,7 +267,7 @@ export default function LandingPage() {
             </p>
             <button
               onClick={() => handleSignIn(activeTab)}
-              className="mt-6 px-6 py-3 bg-[#0F172A] text-white rounded-lg font-medium hover:bg-[#1E293B] transition-colors"
+              className="mt-6 px-6 py-3 bg-primary text-white rounded-lg font-medium hover:bg-primary-light transition-colors"
             >
               Get Started as {activeTab === 'owners' ? 'Owner' : 'Provider'}
             </button>
@@ -276,7 +276,7 @@ export default function LandingPage() {
       </section>
 
       {/* Services */}
-      <section className="py-20 bg-[#F8F8F9]">
+      <section className="py-20 bg-surface-page">
         <div className="container mx-auto px-6 max-w-6xl">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -284,10 +284,10 @@ export default function LandingPage() {
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl font-bold text-[#0F172A] mb-4">
-              Our <span className="text-[#C89128]">Services</span>
+            <h2 className="text-4xl font-bold text-primary mb-4">
+              Our <span className="text-accent">Services</span>
             </h2>
-            <p className="text-xl text-[#2D3A58] opacity-80">
+            <p className="text-xl text-text-secondary opacity-80">
               Comprehensive solutions for modern property management
             </p>
           </motion.div>
@@ -299,15 +299,15 @@ export default function LandingPage() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 * index, duration: 0.6 }}
-                className="bg-white p-8 rounded-2xl border border-[#DDE1E8] hover:border-[#C89128] transition-all"
+                className="bg-white p-8 rounded-2xl border border-border hover:border-accent transition-all"
               >
-                <h3 className="text-2xl font-bold text-[#0F172A] mb-4">{service.title}</h3>
-                <p className="text-[#2D3A58] mb-6 opacity-80">{service.description}</p>
+                <h3 className="text-2xl font-bold text-primary mb-4">{service.title}</h3>
+                <p className="text-text-secondary mb-6 opacity-80">{service.description}</p>
                 <ul className="space-y-3">
                   {service.features.map((feature, idx) => (
                     <li key={idx} className="flex items-center gap-3">
-                      <div className="w-2 h-2 bg-[#C89128] rounded-full"></div>
-                      <span className="text-[#2D3A58]">{feature}</span>
+                      <div className="w-2 h-2 bg-accent rounded-full"></div>
+                      <span className="text-text-secondary">{feature}</span>
                     </li>
                   ))}
                 </ul>
