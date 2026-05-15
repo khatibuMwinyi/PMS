@@ -3,7 +3,8 @@ import { auth } from '@/core/auth';
 import { redirect } from 'next/navigation';
 import { DashboardShell } from '@/components/layout/DashboardShell';
 import { RoleGuard } from '@/components/RoleGuard';
-import { BentoCard } from '@/components/ui/BentoCard';
+import { Stat } from '@/components/ui/Stat';
+import { Card } from '@/components/ui/Card';
 import { DataTable } from '@/components/ui/DataTable';
 import { StatusBadge } from '@/components/ui/StatusBadge';
 import type { Column } from '@/components/ui/DataTable';
@@ -109,26 +110,18 @@ async function AdminDashboardContent() {
     <DashboardShell role="ADMIN" userName={session.user.name} pageTitle="Dashboard">
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-        <BentoCard
-          icon={<Users size={20} />}
-          label="Total Users"
-          value={stats.totalUsers.toString()}
-        />
-        <BentoCard
-          icon={<Building2 size={20} />}
-          label="Properties"
-          value={stats.totalProperties.toString()}
-        />
-        <BentoCard
-          icon={<ClipboardList size={20} />}
-          label="Active Requests"
-          value={stats.activeRequests.toString()}
-        />
-        <BentoCard
-          icon={<DollarSign size={20} />}
-          label="Monthly Revenue"
-          value={stats.monthlyRevenue}
-        />
+        <Card padding="compact">
+          <Stat icon={Users} label="Total Users" value={stats.totalUsers.toString()} />
+        </Card>
+        <Card padding="compact">
+          <Stat icon={Building2} label="Properties" value={stats.totalProperties.toString()} />
+        </Card>
+        <Card padding="compact">
+          <Stat icon={ClipboardList} label="Active Requests" value={stats.activeRequests.toString()} />
+        </Card>
+        <Card padding="compact">
+          <Stat icon={DollarSign} label="Monthly Revenue" value={stats.monthlyRevenue} />
+        </Card>
       </div>
 
       {/* Recent Users Table */}
