@@ -18,24 +18,24 @@ export function FooterEditorial() {
           </div>
 
           {/* Company */}
-          <div>
+          <nav aria-label="Company links">
             <p className="text-caption uppercase text-text-muted tracking-widest mb-4">Company</p>
             <ul className="flex flex-col gap-2.5">
               {FOOTER.company.map((l) => (
                 <li key={l.href}><Link href={l.href} className="text-body-sm text-text-secondary hover:text-text-on-dark transition-colors">{l.label}</Link></li>
               ))}
             </ul>
-          </div>
+          </nav>
 
           {/* Services */}
-          <div>
+          <nav aria-label="Services links">
             <p className="text-caption uppercase text-text-muted tracking-widest mb-4">Services</p>
             <ul className="flex flex-col gap-2.5">
               {FOOTER.services.map((l) => (
                 <li key={l.label}><Link href={l.href} className="text-body-sm text-text-secondary hover:text-text-on-dark transition-colors">{l.label}</Link></li>
               ))}
             </ul>
-          </div>
+          </nav>
 
           {/* Contact */}
           <div>
@@ -53,13 +53,17 @@ export function FooterEditorial() {
           <p className="text-body-sm text-text-muted">
             © {year} Oweru. Reg: {FOOTER.contact.businessRegistration}
           </p>
-          <div className="flex flex-wrap gap-4">
-            {FOOTER.legal.map((l) => (
-              <Link key={l.href} href={l.href} className="text-body-sm text-text-muted hover:text-text-secondary transition-colors">
-                {l.label}
-              </Link>
-            ))}
-          </div>
+          <nav aria-label="Legal links">
+            <ul className="flex flex-wrap gap-4">
+              {FOOTER.legal.map((l) => (
+                <li key={l.href}>
+                  <Link href={l.href} className="text-body-sm text-text-muted hover:text-text-secondary transition-colors">
+                    {l.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
         </div>
       </div>
     </footer>
