@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Wrench, Tag, DollarSign } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/Card';
 import { StatusBadge } from '@/components/shared/StatusBadge';
 
 interface ServiceCardProps {
