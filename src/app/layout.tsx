@@ -13,14 +13,15 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'Oweru — Property Services, Professionally Managed',
-  description: 'Oweru Property Service Management Platform',
-  icons: {
-    icon: '/images/logo.jpeg',
-    apple: '/images/logo.jpeg',
-  },
-  other: {
-    preconnect: 'https://fonts.googleapis.com',
+  title: 'Oweru — Tanzania\'s Managed Property Services',
+  description:
+    'One contract, one invoice, zero coordination. Oweru manages cleaning, plumbing, electrical, landscaping, security, and pool services for property owners in Tanzania.',
+  keywords: ['property management', 'Tanzania', 'Dar es Salaam', 'property services', 'Oweru'],
+  openGraph: {
+    title: 'Oweru — Tanzania\'s Managed Property Services',
+    description: 'One contract, one invoice, zero coordination.',
+    type: 'website',
+    locale: 'en_TZ',
   },
 };
 
