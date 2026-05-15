@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { AgreementStatus } from '../types';
-import { StatusBadge } from '@/components/ui/StatusBadge';
+import { StatusBadge } from '@/components/ui/Badge';
 
 interface AgreementCardProps {
   id: string;

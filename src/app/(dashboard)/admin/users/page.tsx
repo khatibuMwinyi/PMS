@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation';
 import { DashboardShell } from '@/components/layout/DashboardShell';
 import { RoleGuard } from '@/components/RoleGuard';
 import { DataTable } from '@/components/ui/DataTable';
-import { StatusBadge } from '@/components/shared/StatusBadge';
+import { StatusBadge } from '@/components/ui/Badge';
 import type { Column } from '@/components/ui/DataTable';
 import { Users, UserCheck, UserX } from 'lucide-react';
 import { getUsers } from '@/features/users/queries';

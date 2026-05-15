@@ -1,7 +1,7 @@
 import React from 'react';
 import { DataTable } from '@/components/ui/DataTable';
 import { AgreementStatus } from '../types';
-import { StatusBadge } from '@/components/ui/StatusBadge';
+import { StatusBadge } from '@/components/ui/Badge';
 
 interface Agreement {
   id: string;

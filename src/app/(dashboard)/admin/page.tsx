@@ -6,7 +6,7 @@ import { RoleGuard } from '@/components/RoleGuard';
 import { Stat } from '@/components/ui/Stat';
 import { Card } from '@/components/ui/Card';
 import { DataTable } from '@/components/ui/DataTable';
-import { StatusBadge } from '@/components/ui/StatusBadge';
+import { StatusBadge } from '@/components/ui/Badge';
 import type { Column } from '@/components/ui/DataTable';
 import { Users, Building2, ClipboardList, DollarSign } from 'lucide-react';
 

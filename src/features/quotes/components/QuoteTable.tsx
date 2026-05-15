@@ -1,7 +1,7 @@
 import React from 'react';
 import { DataTable } from '@/components/ui/DataTable';
 import { QuoteStatus } from '../types';
-import { StatusBadge } from '@/components/ui/StatusBadge';
+import { StatusBadge } from '@/components/ui/Badge';
 
 interface Quote {
   id: string;

@@ -1,5 +1,5 @@
 import { DataTable } from '@/components/ui/DataTable';
-import { StatusBadge } from '@/components/ui/StatusBadge';
+import { StatusBadge } from '@/components/ui/Badge';
 import type { Column } from '@/components/ui/DataTable';
 
 interface ServiceRequest {

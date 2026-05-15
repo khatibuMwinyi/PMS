@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { MapPin, Home, Wrench, Tag } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/Card';
-import { StatusBadge } from '@/components/shared/StatusBadge';
+import { StatusBadge } from '@/components/ui/Badge';
 
 interface PropertyCardProps {
   property: {
