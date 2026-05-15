@@ -7,10 +7,10 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
   state?: 'default' | 'error' | 'success' | 'warning';
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
+  rightElement?: React.ReactNode;
   label?: string;
   helper?: string;
   error?: string;
-  loading?: boolean;
   loading?: boolean;
   required?: boolean;
   ariaLabel?: string;
@@ -25,6 +25,7 @@ export const UnifiedInput = React.forwardRef<HTMLInputElement, InputProps>((
     state = 'default',
     leftIcon,
     rightIcon,
+    rightElement,
     label,
     helper,
     error,
@@ -78,6 +79,9 @@ export const UnifiedInput = React.forwardRef<HTMLInputElement, InputProps>((
       )}
 
       <div className="relative flex items-center">
+        {leftIcon && (
+          <span className="absolute left-3 text-[var(--text-muted)]">{leftIcon}</span>
+        )}
         <input
           ref={ref}
           id={inputId}
@@ -92,13 +96,18 @@ export const UnifiedInput = React.forwardRef<HTMLInputElement, InputProps>((
             stateTextClasses[state],
             sizeClasses[size],
             leftIcon && 'pl-10',
-            (rightIcon || loading) && 'pr-10',
+            (rightIcon || rightElement || loading) && 'pr-10',
             className,
           )}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           {...props}
         />
+        {(rightIcon || rightElement) && (
+          <span className="absolute right-3 text-[var(--text-muted)]">
+            {rightElement || rightIcon}
+          </span>
+        )}
       </div>
 
       <div className="space-y-1">

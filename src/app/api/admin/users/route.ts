@@ -20,15 +20,12 @@ export async function GET() {
   try {
     const users = await prisma.user.findMany({
       include: {
-        ownerProfile: true,
-        providerProfile: true,
-        _count: {
-          select: {
-            properties: true,
-            quotes: true,
-            agreements: true,
-          },
+        ownerProfile: {
+          include: {
+            _count: { select: { properties: true } }
+          }
         },
+        providerProfile: true,
       },
       orderBy: { createdAt: 'desc' },
     });

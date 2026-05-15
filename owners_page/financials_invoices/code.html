@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Financial Overview - OPSMP</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-container": "#63646c",
+                        "on-tertiary-fixed-variant": "#574425",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#bec6e0",
+                        "surface": "#fcf8fa",
+                        "primary-container": "#131b2e",
+                        "on-error": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "primary-fixed-dim": "#bec6e0",
+                        "primary": "#000000",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-bright": "#fcf8fa",
+                        "error": "#ba1a1a",
+                        "on-secondary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed": "#e3e1ec",
+                        "surface-dim": "#dcd9db",
+                        "outline": "#76777d",
+                        "on-secondary-fixed-variant": "#46464e",
+                        "surface-container-high": "#eae7e9",
+                        "on-tertiary-container": "#98805d",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "on-tertiary": "#ffffff",
+                        "on-background": "#1b1b1d",
+                        "background": "#fcf8fa",
+                        "on-primary-fixed": "#131b2e",
+                        "tertiary": "#000000",
+                        "inverse-surface": "#303032",
+                        "on-surface-variant": "#45464d",
+                        "tertiary-container": "#271901",
+                        "on-tertiary-fixed": "#271901",
+                        "surface-variant": "#e4e2e4",
+                        "tertiary-fixed-dim": "#dec29a",
+                        "secondary-fixed-dim": "#c6c5cf",
+                        "surface-container-low": "#f6f3f5",
+                        "surface-container-highest": "#e4e2e4",
+                        "primary-fixed": "#dae2fd",
+                        "on-secondary-fixed": "#1a1b22",
+                        "surface-tint": "#565e74",
+                        "on-primary-container": "#7c839b",
+                        "inverse-on-surface": "#f3f0f2",
+                        "secondary-container": "#e3e1ec",
+                        "surface-container": "#f0edef",
+                        "tertiary-fixed": "#fcdeb5",
+                        "secondary": "#5d5e66",
+                        "outline-variant": "#c6c6cd",
+                        "on-surface": "#1b1b1d"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "lg": "24px",
+                        "table-cell-padding-y": "8px",
+                        "table-cell-padding-x": "12px",
+                        "base": "4px",
+                        "xs": "4px",
+                        "xl": "32px",
+                        "md": "16px",
+                        "sm": "8px"
+                    },
+                    "fontFamily": {
+                        "h1": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "table-header": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label": ["Inter"],
+                        "data-tabular": ["Inter"],
+                        "h2": ["Inter"]
+                    },
+                    "fontSize": {
+                        "h1": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                        "table-header": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "label": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "data-tabular": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                        "h2": ["18px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #c6c6cd; border-radius: 2px; }
+    </style>
+</head>
+<body class="bg-background text-on-surface">
+<div class="flex min-h-screen">
+<!-- SideNavBar Component -->
+<aside class="flex flex-col h-screen w-64 border-r border-outline-variant bg-surface-container-lowest sticky top-0 py-md">
+<div class="px-lg mb-xl">
+<h1 class="font-h2 text-h2 font-bold text-primary">OPSMP</h1>
+<p class="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold">Operational Excellence</p>
+</div>
+<nav class="flex-1 space-y-base px-sm">
+<!-- Dashboard -->
+<a class="flex items-center gap-md px-md py-sm transition-colors duration-200 hover:bg-surface-container-high text-on-surface-variant" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<!-- Properties -->
+<a class="flex items-center gap-md px-md py-sm transition-colors duration-200 hover:bg-surface-container-high text-on-surface-variant" href="#">
+<span class="material-symbols-outlined" data-icon="domain">domain</span>
+<span class="font-body-md text-body-md">Properties</span>
+</a>
+<!-- Work Orders -->
+<a class="flex items-center gap-md px-md py-sm transition-colors duration-200 hover:bg-surface-container-high text-on-surface-variant" href="#">
+<span class="material-symbols-outlined" data-icon="build">build</span>
+<span class="font-body-md text-body-md">Work Orders</span>
+</a>
+<!-- Financials (ACTIVE) -->
+<a class="flex items-center gap-md px-md py-sm transition-colors duration-200 text-primary font-bold border-r-4 border-primary bg-surface-container-low" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span class="font-body-md text-body-md">Financials</span>
+</a>
+<!-- Service Network -->
+<a class="flex items-center gap-md px-md py-sm transition-colors duration-200 hover:bg-surface-container-high text-on-surface-variant" href="#">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+<span class="font-body-md text-body-md">Service Network</span>
+</a>
+<!-- Reports -->
+<a class="flex items-center gap-md px-md py-sm transition-colors duration-200 hover:bg-surface-container-high text-on-surface-variant" href="#">
+<span class="material-symbols-outlined" data-icon="assessment">assessment</span>
+<span class="font-body-md text-body-md">Reports</span>
+</a>
+</nav>
+<div class="mt-auto px-sm border-t border-outline-variant pt-md space-y-base">
+<a class="flex items-center gap-md px-md py-sm hover:bg-surface-container-high text-on-surface-variant" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm hover:bg-surface-container-high text-on-surface-variant" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span class="font-body-md text-body-md">Help Center</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col min-w-0">
+<!-- TopNavBar Component -->
+<header class="flex justify-between items-center h-16 px-lg w-full sticky top-0 z-40 bg-surface-container-lowest border-b border-outline-variant">
+<div class="flex items-center flex-1 max-w-xl">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full bg-surface-container-low border-none rounded-lg pl-xl pr-md py-sm text-body-sm focus:ring-1 focus:ring-primary" placeholder="Search financials..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-lg ml-xl">
+<div class="flex items-center gap-md text-on-surface-variant">
+<button class="hover:text-primary transition-transform active:scale-95">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="hover:text-primary transition-transform active:scale-95">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+</button>
+<button class="hover:text-primary transition-transform active:scale-95">
+<span class="material-symbols-outlined" data-icon="chat">chat</span>
+</button>
+</div>
+<div class="h-8 w-[1px] bg-outline-variant"></div>
+<div class="flex items-center gap-md">
+<button class="text-label text-primary font-bold hover:underline">Support</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant bg-surface-container-high">
+<img alt="User profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9ot25mJFyQc3JcYpFhcHPAEQGbs3ivQdJeAzbX1PixAHQp6uxyOHJfnHzYv2YvQay1hWEItsv0q_w9Wkuzqgnn0s0VypCMOThMshxbIiijBEBUN1_enxo0OXp7K7tiWxjfdM-Auay5g6d_Gg3uUBWJakI87LMby2jz_pH-PwSUgOnNt8nAUk2SSTEjBpkon7rVZ9jVe1nEVCWLydvofDg9zDvJyXHcMj4if0GzzIjMY9xgevJpgK7kxNQ54bJP82FAl2Ymkb7JUk"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Dashboard Content -->
+<div class="p-lg space-y-lg">
+<!-- Header Actions -->
+<div class="flex justify-between items-end">
+<div>
+<h2 class="font-h1 text-h1 text-primary">Financial Overview</h2>
+<p class="text-on-surface-variant text-body-sm">Detailed performance and expense tracking for your property portfolio.</p>
+</div>
+<button class="bg-primary text-on-primary px-lg py-sm rounded-lg font-label flex items-center gap-sm transition-transform active:scale-95">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                        New Work Order
+                    </button>
+</div>
+<!-- Summary Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-lg">
+<!-- Total Spent YTD -->
+<div class="bg-surface-container-lowest border border-outline-variant p-lg flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start">
+<span class="text-label text-on-surface-variant uppercase tracking-wider">Total Spent (YTD)</span>
+<span class="text-on-primary-fixed-variant bg-primary-fixed px-sm py-xs rounded text-[10px] font-bold">+12.4%</span>
+</div>
+<p class="text-[32px] font-black text-primary mt-sm tracking-tight">$42,850.00</p>
+</div>
+<div class="mt-xl h-12 flex items-end gap-1">
+<div class="flex-1 bg-surface-container-high h-[30%]"></div>
+<div class="flex-1 bg-surface-container-high h-[45%]"></div>
+<div class="flex-1 bg-surface-container-high h-[20%]"></div>
+<div class="flex-1 bg-surface-container-high h-[60%]"></div>
+<div class="flex-1 bg-surface-container-high h-[80%]"></div>
+<div class="flex-1 bg-primary h-[95%]"></div>
+<div class="flex-1 bg-primary h-[85%]"></div>
+</div>
+</div>
+<!-- Pending Invoices -->
+<div class="bg-surface-container-lowest border border-outline-variant p-lg">
+<span class="text-label text-on-surface-variant uppercase tracking-wider">Pending Invoices</span>
+<div class="mt-md space-y-md">
+<div>
+<p class="text-h2 font-bold text-primary">08 <span class="text-body-sm font-normal text-on-surface-variant ml-xs">Invoices pending</span></p>
+<p class="text-body-md font-bold text-error mt-xs">$3,420.50</p>
+</div>
+<div class="w-full bg-surface-container-low h-2 rounded-full overflow-hidden">
+<div class="bg-error w-[65%] h-full"></div>
+</div>
+<p class="text-[11px] text-on-surface-variant italic">Next due date: Oct 24, 2023</p>
+</div>
+</div>
+<!-- Utility Allocations -->
+<div class="bg-surface-container-lowest border border-outline-variant p-lg overflow-hidden relative">
+<span class="text-label text-on-surface-variant uppercase tracking-wider">Estimated Utilities</span>
+<div class="mt-md space-y-sm">
+<div class="flex justify-between items-center">
+<span class="text-body-sm">Water &amp; Sewage</span>
+<span class="font-data-tabular">$1,200</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-body-sm">Electricity</span>
+<span class="font-data-tabular">$2,450</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-body-sm">Waste Management</span>
+<span class="font-data-tabular">$680</span>
+</div>
+</div>
+<div class="absolute -right-4 -bottom-4 opacity-10">
+<span class="material-symbols-outlined text-[120px]" data-icon="bolt">bolt</span>
+</div>
+</div>
+</div>
+<!-- Main Table and Chart Section -->
+<div class="grid grid-cols-1 xl:grid-cols-4 gap-lg">
+<!-- Invoices & History Table -->
+<div class="xl:col-span-3 bg-surface-container-lowest border border-outline-variant">
+<div class="p-md border-b border-outline-variant flex justify-between items-center bg-surface-container-lowest sticky top-0">
+<h3 class="font-h2 text-h2">Invoices &amp; Payment History</h3>
+<div class="flex gap-sm">
+<button class="border border-outline-variant px-sm py-xs text-[11px] font-bold hover:bg-surface-container-high">Export CSV</button>
+<button class="border border-outline-variant px-sm py-xs text-[11px] font-bold hover:bg-surface-container-high">Filter</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low text-table-header uppercase">
+<tr>
+<th class="px-table-cell-padding-x py-table-cell-padding-y border-b border-outline-variant">Invoice ID</th>
+<th class="px-table-cell-padding-x py-table-cell-padding-y border-b border-outline-variant">Property</th>
+<th class="px-table-cell-padding-x py-table-cell-padding-y border-b border-outline-variant">Date</th>
+<th class="px-table-cell-padding-x py-table-cell-padding-y border-b border-outline-variant">Amount</th>
+<th class="px-table-cell-padding-x py-table-cell-padding-y border-b border-outline-variant">Status</th>
+<th class="px-table-cell-padding-x py-table-cell-padding-y border-b border-outline-variant text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="text-body-sm font-data-tabular">
+<tr class="hover:bg-surface-container-low group border-b border-outline-variant">
+<td class="px-table-cell-padding-x py-table-cell-padding-y font-bold">INV-9021</td>
+<td class="px-table-cell-padding-x py-table-cell-padding-y">Skyline Apartments, 402</td>
+<td class="px-table-cell-padding-x py-table-cell-padding-y">Oct 12, 2023</td>
+<td class="px-table-cell-padding-x py-table-cell-padding-y">$1,450.00</td>
+<td class="px-table-cell-padding-x py-table-cell-padding-y">
+<span class="bg-primary/10 text-primary px-sm py-xs rounded text-[10px] font-bold">PAID</span>
+</td>
+<td class="px-table-cell-padding-x py-table-cell-padding-y text-right">
+<button class="text-outline hover:text-primary transition-colors"><span class="material-symbols-outlined text-[20px]">download</span></button>
+</td>
+</tr>
+<tr class="bg-surface-container-low/50 hover:bg-surface-container-low group border-b border-outline-variant">
+<td class="px-table-cell-padding-x py-table-cell-padding-y font-bold">INV-8955</td>
+<td class="px-table-cell-padding-x py-table-cell-padding-y">Emerald Towers, GH</td>
+<td class="px-table-cell-padding-x py-table-cell-padding-y">Oct 05, 2023</td>
+<td class="px-table-cell-padding-x py-table-cell-padding-y">$890.50</td>
+<td class="px-table-cell-padding-x py-table-cell-padding-y">
+<span class="bg-error/10 text-error px-sm py-xs rounded text-[10px] font-bold">OVERDUE</span>
+</td>
+<td class="px-table-cell-padding-x py-table-cell-padding-y text-right">
+<button class="bg-primary text-on-primary px-sm py-xs rounded text-[11px] font-bold hover:opacity-90 active:scale-95 transition-all">Pay via Selcom</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low group border-b border-outline-variant">
+<td class="px-table-cell-padding-x py-table-cell-padding-y font-bold">INV-8832</td>
+<td class="px-table-cell-padding-x py-table-cell-padding-y">The Grand Atrium, B2</td>
+<td class="px-table-cell-padding-x py-table-cell-padding-y">Sep 28, 2023</td>
+<td class="px-table-cell-padding-x py-table-cell-padding-y">$2,100.00</td>
+<td class="px-table-cell-padding-x py-table-cell-padding-y">
+<span class="bg-on-tertiary-container/10 text-on-tertiary-container px-sm py-xs rounded text-[10px] font-bold">PENDING</span>
+</td>
+<td class="px-table-cell-padding-x py-table-cell-padding-y text-right">
+<button class="bg-primary text-on-primary px-sm py-xs rounded text-[11px] font-bold hover:opacity-90 active:scale-95 transition-all">Pay via Selcom</button>
+</td>
+</tr>
+<tr class="bg-surface-container-low/50 hover:bg-surface-container-low group border-b border-outline-variant">
+<td class="px-table-cell-padding-x py-table-cell-padding-y font-bold">INV-8711</td>
+<td class="px-table-cell-padding-x py-table-cell-padding-y">Urban Loft, Penthouse</td>
+<td class="px-table-cell-padding-x py-table-cell-padding-y">Sep 15, 2023</td>
+<td class="px-table-cell-padding-x py-table-cell-padding-y">$520.00</td>
+<td class="px-table-cell-padding-x py-table-cell-padding-y">
+<span class="bg-primary/10 text-primary px-sm py-xs rounded text-[10px] font-bold">PAID</span>
+</td>
+<td class="px-table-cell-padding-x py-table-cell-padding-y text-right">
+<button class="text-outline hover:text-primary transition-colors"><span class="material-symbols-outlined text-[20px]">download</span></button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low group border-b border-outline-variant">
+<td class="px-table-cell-padding-x py-table-cell-padding-y font-bold">INV-8650</td>
+<td class="px-table-cell-padding-x py-table-cell-padding-y">Sunset Residency, 11C</td>
+<td class="px-table-cell-padding-x py-table-cell-padding-y">Sep 01, 2023</td>
+<td class="px-table-cell-padding-x py-table-cell-padding-y">$1,120.00</td>
+<td class="px-table-cell-padding-x py-table-cell-padding-y">
+<span class="bg-primary/10 text-primary px-sm py-xs rounded text-[10px] font-bold">PAID</span>
+</td>
+<td class="px-table-cell-padding-x py-table-cell-padding-y text-right">
+<button class="text-outline hover:text-primary transition-colors"><span class="material-symbols-outlined text-[20px]">download</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Spending Trend Column -->
+<div class="bg-surface-container-lowest border border-outline-variant p-md">
+<h3 class="font-h2 text-h2 mb-lg">Spending Trends</h3>
+<div class="space-y-xl">
+<!-- Trend Chart 1 -->
+<div class="relative pt-xl">
+<div class="flex justify-between items-end h-32 gap-xs px-xs">
+<div class="flex-1 bg-surface-container-low h-[40%] rounded-t-sm"></div>
+<div class="flex-1 bg-surface-container-low h-[55%] rounded-t-sm"></div>
+<div class="flex-1 bg-surface-container-low h-[70%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary h-[85%] rounded-t-sm"></div>
+<div class="flex-1 bg-surface-container-low h-[65%] rounded-t-sm"></div>
+<div class="flex-1 bg-surface-container-low h-[50%] rounded-t-sm"></div>
+</div>
+<div class="flex justify-between text-[10px] font-bold text-outline mt-sm uppercase tracking-tighter">
+<span>May</span>
+<span>Jun</span>
+<span>Jul</span>
+<span>Aug</span>
+<span>Sep</span>
+<span>Oct</span>
+</div>
+<p class="text-label text-on-surface-variant mt-md uppercase tracking-widest text-center">Maintenance Volume</p>
+</div>
+<div class="h-[1px] bg-outline-variant w-full"></div>
+<!-- Spending Breakdown -->
+<div class="space-y-md">
+<h4 class="text-label uppercase font-bold text-outline">Allocation</h4>
+<div class="space-y-sm">
+<div class="flex items-center gap-md">
+<div class="w-3 h-3 bg-primary rounded-full"></div>
+<div class="flex-1 text-body-sm">Repair Works</div>
+<div class="font-data-tabular font-bold">48%</div>
+</div>
+<div class="flex items-center gap-md">
+<div class="w-3 h-3 bg-on-tertiary-container rounded-full"></div>
+<div class="flex-1 text-body-sm">Operational Fees</div>
+<div class="font-data-tabular font-bold">32%</div>
+</div>
+<div class="flex items-center gap-md">
+<div class="w-3 h-3 bg-outline-variant rounded-full"></div>
+<div class="flex-1 text-body-sm">Insurance</div>
+<div class="font-data-tabular font-bold">20%</div>
+</div>
+</div>
+</div>
+<div class="mt-lg">
+<div class="p-md bg-primary text-on-primary rounded-lg text-center">
+<p class="text-body-sm opacity-80 mb-xs">Next Projected Payment</p>
+<p class="text-h2 font-bold">$12,450.00</p>
+<p class="text-[10px] mt-xs uppercase tracking-widest font-black">November 1st, 2023</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

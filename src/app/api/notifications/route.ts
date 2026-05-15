@@ -2,8 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/core/auth';
 import { prisma } from '@/core/database/client';
 import { getSMSProvider } from '@/integrations/sms';
-
-// ─── GET: Fetch User Notifications ─────────────────
+import type { Prisma } from '@prisma/client';
 
 export async function GET(request: NextRequest) {
   const session = await auth();
@@ -16,10 +15,8 @@ export async function GET(request: NextRequest) {
   const offset = parseInt(searchParams.get('offset') || '0');
   const unreadOnly = searchParams.get('unreadOnly') === 'true';
 
-  const where: any = { userId: session.user.id };
-  if (unreadOnly) {
-    where.isRead = false;
-  }
+  const where: Prisma.NotificationWhereInput = { recipientId: session.user.id };
+  if (unreadOnly) where.isRead = false;
 
   const [notifications, unreadCount] = await Promise.all([
     prisma.notification.findMany({
@@ -29,7 +26,7 @@ export async function GET(request: NextRequest) {
       skip: offset,
       select: {
         id: true,
-        type: true,
+        channel: true,
         event: true,
         payload: true,
         isRead: true,
@@ -37,10 +34,7 @@ export async function GET(request: NextRequest) {
       },
     }),
     prisma.notification.count({
-      where: {
-        userId: session.user.id,
-        isRead: false,
-      },
+      where: { recipientId: session.user.id, isRead: false },
     }),
   ]);
 
@@ -55,8 +49,6 @@ export async function GET(request: NextRequest) {
   });
 }
 
-// ─── POST: Create Notification ─────────────────────
-
 export async function POST(request: NextRequest) {
   const session = await auth();
   if (!session?.user || session.user.role !== 'ADMIN') {
@@ -65,38 +57,37 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { userId, type, event, payload, sendSMS: shouldSendSMS } = body;
+    const { recipientId, channel, event, payload, sendSMS: shouldSendSMS } = body;
 
-    if (!userId || !event) {
-      return NextResponse.json({ error: 'Missing required fields: userId, event' }, { status: 400 });
+    if (!recipientId || !event) {
+      return NextResponse.json(
+        { error: 'Missing required fields: recipientId, event' },
+        { status: 400 },
+      );
     }
 
-    // Create in-app notification
     const notification = await prisma.notification.create({
       data: {
-        userId,
-        type: type || 'IN_APP',
+        recipientId,
+        channel: channel || 'IN_APP',
         event,
-        payload: payload || null,
+        payload: (payload ?? {}) as Prisma.InputJsonValue,
       },
     });
 
-    // Send SMS if requested and type is SMS
-    if (shouldSendSMS && (type === 'SMS' || event.includes('SMS'))) {
+    if (shouldSendSMS && (channel === 'SMS' || event.includes('SMS'))) {
       try {
         const user = await prisma.user.findUnique({
-          where: { id: userId },
+          where: { id: recipientId },
           select: { phone: true },
         });
-
         if (user?.phone) {
           const provider = getSMSProvider();
-          const message = payload?.message || `Notification: ${event}`;          
+          const message = payload?.message || `Notification: ${event}`;
           await provider.sendSMS(user.phone, message);
         }
       } catch (smsError) {
         console.error('SMS sending failed:', smsError);
-        // Don't fail the request if SMS fails
       }
     }
 
@@ -106,8 +97,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
-
-// ─── PUT: Mark All as Read ────────────────────────
 
 export async function PUT(request: NextRequest) {
   const session = await auth();
@@ -120,47 +109,36 @@ export async function PUT(request: NextRequest) {
     const { notificationId, markAll } = body;
 
     if (markAll) {
-      // Mark all as read
       const result = await prisma.notification.updateMany({
-        where: {
-          userId: session.user.id,
-          isRead: false,
-        },
+        where: { recipientId: session.user.id, isRead: false },
         data: { isRead: true },
       });
-
       return NextResponse.json({ updated: result.count });
     }
 
     if (notificationId) {
-      // Mark single as read - verify ownership
       const notification = await prisma.notification.findFirst({
-        where: {
-          id: notificationId,
-          userId: session.user.id,
-        },
+        where: { id: notificationId, recipientId: session.user.id },
       });
-
       if (!notification) {
         return NextResponse.json({ error: 'Notification not found' }, { status: 404 });
       }
-
       await prisma.notification.update({
         where: { id: notificationId },
         data: { isRead: true },
       });
-
       return NextResponse.json({ success: true });
     }
 
-    return NextResponse.json({ error: 'Missing notificationId or markAll flag' }, { status: 400 });
+    return NextResponse.json(
+      { error: 'Missing notificationId or markAll flag' },
+      { status: 400 },
+    );
   } catch (error) {
     console.error('Failed to update notifications:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
-
-// ─── DELETE: Delete Old Read Notifications (Admin) ───
 
 export async function DELETE(request: NextRequest) {
   const session = await auth();
@@ -170,17 +148,12 @@ export async function DELETE(request: NextRequest) {
 
   try {
     const { olderThanDays = 30 } = await request.json();
-    
     const cutoffDate = new Date();
     cutoffDate.setDate(cutoffDate.getDate() - olderThanDays);
 
     const result = await prisma.notification.deleteMany({
-      where: {
-        createdAt: { lt: cutoffDate },
-        isRead: true,
-      },
+      where: { createdAt: { lt: cutoffDate }, isRead: true },
     });
-
     return NextResponse.json({ deleted: result.count });
   } catch (error) {
     console.error('Failed to delete notifications:', error);

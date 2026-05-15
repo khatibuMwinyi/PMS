@@ -27,7 +27,7 @@ export async function listQuotesByOwner(ownerId: string) {
   }));
 }
 
-export async function listQuotesByStatus(status: string) {
+export async function listQuotesByStatus(status: import('@prisma/client').QuoteStatus) {
   return quoteRepository.findByStatus(status);
 }
 

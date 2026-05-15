@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+                  "on-secondary-container": "#63646c",
+                  "on-tertiary-fixed-variant": "#574425",
+                  "on-primary": "#ffffff",
+                  "inverse-primary": "#bec6e0",
+                  "surface": "#fcf8fa",
+                  "primary-container": "#131b2e",
+                  "on-error": "#ffffff",
+                  "on-error-container": "#93000a",
+                  "primary-fixed-dim": "#bec6e0",
+                  "primary": "#000000",
+                  "surface-container-lowest": "#ffffff",
+                  "surface-bright": "#fcf8fa",
+                  "error": "#ba1a1a",
+                  "on-secondary": "#ffffff",
+                  "error-container": "#ffdad6",
+                  "secondary-fixed": "#e3e1ec",
+                  "surface-dim": "#dcd9db",
+                  "outline": "#76777d",
+                  "on-secondary-fixed-variant": "#46464e",
+                  "surface-container-high": "#eae7e9",
+                  "on-tertiary-container": "#98805d",
+                  "on-primary-fixed-variant": "#3f465c",
+                  "on-tertiary": "#ffffff",
+                  "on-background": "#1b1b1d",
+                  "background": "#fcf8fa",
+                  "on-primary-fixed": "#131b2e",
+                  "tertiary": "#000000",
+                  "inverse-surface": "#303032",
+                  "on-surface-variant": "#45464d",
+                  "tertiary-container": "#271901",
+                  "on-tertiary-fixed": "#271901",
+                  "surface-variant": "#e4e2e4",
+                  "tertiary-fixed-dim": "#dec29a",
+                  "secondary-fixed-dim": "#c6c5cf",
+                  "surface-container-low": "#f6f3f5",
+                  "surface-container-highest": "#e4e2e4",
+                  "primary-fixed": "#dae2fd",
+                  "on-secondary-fixed": "#1a1b22",
+                  "surface-tint": "#565e74",
+                  "on-primary-container": "#7c839b",
+                  "inverse-on-surface": "#f3f0f2",
+                  "secondary-container": "#e3e1ec",
+                  "surface-container": "#f0edef",
+                  "tertiary-fixed": "#fcdeb5",
+                  "secondary": "#5d5e66",
+                  "outline-variant": "#c6c6cd",
+                  "on-surface": "#1b1b1d"
+          },
+          "borderRadius": {
+                  "DEFAULT": "0.125rem",
+                  "lg": "0.25rem",
+                  "xl": "0.5rem",
+                  "full": "0.75rem"
+          },
+          "spacing": {
+                  "lg": "24px",
+                  "table-cell-padding-y": "8px",
+                  "table-cell-padding-x": "12px",
+                  "base": "4px",
+                  "xs": "4px",
+                  "xl": "32px",
+                  "md": "16px",
+                  "sm": "8px"
+          },
+          "fontFamily": {
+                  "h1": ["Inter"],
+                  "body-sm": ["Inter"],
+                  "table-header": ["Inter"],
+                  "body-md": ["Inter"],
+                  "label": ["Inter"],
+                  "data-tabular": ["Inter"],
+                  "h2": ["Inter"]
+          },
+          "fontSize": {
+                  "h1": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                  "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                  "table-header": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                  "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                  "label": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                  "data-tabular": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                  "h2": ["18px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    body { font-family: 'Inter', sans-serif; }
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #c6c6cd; border-radius: 2px; }
+  </style>
+</head>
+<body class="bg-surface-container-lowest text-on-surface">
+<div class="flex h-screen overflow-hidden">
+<!-- SideNavBar Component -->
+<aside class="hidden md:flex flex-col h-full py-md bg-surface-container-lowest dark:bg-surface-dim h-screen w-64 border-r border-outline-variant">
+<div class="px-lg mb-xl">
+<h1 class="font-h2 text-h2 font-bold text-primary dark:text-primary-fixed-dim">OPSMP</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Operational Excellence</p>
+</div>
+<nav class="flex-1 px-sm space-y-base overflow-y-auto custom-scrollbar">
+<!-- Dashboard -->
+<a class="flex items-center gap-md px-md py-sm font-body-md text-body-md text-on-surface-variant dark:text-outline hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+          Dashboard
+        </a>
+<!-- Properties (ACTIVE) -->
+<a class="flex items-center gap-md px-md py-sm font-body-md text-body-md text-primary dark:text-primary-fixed-dim font-bold border-r-4 border-primary dark:border-primary-fixed-dim bg-surface-container-low transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="domain" style="font-variation-settings: 'FILL' 1;">domain</span>
+          Properties
+        </a>
+<!-- Work Orders -->
+<a class="flex items-center gap-md px-md py-sm font-body-md text-body-md text-on-surface-variant dark:text-outline hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="build">build</span>
+          Work Orders
+        </a>
+<!-- Financials -->
+<a class="flex items-center gap-md px-md py-sm font-body-md text-body-md text-on-surface-variant dark:text-outline hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+          Financials
+        </a>
+<!-- Service Network -->
+<a class="flex items-center gap-md px-md py-sm font-body-md text-body-md text-on-surface-variant dark:text-outline hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+          Service Network
+        </a>
+<!-- Reports -->
+<a class="flex items-center gap-md px-md py-sm font-body-md text-body-md text-on-surface-variant dark:text-outline hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="assessment">assessment</span>
+          Reports
+        </a>
+</nav>
+<div class="mt-auto px-sm pt-md border-t border-outline-variant">
+<a class="flex items-center gap-md px-md py-sm font-body-md text-body-md text-on-surface-variant dark:text-outline hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+          Settings
+        </a>
+<a class="flex items-center gap-md px-md py-sm font-body-md text-body-md text-on-surface-variant dark:text-outline hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+          Help Center
+        </a>
+</div>
+</aside>
+<main class="flex-1 flex flex-col min-w-0 bg-background overflow-hidden">
+<!-- TopNavBar Component -->
+<header class="flex justify-between items-center h-16 px-lg w-full sticky top-0 z-40 bg-surface-container-lowest dark:bg-surface-dim border-b border-outline-variant">
+<div class="flex items-center gap-md flex-1">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-outline" data-icon="search">search</span>
+<input class="w-full pl-xl pr-md py-xs bg-surface-container-low border border-outline-variant rounded focus:outline-none focus:border-primary font-body-sm text-body-sm" placeholder="Search properties, ID, or location..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-lg ml-md">
+<div class="flex items-center gap-md">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary active:scale-95 transition-transform" data-icon="notifications">notifications</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary active:scale-95 transition-transform" data-icon="history">history</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary active:scale-95 transition-transform" data-icon="chat">chat</button>
+</div>
+<div class="h-8 w-px bg-outline-variant"></div>
+<button class="font-body-sm text-body-sm font-medium text-on-surface-variant hover:text-primary transition-colors">Support</button>
+<img alt="User profile" class="w-8 h-8 rounded-full border border-outline-variant" data-alt="A professional headshot of a property manager in a corporate office setting. The lighting is bright and even, highlighting a clean-shaven man in a tailored charcoal suit. The background is a blurred high-end office interior with minimalist decor and soft daylight filtering through floor-to-ceiling windows. The overall aesthetic is reliable and modern corporate." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBuQdPu2L5B9LHBaaS6u7iVyLBjI918h6hpg_VrumeI6COSoFoAbeA0mXxwALGOYzLNqqVdxzJi8frCN4T8yydW5lKcRB1XDFAWLVZEKOd4OVRCxi83fLCMjscRq85fbSGVSyiTG7VwCq1-e0oMTcCUNeLID8zgB4qA9u4ZiqTlU2BfmfHyTQ7aORCEvQjMt16b4PHQ87B8vuUPWUNKZv7gJ9igitxdULwkBMW4TDL-89ilsTLQhEIDd8zwUAw6uxac_Fp0Iz5GyI0"/>
+</div>
+</header>
+<!-- Content Canvas -->
+<div class="flex-1 overflow-y-auto p-lg custom-scrollbar">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row md:items-center justify-between mb-lg gap-md">
+<div>
+<h2 class="font-h1 text-h1 text-primary">Property Portfolio</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Manage and monitor all registered commercial and residential assets.</p>
+</div>
+<div class="flex items-center gap-sm">
+<button class="flex items-center gap-sm px-md py-sm border border-outline-variant bg-surface-container-lowest font-label text-label hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="file_download">file_download</span>
+              Export
+            </button>
+<button class="flex items-center gap-sm px-md py-sm bg-primary text-on-primary font-label text-label hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined text-[18px]" data-icon="add">add</span>
+              Add Property
+            </button>
+</div>
+</div>
+<!-- Filter Bar -->
+<div class="flex flex-wrap items-center gap-md mb-md p-md bg-surface-container-lowest border border-outline-variant">
+<div class="flex items-center gap-sm">
+<span class="font-label text-label text-on-surface-variant">Filter by Status:</span>
+<select class="px-md py-xs bg-surface-container-low border border-outline-variant rounded font-body-sm text-body-sm focus:ring-0 focus:border-primary">
+<option>All Statuses</option>
+<option>Active</option>
+<option>Pending Approval</option>
+<option>Inactive</option>
+</select>
+</div>
+<div class="flex items-center gap-sm">
+<span class="font-label text-label text-on-surface-variant">Type:</span>
+<select class="px-md py-xs bg-surface-container-low border border-outline-variant rounded font-body-sm text-body-sm focus:ring-0 focus:border-primary">
+<option>All Types</option>
+<option>Mixed Use</option>
+<option>Residential</option>
+<option>Commercial</option>
+</select>
+</div>
+<div class="ml-auto">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Showing 3 of 42 properties</span>
+</div>
+</div>
+<!-- Property Table -->
+<div class="bg-surface-container-lowest border border-outline-variant overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-outline-variant">
+<th class="px-table-cell-padding-x py-table-cell-padding-y font-table-header text-table-header uppercase text-on-surface-variant">Property ID</th>
+<th class="px-table-cell-padding-x py-table-cell-padding-y font-table-header text-table-header uppercase text-on-surface-variant">Details</th>
+<th class="px-table-cell-padding-x py-table-cell-padding-y font-table-header text-table-header uppercase text-on-surface-variant">Location</th>
+<th class="px-table-cell-padding-x py-table-cell-padding-y font-table-header text-table-header uppercase text-on-surface-variant">Type &amp; Units</th>
+<th class="px-table-cell-padding-x py-table-cell-padding-y font-table-header text-table-header uppercase text-on-surface-variant">Status</th>
+<th class="px-table-cell-padding-x py-table-cell-padding-y font-table-header text-table-header uppercase text-on-surface-variant text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<!-- Row 1: Skyline Heights -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-table-cell-padding-x py-md font-data-tabular text-data-tabular text-on-surface-variant">#PROP-8821</td>
+<td class="px-table-cell-padding-x py-md">
+<div class="flex items-center gap-md">
+<img class="w-16 h-12 object-cover rounded" data-alt="A low-angle shot of a sleek, modern glass skyscraper reaching into a clear blue sky. The reflective glass panels capture the surrounding city architecture in sharp detail. The lighting is crisp afternoon sun, casting sharp shadows and emphasizing the vertical lines of the high-rise building. The vibe is sophisticated, urban, and highly professional." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBniGqXBhfoTkDAf5OrTP-4NTuKqJr2ochiCjHlkwM0Zc5E1tuIU2UOut7lK7oJflglQRT3L6HquRkO1Gs1BnlG8JvxKHOml3Jh61umYd4jscHyYeDywREUasDgJuBqHtGa-u2BOgaHccIct4n5iPZCDw0n-rTzD86NI0e3050a4fYSuPDaikRrBg2uRrOdcFUH15eKo-_kJ8nr1sroc3pZ3CRJyu0a_8vD6hAKigU5WiJCW0VEtjpVagEAljl5JA8VdXiwmkQPeio"/>
+<div>
+<div class="font-label text-body-md text-primary">Skyline Heights</div>
+<div class="text-[11px] text-on-surface-variant">Added: Oct 12, 2023</div>
+</div>
+</div>
+</td>
+<td class="px-table-cell-padding-x py-md">
+<div class="flex items-center gap-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px]" data-icon="location_on">location_on</span>
+<span class="font-body-sm text-body-sm">452 North Point, Chicago, IL</span>
+</div>
+</td>
+<td class="px-table-cell-padding-x py-md">
+<div class="font-body-sm text-body-sm text-primary">Mixed Use</div>
+<div class="text-[11px] text-on-surface-variant">124 Units | Commercial Base</div>
+</td>
+<td class="px-table-cell-padding-x py-md">
+<span class="inline-flex items-center px-sm py-xs bg-green-100 text-green-800 text-[11px] font-bold uppercase rounded-sm">Active</span>
+</td>
+<td class="px-table-cell-padding-x py-md text-right">
+<button class="material-symbols-outlined text-outline hover:text-primary" data-icon="more_vert">more_vert</button>
+</td>
+</tr>
+<!-- Row 2: Oakwood Estates -->
+<tr class="bg-surface-container-low/30 hover:bg-surface-container-low transition-colors group">
+<td class="px-table-cell-padding-x py-md font-data-tabular text-data-tabular text-on-surface-variant">#PROP-4109</td>
+<td class="px-table-cell-padding-x py-md">
+<div class="flex items-center gap-md">
+<img class="w-16 h-12 object-cover rounded" data-alt="An expansive view of a luxury residential community with manicured lawns and high-end architecture. The houses feature clean lines and a mix of natural wood and stone textures. The lighting is warm golden hour, creating long, soft shadows and a peaceful, premium suburban atmosphere. The color palette is rich with greens, browns, and warm neutral tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZ5-7AUrTy_CVUFz46MM-mLA192MqAObNZpNM9zqqZBZG6egxeOuA6fp4rmFzJRKap2lNXysGpL27Gn10EmO7LPoHd9-p2J0VUPKn0CFbK9pFR6dR-fbuSU41OTA6wYXpxeMnaxbXvIPBR4LXQMIDgoeR-lkTh6nhT8Cg-exO5NSVhi_XG7D5fFreUdch4RZbXyaIm0Lw6iRzwrKN_rRmobQ9bqE1GYqKzogxIGVusss5M2j4oVgnRd7pH8oS-bPocdf7SRQBuxoU"/>
+<div>
+<div class="font-label text-body-md text-primary">Oakwood Estates</div>
+<div class="text-[11px] text-on-surface-variant">Added: Jan 05, 2024</div>
+</div>
+</div>
+</td>
+<td class="px-table-cell-padding-x py-md">
+<div class="flex items-center gap-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px]" data-icon="location_on">location_on</span>
+<span class="font-body-sm text-body-sm">82 Oak Ln, Austin, TX</span>
+</div>
+</td>
+<td class="px-table-cell-padding-x py-md">
+<div class="font-body-sm text-body-sm text-primary">Residential</div>
+<div class="text-[11px] text-on-surface-variant">42 Multi-family Units</div>
+</td>
+<td class="px-table-cell-padding-x py-md">
+<span class="inline-flex items-center px-sm py-xs bg-amber-100 text-amber-800 text-[11px] font-bold uppercase rounded-sm">Pending Approval</span>
+</td>
+<td class="px-table-cell-padding-x py-md text-right">
+<button class="material-symbols-outlined text-outline hover:text-primary" data-icon="more_vert">more_vert</button>
+</td>
+</tr>
+<!-- Row 3: Tech Park -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-table-cell-padding-x py-md font-data-tabular text-data-tabular text-on-surface-variant">#PROP-1256</td>
+<td class="px-table-cell-padding-x py-md">
+<div class="flex items-center gap-md">
+<img class="w-16 h-12 object-cover rounded" data-alt="A modern industrial technology campus with wide plazas and contemporary low-rise buildings. The architecture features exposed steel, large glass facades, and minimalist concrete surfaces. The setting is bright and airy with scattered greenery and professional outdoor seating. The style is ultra-efficient and high-performance, reflecting a cutting-edge corporate environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3fcCnjhdkBNGNvZAeR5RIRHuXF1-hMSeDPlN5ngyk7XHD72NcGG9wFZsV5qy4lJW3oz-bX_pf3IF0pEQHXCXZAxtrM_jnr_gD5d9laJZmmsk820qsAjlJDLK342wxl2UU4tRMyC9mtmpUuVvQvm69aHOnGfSt6uKPMBvdn5scjS_kOLGxKeiCkIaNFWf9wvb2bDInzjwo--N2dN9BPokI12ZrEWO9ZQ0zIs11Y7B5aXPLOLQ47k1e0VdGPrph3hbtMPFgoBCTeng"/>
+<div>
+<div class="font-label text-body-md text-primary">Tech Park</div>
+<div class="text-[11px] text-on-surface-variant">Added: Mar 22, 2024</div>
+</div>
+</div>
+</td>
+<td class="px-table-cell-padding-x py-md">
+<div class="flex items-center gap-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px]" data-icon="location_on">location_on</span>
+<span class="font-body-sm text-body-sm">1200 Innovation Way, San Jose, CA</span>
+</div>
+</td>
+<td class="px-table-cell-padding-x py-md">
+<div class="font-body-sm text-body-sm text-primary">Commercial</div>
+<div class="text-[11px] text-on-surface-variant">8 Office Blocks</div>
+</td>
+<td class="px-table-cell-padding-x py-md">
+<span class="inline-flex items-center px-sm py-xs bg-green-100 text-green-800 text-[11px] font-bold uppercase rounded-sm">Active</span>
+</td>
+<td class="px-table-cell-padding-x py-md text-right">
+<button class="material-symbols-outlined text-outline hover:text-primary" data-icon="more_vert">more_vert</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="p-md flex items-center justify-between bg-surface-container-low border-t border-outline-variant">
+<div class="font-body-sm text-body-sm text-on-surface-variant">
+              Page 1 of 5
+            </div>
+<div class="flex items-center gap-sm">
+<button class="p-xs border border-outline-variant hover:bg-surface-container-lowest transition-colors opacity-50 cursor-not-allowed">
+<span class="material-symbols-outlined text-[18px]" data-icon="chevron_left">chevron_left</span>
+</button>
+<button class="px-sm py-xs border border-primary bg-primary text-on-primary font-label text-label">1</button>
+<button class="px-sm py-xs border border-outline-variant hover:bg-surface-container-lowest font-label text-label transition-colors">2</button>
+<button class="px-sm py-xs border border-outline-variant hover:bg-surface-container-lowest font-label text-label transition-colors">3</button>
+<button class="p-xs border border-outline-variant hover:bg-surface-container-lowest transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

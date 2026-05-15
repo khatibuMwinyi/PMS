@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 import { auth } from '@/core/auth';
 import { redirect } from 'next/navigation';
 import { DashboardShell } from '@/components/layout/DashboardShell';
-import { RoleGuard } from '@/components/RoleGuard';
+import RoleGuard from '@/components/RoleGuard';
 import { BentoCard } from '@/components/ui/BentoCard';
 import { DataTable } from '@/components/ui/DataTable';
 import { StatusBadge } from '@/components/ui/StatusBadge';

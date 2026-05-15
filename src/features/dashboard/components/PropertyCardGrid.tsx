@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { cn } from '@/core/lib/utils';
 import { getDashboardProperties } from '@/features/dashboard/actions';
 
 interface Property {
@@ -13,16 +12,10 @@ interface Property {
   imageUrl?: string;
 }
 
-interface PropertyCardGridProps {
-  properties?: Property[];
-}
-
-export async function PropertyCardGrid() {
-  const properties = await getDashboardProperties();
+function PropertyCard({ property }: { property: Property }) {
   return (
     <Link href={`/owner/properties/${property.id}`}>
       <div className="rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-card)] overflow-hidden transition-all duration-200 hover:border-[var(--brand-gold)] hover:shadow-md">
-        {/* Property Image */}
         <div className="relative h-32 w-full bg-[var(--surface-200)] overflow-hidden">
           {property.imageUrl ? (
             <Image
@@ -37,8 +30,6 @@ export async function PropertyCardGrid() {
             </div>
           )}
         </div>
-
-        {/* Property Details */}
         <div className="p-4">
           <h3 className="font-bold text-[var(--text-primary)]">{property.name}</h3>
           <span className="mt-1 inline-block rounded-full bg-[var(--surface-200)] px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-[var(--text-secondary)]">
@@ -47,8 +38,6 @@ export async function PropertyCardGrid() {
           <p className="mt-2 text-[var(--font-body-sm)] text-[var(--on-surface-variant)]">
             {property.address}
           </p>
-
-          {/* Footer */}
           <div className="mt-3 flex items-center justify-between border-t border-[var(--border-subtle)] pt-3">
             <div className="flex items-center gap-1 text-sm text-[var(--text-secondary)]">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -84,17 +73,6 @@ export async function PropertyCardGrid() {
           No properties yet. Add your first property to get started.
         </div>
       )}
-    </div>
-  );
-}
-  return (
-    <div className="mb-6">
-      <h2 className="mb-4 text-[var(--font-h2)] text-[var(--text-primary)]">Properties</h2>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {properties.map((property) => (
-          <PropertyCard key={property.id} property={property} />
-        ))}
-      </div>
     </div>
   );
 }

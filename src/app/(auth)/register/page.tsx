@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { RegisterForm } from '@/features/users/components/RegisterForm';
+import RegisterForm from '@/features/users/components/RegisterForm';
 import { AuthLayout } from '@/components/auth/AuthLayout';
 
 export const metadata: Metadata = { title: 'Create Account — Oweru' };

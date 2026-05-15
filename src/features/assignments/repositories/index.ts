@@ -1,7 +1,8 @@
 import { prisma } from '@/core/database/client';
+import type { AssignmentStatus } from '@prisma/client';
 
 export class AssignmentRepository {
-  static async findByProvider(providerId: string, status?: string) {
+  static async findByProvider(providerId: string, status?: AssignmentStatus) {
     return prisma.assignment.findMany({
       where: { providerId, ...(status ? { status } : {}) },
       include: { property: true, agreement: true },
@@ -17,13 +18,19 @@ export class AssignmentRepository {
   }
 
   static async findPending(providerId: string, page: number = 1, pageSize: number = 20) {
-    const total = await prisma.assignment.count({
-      where: { providerId, status: 'PENDING_ACCEPTANCE', expiresAt: { gt: new Date() } },
-    });
+    const where = {
+      providerId,
+      status: 'PENDING_ACCEPTANCE' as AssignmentStatus,
+      expiresAt: { gt: new Date() },
+    };
+    const total = await prisma.assignment.count({ where });
     const skip = (page - 1) * pageSize;
     const assignments = await prisma.assignment.findMany({
-      where: { providerId, status: 'PENDING_ACCEPTANCE', expiresAt: { gt: new Date() } },
-      include: { property: { select: { id: true, name: true, zone: true } }, agreement: { select: { id: true } } },
+      where,
+      include: {
+        property: { select: { id: true, name: true, zone: true } },
+        agreement: { select: { id: true } },
+      },
       orderBy: { createdAt: 'desc' },
       skip,
       take: pageSize,
@@ -31,7 +38,7 @@ export class AssignmentRepository {
     return { assignments, total, page, pageSize };
   }
 
-  static async updateStatus(assignmentId: string, status: string) {
+  static async updateStatus(assignmentId: string, status: AssignmentStatus) {
     return prisma.assignment.update({
       where: { id: assignmentId },
       data: { status, transitionedAt: new Date() },

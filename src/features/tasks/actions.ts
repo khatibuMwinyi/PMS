@@ -1,19 +1,21 @@
-// Task Execution actions (Phase 4)
+'use server';
+
+// Task Execution actions
 import { prisma } from '@/core/database/client';
 import { nanoid } from 'nanoid';
-import { addHours } from 'date-fns';
-import { processServicePayment } from '@/features/wallets/actions'; // saga from Phase 3
+import { addHours, addDays, addWeeks } from 'date-fns';
+import { Decimal } from '@prisma/client/runtime/library';
+import { processServicePayment } from '@/features/wallets/actions';
 
-/**
- * Helper: calculate distance (meters) between two lat/lng points using the Haversine formula.
- */
 function redactPII(text: string): string {
-  return text.replace(/\S+@\S+\.\S+/g, '[EMAIL]').replace(/\+\d{10,}/g, '[PHONE]');
+  return text
+    .replace(/\S+@\S+\.\S+/g, '[EMAIL]')
+    .replace(/\+\d{10,}/g, '[PHONE]');
 }
 
 function haversineDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
   const toRad = (v: number) => (v * Math.PI) / 180;
-  const R = 6371000; // Earth radius in meters
+  const R = 6371000;
   const φ1 = toRad(lat1);
   const φ2 = toRad(lat2);
   const Δφ = toRad(lat2 - lat1);
@@ -23,66 +25,51 @@ function haversineDistance(lat1: number, lon1: number, lat2: number, lon2: numbe
   return R * c;
 }
 
-/**
- * Enhanced location verification with multiple fallback modes
- */
 export interface LocationVerificationResult {
   verified: boolean;
   method: 'GPS' | 'PHOTO_FALLBACK' | 'MANUAL_REVIEW';
   distance?: number;
-  accuracy?: number;
+  accuracy?: number | null;
   reason?: string;
+  propertyLat?: number;
+  propertyLng?: number;
 }
 
-/**
- * Verify provider location with enhanced GPS and fallback options
- */
 export async function verifyLocation(
   taskId: string,
   providerLat: number,
   providerLng: number,
   accuracy: number | null = null,
-  hasPhotoFallback: boolean = false
+  hasPhotoFallback: boolean = false,
 ): Promise<LocationVerificationResult> {
   const task = await prisma.task.findUnique({
     where: { id: taskId },
     include: { assignment: { include: { property: true } } },
   });
 
-  if (!task) {
-    throw new Error('Task not found');
-  }
+  if (!task) throw new Error('Task not found');
+  if (!task.assignment) throw new Error('Task has no assignment');
 
-  if (!task.assignment) {
-    throw new Error('Task has no assignment');
-  }
+  const propertyLat = task.assignment.property.latitude;
+  const propertyLng = task.assignment.property.longitude;
+  const distance = haversineDistance(providerLat, providerLng, propertyLat, propertyLng);
 
-  const { latitude: propLat, longitude: propLng } = task.assignment.property;
-  const distance = haversineDistance(providerLat, providerLng, propLat, propLng);
-
-  // Check GPS accuracy if available
   if (accuracy !== null && accuracy > 100) {
-    // High GPS error - flag for manual review
     return {
       verified: false,
       method: 'MANUAL_REVIEW',
       distance,
       accuracy,
       reason: `GPS accuracy too low (${accuracy}m) - requires manual review`,
+      propertyLat,
+      propertyLng,
     };
   }
 
-  // Standard GPS verification
   if (distance <= 200) {
-    return {
-      verified: true,
-      method: 'GPS',
-      distance,
-      accuracy,
-    };
+    return { verified: true, method: 'GPS', distance, accuracy, propertyLat, propertyLng };
   }
 
-  // Check if within extended radius with photo fallback
   if (distance <= 500 && hasPhotoFallback) {
     return {
       verified: false,
@@ -90,23 +77,22 @@ export async function verifyLocation(
       distance,
       accuracy,
       reason: 'Outside GPS radius - photo verification required',
+      propertyLat,
+      propertyLng,
     };
   }
 
-  // Outside all acceptable ranges
   return {
     verified: false,
     method: 'MANUAL_REVIEW',
     distance,
     accuracy,
     reason: 'Location verification failed - requires manual review',
+    propertyLat,
+    propertyLng,
   };
 }
 
-/**
- * Provider checks in to a task.
- * Uses enhanced verification with multiple fallback options.
- */
 export async function checkInToTask(
   taskId: string,
   providerLat: number,
@@ -115,88 +101,74 @@ export async function checkInToTask(
     accuracy?: number | null;
     hasPhotoFallback?: boolean;
     forceManualReview?: boolean;
-  } = {}
+  } = {},
 ): Promise<{ success: boolean; method?: string; reason?: string }> {
-  const {
-    accuracy = null,
-    hasPhotoFallback = false,
-    forceManualReview = false,
-  } = options;
+  const { accuracy = null, hasPhotoFallback = false, forceManualReview = false } = options;
 
   const task = await prisma.task.findUnique({
     where: { id: taskId },
     include: { assignment: { include: { property: true } } },
   });
-
-  if (!task) {
-    throw new Error('Task not found');
-  }
-
-  // Always update task status to IN_PROGRESS
-  const updates: any = {
-    status: 'IN_PROGRESS',
-    checkInTime: new Date(),
-  };
+  if (!task) throw new Error('Task not found');
 
   if (forceManualReview) {
-    // Force manual review mode
-    updates.status = 'PENDING_REVIEW';
-    updates.manualReviewReason = 'Manual check-in requested';
-
-    await prisma.task.update({ where: { id: taskId }, data: updates });
-
-    return {
-      success: false,
-      method: 'MANUAL_REVIEW',
-      reason: 'Manual review required for check-in',
-    };
+    await prisma.task.update({
+      where: { id: taskId },
+      data: {
+        status: 'PENDING_REVIEW',
+        manualReviewReason: 'Manual check-in requested',
+        manualReviewRequestedAt: new Date(),
+        checkInTime: new Date(),
+      },
+    });
+    return { success: false, method: 'MANUAL_REVIEW', reason: 'Manual review required for check-in' };
   }
 
-  // Verify location
-  const verification = await verifyLocation(
-    taskId,
-    providerLat,
-    providerLng,
-    accuracy,
-    hasPhotoFallback
-  );
+  const verification = await verifyLocation(taskId, providerLat, providerLng, accuracy, hasPhotoFallback);
 
   if (verification.verified) {
-    // GPS verification successful
-    updates.checkInLatitude = providerLat;
-    updates.checkInLongitude = providerLng;
-    updates.checkInMethod = 'GPS';
-
-    await prisma.task.update({ where: { id: taskId }, data: updates });
-
-    return {
-      success: true,
-      method: 'GPS',
-    };
+    await prisma.task.update({
+      where: { id: taskId },
+      data: {
+        status: 'IN_PROGRESS',
+        checkInTime: new Date(),
+        checkInLatitude: providerLat,
+        checkInLongitude: providerLng,
+        checkInMethod: 'GPS',
+      },
+    });
+    if (task.assignment) {
+      await prisma.assignment.update({
+        where: { id: task.assignment.id },
+        data: { status: 'IN_PROGRESS' },
+      });
+    }
+    return { success: true, method: 'GPS' };
   }
 
   if (verification.method === 'PHOTO_FALLBACK') {
-    // Photo fallback required
-    updates.checkInMethod = 'PHOTO_FALLBACK';
-    updates.pendingPhotoVerification = true;
-
-    await prisma.task.update({ where: { id: taskId }, data: updates });
-
-    return {
-      success: false,
-      method: 'PHOTO_FALLBACK',
-      reason: verification.reason,
-    };
+    await prisma.task.update({
+      where: { id: taskId },
+      data: {
+        status: 'IN_PROGRESS',
+        checkInTime: new Date(),
+        checkInMethod: 'PHOTO_FALLBACK',
+        pendingPhotoVerification: true,
+      },
+    });
+    return { success: false, method: 'PHOTO_FALLBACK', reason: verification.reason };
   }
 
-  // Manual review required
-  updates.status = 'PENDING_REVIEW';
-  updates.manualReviewReason = verification.reason;
-  updates.manualReviewRequestedAt = new Date();
+  await prisma.task.update({
+    where: { id: taskId },
+    data: {
+      status: 'PENDING_REVIEW',
+      manualReviewReason: verification.reason,
+      manualReviewRequestedAt: new Date(),
+      checkInTime: new Date(),
+    },
+  });
 
-  await prisma.task.update({ where: { id: taskId }, data: updates });
-
-  // Create manual review ticket
   await prisma.staffTicket.create({
     data: {
       id: nanoid(),
@@ -209,117 +181,133 @@ export async function checkInToTask(
         gpsAccuracy: verification.accuracy,
         reason: verification.reason,
         providerLocation: { lat: providerLat, lng: providerLng },
-        propertyLocation: { lat: propLat, lng: propLng },
+        propertyLocation: {
+          lat: verification.propertyLat,
+          lng: verification.propertyLng,
+        },
       },
       status: 'PENDING',
     },
   });
 
-  return {
-    success: false,
-    method: 'MANUAL_REVIEW',
-    reason: verification.reason,
-  };
+  return { success: false, method: 'MANUAL_REVIEW', reason: verification.reason };
 }
 
 /**
- * Submit evidence for a completed task.
- * Requires at least three image URLs.
- * Sets task status to COMPLETED and schedules a 24‑hour window for disputes.
- * If no dispute is filed, the funds are released via the payment saga.
+ * Provider submits completion evidence (>=3 images).
+ * Opens 24h dispute window. Next recurring task generated on verification.
  */
-export async function submitTaskEvidence(
-  taskId: string,
-  imageUrls: string[],
-): Promise<void> {
+export async function submitTaskEvidence(taskId: string, imageUrls: string[]): Promise<void> {
   if (imageUrls.length < 3) {
     throw new Error('At least 3 evidence photos are required.');
   }
 
-  const task = await prisma.task.findUnique({ where: { id: taskId } });
+  const task = await prisma.task.findUnique({
+    where: { id: taskId },
+    include: { assignment: true },
+  });
   if (!task) throw new Error('Task not found');
 
-  // Update task record with evidence and mark completed
-  await prisma.task.update({
-    where: { id: taskId },
-    data: {
-      status: 'COMPLETED',
-      checkOutTime: new Date(),
-      evidenceImages: imageUrls,
-    },
-  });
+  await prisma.$transaction(async (tx) => {
+    await tx.task.update({
+      where: { id: taskId },
+      data: {
+        status: 'COMPLETED',
+        checkOutTime: new Date(),
+        evidenceImages: imageUrls,
+      },
+    });
 
-  // Create a dispute placeholder that expires in 24 h. If the owner never creates a real dispute, the row will expire and we can auto‑verify.
-  const expiresAt = addHours(new Date(), 24);
-  await prisma.dispute.create({
-    data: {
-      id: nanoid(),
-      taskId,
-      reason: 'AUTO_VERIFICATION_PENDING',
-      expiresAt,
-    },
+    if (task.assignment) {
+      await tx.assignment.update({
+        where: { id: task.assignment.id },
+        data: { status: 'COMPLETED', completedAt: new Date() },
+      });
+    }
   });
-
-  // Schedule auto‑verification. In a real system you would enqueue a background job (e.g., pg‑boss).
-  // For this implementation we simply rely on a periodic job elsewhere to call `autoVerifyPendingTasks`.
 }
 
 /**
- * Called by a scheduled job (e.g., nightly worker) to automatically verify tasks whose dispute window has passed.
- * When verified, it triggers the payment split saga.
+ * Auto-verify tasks whose 24h dispute window has passed without dispute.
+ * Triggers payment saga with the Assignment.totalAmount (not basePrice).
  */
 export async function autoVerifyPendingTasks(): Promise<void> {
   const now = new Date();
-  const pending = await prisma.dispute.findMany({
-    where: { expiresAt: { lte: now }, status: 'OPEN' },
-    include: { task: true },
+  const cutoff = addHours(now, -24);
+
+  const candidates = await prisma.task.findMany({
+    where: {
+      status: 'COMPLETED',
+      checkOutTime: { lte: cutoff },
+      dispute: null,
+    },
+    include: { assignment: true },
   });
 
-  for (const d of pending) {
-    // Mark dispute as resolved without owner action
-    await prisma.dispute.update({
-      where: { id: d.id },
-      data: { status: 'EXPIRED', resolvedAt: now },
+  for (const t of candidates) {
+    if (!t.assignment) continue;
+
+    await prisma.task.update({
+      where: { id: t.id },
+      data: { status: 'VERIFIED', verifiedAt: now },
     });
-    // Trigger payment saga for the related assignment
-    if (d.task && d.task.assignmentId) {
-      // Retrieve the total amount from the assignment (assume it's stored as `price` on the assignment or service)
-      const assignment = await prisma.assignment.findUnique({
-        where: { id: d.task.assignmentId },
-        include: { serviceType: { select: { basePrice: true } } },
-      });
-      if (!assignment) throw new Error('Assignment not found for payment');
-      // Use the service's base price as the total amount for the payout
-      const totalAmount = assignment.serviceType.basePrice.toNumber();
-      await processServicePayment(assignment.id, totalAmount);
-    }
+
+    await prisma.assignment.update({
+      where: { id: t.assignment.id },
+      data: { status: 'VERIFIED', verifiedAt: now },
+    });
+
+    await processServicePayment(t.assignment.id, t.assignment.totalAmount.toString());
+    await scheduleNextRecurrence(t.assignment.id, t.scheduledFor);
   }
 }
 
 /**
- * Owner initiates a dispute within the 24‑hour window.
+ * Generate next recurring task based on Agreement.frequency.
  */
-export async function initiateDispute(taskId: string, reason: string): Promise<void> {
-  const task = await prisma.task.findUnique({ where: { id: taskId } });
-  if (!task) throw new Error('Task not found');
+async function scheduleNextRecurrence(assignmentId: string, lastScheduledFor: Date): Promise<void> {
+  const assignment = await prisma.assignment.findUnique({
+    where: { id: assignmentId },
+    include: { agreement: true },
+  });
+  if (!assignment?.agreement) return;
+  if (assignment.agreement.status !== 'ACTIVE') return;
 
-  // Update task status
-  await prisma.task.update({ where: { id: taskId }, data: { status: 'DISPUTED' } });
+  let next: Date;
+  switch (assignment.agreement.frequency) {
+    case 'WEEKLY':
+      next = addWeeks(lastScheduledFor, 1);
+      break;
+    case 'BIWEEKLY':
+      next = addWeeks(lastScheduledFor, 2);
+      break;
+    case 'MONTHLY':
+      next = addDays(lastScheduledFor, 30);
+      break;
+    default:
+      return;
+  }
 
-  // Create dispute record (expires at original 24h deadline)
-  const expiresAt = addHours(new Date(), 24);
-  await prisma.dispute.create({
+  await prisma.task.create({
     data: {
       id: nanoid(),
-      taskId,
-      reason,
-      expiresAt,
+      assignmentId,
+      scheduledFor: next,
+      status: 'SCHEDULED',
     },
   });
 }
 
 /**
- * Staff fetches dispute details, with evidence redacted via Gemini.
+ * Owner initiates dispute on a completed task (delegates to disputes feature).
+ */
+export async function initiateDispute(taskId: string, reason: string): Promise<void> {
+  const { createDispute } = await import('@/features/disputes/actions');
+  await createDispute(taskId, reason);
+}
+
+/**
+ * Staff dispute view with redacted notes.
  */
 export async function getDisputeForStaffReview(disputeId: string): Promise<{
   reason: string;
@@ -332,12 +320,9 @@ export async function getDisputeForStaffReview(disputeId: string): Promise<{
   });
   if (!dispute) throw new Error('Dispute not found');
 
-  const notes = `Dispute reason: ${dispute.reason}`;
-  const redactedNotes = redactPII(notes);
-
   return {
     reason: dispute.reason,
     evidenceImages: dispute.task?.evidenceImages ?? [],
-    redactedNotes,
+    redactedNotes: redactPII(`Dispute reason: ${dispute.reason}`),
   };
 }

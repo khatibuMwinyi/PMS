@@ -436,63 +436,97 @@ async function main() {
   ])
   console.log('✓ 4 wallets created')
 
-  // ============ ASSIGNMENTS ============
-  const assignments = await Promise.all([
-    prisma.assignment.create({
+  // ============ QUOTES → AGREEMENTS → ASSIGNMENTS → INVOICES ============
+  // Property index → owner User id mapping (matches seed order above)
+  const propertyOwnerUserId: Record<number, string> = {
+    0: owners[0].id,
+    1: owners[0].id,
+    2: owners[0].id,
+    3: owners[1].id,
+    4: owners[1].id,
+    5: owners[2].id,
+    6: owners[2].id,
+    7: owners[2].id,
+  };
+
+  const seedConfigs = [
+    { propIdx: 0, svcIdx: 0, providerIdx: 0, status: 'PENDING_ACCEPTANCE' as const, price: 150000 },
+    { propIdx: 1, svcIdx: 1, providerIdx: 0, status: 'ACCEPTED' as const, price: 250000, acceptedHoursAgo: 2 },
+    { propIdx: 4, svcIdx: 0, providerIdx: 2, status: 'PENDING_ACCEPTANCE' as const, price: 180000 },
+    { propIdx: 6, svcIdx: 3, providerIdx: 1, status: 'PENDING_ACCEPTANCE' as const, price: 220000 },
+    { propIdx: 3, svcIdx: 2, providerIdx: 2, status: 'COMPLETED' as const, price: 200000, acceptedHoursAgo: 48 },
+  ];
+
+  const assignments: Awaited<ReturnType<typeof prisma.assignment.create>>[] = [];
+  for (const cfg of seedConfigs) {
+    const ownerId = propertyOwnerUserId[cfg.propIdx];
+
+    const quote = await prisma.quote.create({
       data: {
-        propertyId: properties[0].id,
-        serviceTypeId: serviceTypes[0].id,
-        providerId: providerProfiles[0].id,
-        status: 'PENDING_ACCEPTANCE',
-        expiresAt: new Date(Date.now() + 48 * 60 * 60 * 1000),
-      },
-    }),
-    prisma.assignment.create({
-      data: {
-        propertyId: properties[1].id,
-        serviceTypeId: serviceTypes[1].id,
-        providerId: providerProfiles[0].id,
+        ownerId,
+        propertyId: properties[cfg.propIdx].id,
+        serviceTypeId: serviceTypes[cfg.svcIdx].id,
+        quotedPrice: cfg.price,
+        priceLockedUntil: new Date(Date.now() + 24 * 60 * 60 * 1000),
+        frequency: 'ONE_TIME',
         status: 'ACCEPTED',
-        acceptedAt: new Date(Date.now() - 2 * 60 * 60 * 1000),
-        expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
       },
-    }),
-    prisma.assignment.create({
+    });
+
+    const agreement = await prisma.agreement.create({
       data: {
-        propertyId: properties[4].id,
-        serviceTypeId: serviceTypes[0].id,
-        providerId: providerProfiles[2].id,
-        status: 'PENDING_ACCEPTANCE',
+        quoteId: quote.id,
+        ownerId,
+        propertyId: properties[cfg.propIdx].id,
+        serviceTypeId: serviceTypes[cfg.svcIdx].id,
+        quotedPrice: cfg.price,
+        frequency: 'ONE_TIME',
+        status: cfg.status === 'COMPLETED' ? 'ACTIVE' : 'PENDING_ASSIGNMENT',
+      },
+    });
+
+    const total = cfg.price;
+    const providerPayout = total * 0.8;
+    const platformFee = total * 0.2;
+
+    const assignment = await prisma.assignment.create({
+      data: {
+        agreementId: agreement.id,
+        propertyId: properties[cfg.propIdx].id,
+        serviceTypeId: serviceTypes[cfg.svcIdx].id,
+        providerId: providerProfiles[cfg.providerIdx].id,
+        status: cfg.status,
+        totalAmount: total,
+        providerPayout,
+        platformFee,
+        acceptedAt:
+          cfg.acceptedHoursAgo !== undefined
+            ? new Date(Date.now() - cfg.acceptedHoursAgo * 60 * 60 * 1000)
+            : undefined,
         expiresAt: new Date(Date.now() + 48 * 60 * 60 * 1000),
       },
-    }),
-    prisma.assignment.create({
+    });
+
+    await prisma.invoice.create({
       data: {
-        propertyId: properties[6].id,
-        serviceTypeId: serviceTypes[3].id,
-        providerId: providerProfiles[1].id,
-        status: 'PENDING_ACCEPTANCE',
-        expiresAt: new Date(Date.now() + 72 * 60 * 60 * 1000),
+        agreementId: agreement.id,
+        amount: total,
+        status: cfg.status === 'COMPLETED' ? 'PAID' : 'PENDING',
+        dueAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+        paidAt: cfg.status === 'COMPLETED' ? new Date(Date.now() - 24 * 60 * 60 * 1000) : null,
       },
-    }),
-    prisma.assignment.create({
-      data: {
-        propertyId: properties[3].id,
-        serviceTypeId: serviceTypes[2].id,
-        providerId: providerProfiles[2].id,
-        status: 'COMPLETED',
-        acceptedAt: new Date(Date.now() - 48 * 60 * 60 * 1000),
-        expiresAt: new Date(Date.now() - 24 * 60 * 60 * 1000),
-      },
-    }),
-  ])
-  console.log('✓ 5 assignments created')
+    });
+
+    assignments.push(assignment);
+  }
+  console.log('✓ Quotes, agreements, assignments, invoices seeded');
 
   // ============ TASKS ============
   const tasks = await Promise.all([
     prisma.task.create({
       data: {
         assignmentId: assignments[1].id,
+        scheduledFor: new Date(Date.now() - 1 * 60 * 60 * 1000),
         status: 'IN_PROGRESS',
         checkInLatitude: -6.7298,
         checkInLongitude: 39.2745,
@@ -501,6 +535,7 @@ async function main() {
     prisma.task.create({
       data: {
         assignmentId: assignments[4].id,
+        scheduledFor: new Date(Date.now() - 30 * 60 * 60 * 1000),
         status: 'COMPLETED',
         checkInLatitude: -6.1655,
         checkInLongitude: 39.2030,
@@ -520,10 +555,11 @@ async function main() {
     prisma.walletTransaction.create({
       data: {
         walletId: wallets[2].id,
-        type: 'CREDIT',
+        type: 'EARNING',
         amount: 200000,
         reference: assignments[4].id,
         status: 'SETTLED',
+        runningBalance: 200000,
       },
     }),
   ])

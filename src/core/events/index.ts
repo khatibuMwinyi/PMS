@@ -36,7 +36,7 @@ export async function fireEventWithNotification(
     // Create notification for the user
     if (data.userId) {
       await fireEvent(event, {
-        userId: data.userId,
+        recipientId: data.userId,
         payload: data,
       });
     }

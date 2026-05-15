@@ -27,7 +27,7 @@ const itemVariants = {
     opacity: 1,
     x: 0,
     transition: {
-      type: 'spring',
+      type: 'spring' as const,
       damping: 25,
       stiffness: 100,
     },
@@ -40,7 +40,7 @@ const logoVariants = {
     scale: 1,
     opacity: 1,
     transition: {
-      type: 'spring',
+      type: 'spring' as const,
       damping: 15,
       stiffness: 100,
     },
@@ -97,6 +97,7 @@ export function AnimatedBrandingPanel({ title = 'Oweru', tagline }: AnimatedBran
               src="/images/logo.jpeg"
               alt="Oweru Logo"
               fill
+              sizes="56px"
               className="object-cover"
             />
           </div>
@@ -122,7 +123,7 @@ export function AnimatedBrandingPanel({ title = 'Oweru', tagline }: AnimatedBran
               className="flex items-start gap-4"
               variants={itemVariants}
               whileHover={{ x: 10 }}
-              transition={{ type: 'spring', stiffness: 300 }}
+              transition={{ type: 'spring' as const, stiffness: 300 }}
             >
               <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-[#C89128]/10 flex items-center justify-center">
                 {feature.icon}

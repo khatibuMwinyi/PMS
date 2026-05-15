@@ -20,7 +20,7 @@ async function AgreementsContent() {
     <div>
       {agreements.length > 0 ? (
         <AgreementList 
-          agreements={agreements.map(a => ({
+          agreements={agreements.map((a: any) => ({
             id: a.id,
             quoteId: a.quoteId,
             quotedPrice: a.quotedPrice.toString(),

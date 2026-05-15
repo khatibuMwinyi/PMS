@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { CheckCheck, Loader2, Bell, Filter } from 'lucide-react';
 import { cn } from '@/core/lib/utils';
-import { getMyNotifications, getMyUnreadCount, markNotificationAsRead, markAllNotificationsAsRead } from '@/features/notifications/queries';
+import { markNotificationAsRead, markAllNotificationsAsRead } from '@/features/notifications/actions';
 import type { NotificationWithUser } from '@/features/notifications/types';
 
 export function NotificationList() {
@@ -15,12 +15,23 @@ export function NotificationList() {
   const fetchNotifications = async () => {
     try {
       setIsLoading(true);
-      const [notes, count] = await Promise.all([
-        getMyNotifications(50, 0),
-        getMyUnreadCount(),
-      ]);
-      setNotifications(notes as NotificationWithUser[]);
-      setUnreadCount(count);
+      const response = await fetch('/api/notifications?limit=50&offset=0', {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch notifications (${response.status})`);
+      }
+
+      const data = await response.json();
+      const mapped = (data.notifications ?? []).map((notification: NotificationWithUser) => ({
+        ...notification,
+        createdAt: new Date(notification.createdAt),
+      }));
+
+      setNotifications(mapped);
+      setUnreadCount(data.unreadCount ?? 0);
     } catch (error) {
       console.error('Failed to fetch notifications:', error);
     } finally {

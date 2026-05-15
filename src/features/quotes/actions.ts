@@ -259,7 +259,7 @@ export async function acceptQuote(quoteId: string): Promise<void> {
   await fireQuoteAcceptedEvent({
     userId: quote.ownerId,
     quoteId: quote.id,
-    quotedPrice: quote.quotedPrice,
+    quotedPrice: Number(quote.quotedPrice),
   });
 
   return;

@@ -1,4 +1,5 @@
 import { prisma } from '@/core/database/client';
+import type { QuoteStatus } from '@prisma/client';
 
 export class QuoteRepository {
   static async findById(quoteId: string) {
@@ -26,7 +27,7 @@ export class QuoteRepository {
     });
   }
 
-  static async findByStatus(status: string) {
+  static async findByStatus(status: QuoteStatus) {
     return prisma.quote.findMany({
       where: { status },
       include: {
@@ -53,12 +54,12 @@ export class QuoteRepository {
     serviceTypeId: string;
     quotedPrice: number;
     priceLockedUntil: Date;
-    status: string;
+    status: QuoteStatus;
   }) {
     return prisma.quote.create({ data });
   }
 
-  static async updateStatus(quoteId: string, status: string) {
+  static async updateStatus(quoteId: string, status: QuoteStatus) {
     return prisma.quote.update({
       where: { id: quoteId },
       data: { status, updatedAt: new Date() },

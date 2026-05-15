@@ -62,9 +62,9 @@ export function isLockActive(priceLockedUntil: Date | null): boolean {
 /**
  * Create a new price lock timestamp (24 hours from now)
  */
-export function createPriceLock(existingLock?: Date | null): Date {
+export function createPriceLock(existingLock?: Date | null | undefined): Date {
   // If there's an existing active lock, throw error (recalculation guard)
-  if (isLockActive(existingLock)) {
+  if (isLockActive(existingLock ?? null)) {
     throw new Error('Price lock is active. Cannot recalculate until lock expires.');
   }
   

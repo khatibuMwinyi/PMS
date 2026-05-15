@@ -69,7 +69,9 @@ export async function getAdminDashboardData() {
   }
 
   const activeDisputes = await prisma.dispute.count({ where: { status: { notIn: ['RESOLVED', 'EXPIRED'] } } });
-  const verifiedProviders = await prisma.providerProfile.count(); // assuming all providers are verified
+  const verifiedProviders = await prisma.providerProfile.count({
+    where: { verification: 'VERIFIED' },
+  });
 
   return { totalRevenue, activeDisputes, verifiedProviders };
 }

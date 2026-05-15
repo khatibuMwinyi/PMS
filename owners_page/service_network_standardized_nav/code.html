@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+                  "on-secondary-container": "#63646c",
+                  "on-tertiary-fixed-variant": "#574425",
+                  "on-primary": "#ffffff",
+                  "inverse-primary": "#bec6e0",
+                  "surface": "#fcf8fa",
+                  "primary-container": "#131b2e",
+                  "on-error": "#ffffff",
+                  "on-error-container": "#93000a",
+                  "primary-fixed-dim": "#bec6e0",
+                  "primary": "#000000",
+                  "surface-container-lowest": "#ffffff",
+                  "surface-bright": "#fcf8fa",
+                  "error": "#ba1a1a",
+                  "on-secondary": "#ffffff",
+                  "error-container": "#ffdad6",
+                  "secondary-fixed": "#e3e1ec",
+                  "surface-dim": "#dcd9db",
+                  "outline": "#76777d",
+                  "on-secondary-fixed-variant": "#46464e",
+                  "surface-container-high": "#eae7e9",
+                  "on-tertiary-container": "#98805d",
+                  "on-primary-fixed-variant": "#3f465c",
+                  "on-tertiary": "#ffffff",
+                  "on-background": "#1b1b1d",
+                  "background": "#fcf8fa",
+                  "on-primary-fixed": "#131b2e",
+                  "tertiary": "#000000",
+                  "inverse-surface": "#303032",
+                  "on-surface-variant": "#45464d",
+                  "tertiary-container": "#271901",
+                  "on-tertiary-fixed": "#271901",
+                  "surface-variant": "#e4e2e4",
+                  "tertiary-fixed-dim": "#dec29a",
+                  "secondary-fixed-dim": "#c6c5cf",
+                  "surface-container-low": "#f6f3f5",
+                  "surface-container-highest": "#e4e2e4",
+                  "primary-fixed": "#dae2fd",
+                  "on-secondary-fixed": "#1a1b22",
+                  "surface-tint": "#565e74",
+                  "on-primary-container": "#7c839b",
+                  "inverse-on-surface": "#f3f0f2",
+                  "secondary-container": "#e3e1ec",
+                  "surface-container": "#f0edef",
+                  "tertiary-fixed": "#fcdeb5",
+                  "secondary": "#5d5e66",
+                  "outline-variant": "#c6c6cd",
+                  "on-surface": "#1b1b1d"
+          },
+          "borderRadius": {
+                  "DEFAULT": "0.125rem",
+                  "lg": "0.25rem",
+                  "xl": "0.5rem",
+                  "full": "0.75rem"
+          },
+          "spacing": {
+                  "lg": "24px",
+                  "table-cell-padding-y": "8px",
+                  "table-cell-padding-x": "12px",
+                  "base": "4px",
+                  "xs": "4px",
+                  "xl": "32px",
+                  "md": "16px",
+                  "sm": "8px"
+          },
+          "fontFamily": {
+                  "h1": ["Inter"],
+                  "body-sm": ["Inter"],
+                  "table-header": ["Inter"],
+                  "body-md": ["Inter"],
+                  "label": ["Inter"],
+                  "data-tabular": ["Inter"],
+                  "h2": ["Inter"]
+          },
+          "fontSize": {
+                  "h1": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                  "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                  "table-header": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                  "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                  "label": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                  "data-tabular": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                  "h2": ["18px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      font-size: 20px;
+    }
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #c6c6cd; border-radius: 2px; }
+  </style>
+</head>
+<body class="bg-surface font-body-md text-on-surface">
+<div class="flex h-screen overflow-hidden">
+<!-- SideNavBar -->
+<aside class="bg-surface-container-lowest dark:bg-surface-dim flex flex-col h-full py-md w-64 border-r border-outline-variant shrink-0">
+<div class="px-lg mb-xl">
+<h1 class="font-h2 text-h2 font-bold text-primary dark:text-primary-fixed-dim">OPSMP</h1>
+<p class="text-on-surface-variant text-xs opacity-70">Operational Excellence</p>
+</div>
+<nav class="flex-1 px-sm space-y-base overflow-y-auto custom-scrollbar">
+<!-- Dashboard -->
+<a class="flex items-center gap-md px-md py-sm rounded transition-colors duration-200 text-on-surface-variant dark:text-outline hover:text-primary dark:hover:text-primary-fixed-dim hover:bg-surface-container-high dark:hover:bg-surface-variant" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md">Dashboard</span>
+</a>
+<!-- Properties -->
+<a class="flex items-center gap-md px-md py-sm rounded transition-colors duration-200 text-on-surface-variant dark:text-outline hover:text-primary dark:hover:text-primary-fixed-dim hover:bg-surface-container-high dark:hover:bg-surface-variant" href="#">
+<span class="material-symbols-outlined">domain</span>
+<span class="font-body-md">Properties</span>
+</a>
+<!-- Work Orders -->
+<a class="flex items-center gap-md px-md py-sm rounded transition-colors duration-200 text-on-surface-variant dark:text-outline hover:text-primary dark:hover:text-primary-fixed-dim hover:bg-surface-container-high dark:hover:bg-surface-variant" href="#">
+<span class="material-symbols-outlined">build</span>
+<span class="font-body-md">Work Orders</span>
+</a>
+<!-- Financials -->
+<a class="flex items-center gap-md px-md py-sm rounded transition-colors duration-200 text-on-surface-variant dark:text-outline hover:text-primary dark:hover:text-primary-fixed-dim hover:bg-surface-container-high dark:hover:bg-surface-variant" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-body-md">Financials</span>
+</a>
+<!-- Service Network (Active) -->
+<a class="flex items-center gap-md px-md py-sm rounded text-primary dark:text-primary-fixed-dim font-bold border-r-4 border-primary dark:border-primary-fixed-dim bg-surface-container-low" href="#">
+<span class="material-symbols-outlined">groups</span>
+<span class="font-body-md">Service Network</span>
+</a>
+<!-- Reports -->
+<a class="flex items-center gap-md px-md py-sm rounded transition-colors duration-200 text-on-surface-variant dark:text-outline hover:text-primary dark:hover:text-primary-fixed-dim hover:bg-surface-container-high dark:hover:bg-surface-variant" href="#">
+<span class="material-symbols-outlined">assessment</span>
+<span class="font-body-md">Reports</span>
+</a>
+</nav>
+<div class="mt-auto px-sm pt-md border-t border-outline-variant space-y-base">
+<button class="w-full bg-primary text-on-primary py-sm px-md rounded-lg font-label mb-md hover:opacity-90 transition-opacity">
+        New Work Order
+      </button>
+<a class="flex items-center gap-md px-md py-sm rounded text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body-md">Settings</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-body-md">Help Center</span>
+</a>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col min-w-0 bg-surface overflow-hidden">
+<!-- TopNavBar -->
+<header class="bg-surface-container-lowest dark:bg-surface-dim flex justify-between items-center h-16 px-lg w-full sticky top-0 z-40 border-b border-outline-variant shrink-0">
+<div class="flex items-center gap-lg flex-1">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full pl-xl pr-md py-xs bg-surface-container-low border border-outline-variant rounded-lg text-body-sm focus:outline-none focus:border-primary" placeholder="Search service regions or types..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-md ml-lg">
+<button class="p-base text-on-surface-variant hover:text-primary transition-transform active:scale-95">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-base text-on-surface-variant hover:text-primary transition-transform active:scale-95">
+<span class="material-symbols-outlined">history</span>
+</button>
+<button class="p-base text-on-surface-variant hover:text-primary transition-transform active:scale-95">
+<span class="material-symbols-outlined">chat</span>
+</button>
+<div class="h-8 w-px bg-outline-variant mx-base"></div>
+<button class="text-body-sm font-label text-on-surface-variant hover:text-primary">Support</button>
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center overflow-hidden border border-outline-variant">
+<img alt="User profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGl92655YJuDSFg4YBync9iwnRt55i_16t5cGMsr1ol-mpCS1J4JoJyva0X70GfPx8SEXHn3SkYT7QmZUY28xHb5hICrxWRNPstniM5AqZsivcHjxUgzBzeyP2fH6SJ6mDZ6t8XXXF7f191Jh22Yxmd3Cwh_-RmsF8syVF1pYMBRJhdB_Ux5kkyFwOIOULGkalMM4RweCtXO0oEoTD93swuwKyBbGawWN1GhYCbiGXdZO1mLhgbtxIi4UC36hWbgHeVSHhX562d_Y"/>
+</div>
+</div>
+</header>
+<!-- Dashboard Canvas -->
+<div class="flex-1 overflow-y-auto p-lg custom-scrollbar">
+<div class="mb-xl flex items-end justify-between">
+<div>
+<h2 class="font-h1 text-h1 text-primary">Service Network Overview</h2>
+<p class="text-on-surface-variant font-body-md mt-xs">Aggregate provider health and operational coverage across your portfolio.</p>
+</div>
+<div class="flex gap-sm">
+<span class="bg-secondary-container text-on-secondary-container px-md py-xs rounded-full font-label flex items-center gap-xs">
+<span class="w-2 h-2 rounded-full bg-green-500"></span>
+            98.4% Network Health
+          </span>
+</div>
+</div>
+<!-- Metrics Bento Grid -->
+<div class="grid grid-cols-12 gap-lg mb-xl">
+<!-- Service Coverage Grid -->
+<div class="col-span-12 lg:col-span-8 bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden flex flex-col">
+<div class="p-md border-b border-outline-variant flex justify-between items-center">
+<h3 class="font-h2 text-h2">Service Coverage</h3>
+<div class="flex gap-xs">
+<button class="px-sm py-xs border border-outline-variant rounded text-label bg-surface-container-low">All Regions</button>
+<button class="px-sm py-xs text-label text-on-surface-variant hover:bg-surface-container-high rounded">East Coast</button>
+<button class="px-sm py-xs text-label text-on-surface-variant hover:bg-surface-container-high rounded">Central</button>
+</div>
+</div>
+<div class="p-lg grid grid-cols-2 sm:grid-cols-3 gap-md bg-surface-container-low/20">
+<!-- Cleaning -->
+<div class="bg-surface-container-lowest border border-outline-variant p-md rounded-lg flex flex-col gap-sm">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-primary">cleaning_services</span>
+<span class="bg-green-100 text-green-800 text-[10px] px-sm py-[2px] rounded font-bold uppercase">Full</span>
+</div>
+<div>
+<p class="font-bold text-body-md">Cleaning</p>
+<p class="text-[10px] text-on-surface-variant">12 Active Regions</p>
+</div>
+</div>
+<!-- Security -->
+<div class="bg-surface-container-lowest border border-outline-variant p-md rounded-lg flex flex-col gap-sm">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-primary">security</span>
+<span class="bg-green-100 text-green-800 text-[10px] px-sm py-[2px] rounded font-bold uppercase">Full</span>
+</div>
+<div>
+<p class="font-bold text-body-md">Security</p>
+<p class="text-[10px] text-on-surface-variant">8 Active Regions</p>
+</div>
+</div>
+<!-- Maintenance -->
+<div class="bg-surface-container-lowest border border-outline-variant p-md rounded-lg flex flex-col gap-sm">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-primary">build</span>
+<span class="bg-amber-100 text-amber-800 text-[10px] px-sm py-[2px] rounded font-bold uppercase">Limited</span>
+</div>
+<div>
+<p class="font-bold text-body-md">Maintenance</p>
+<p class="text-[10px] text-on-surface-variant">4 Active Regions</p>
+</div>
+</div>
+<!-- HVAC -->
+<div class="bg-surface-container-lowest border border-outline-variant p-md rounded-lg flex flex-col gap-sm">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-primary">airware</span>
+<span class="bg-green-100 text-green-800 text-[10px] px-sm py-[2px] rounded font-bold uppercase">Full</span>
+</div>
+<div>
+<p class="font-bold text-body-md">HVAC</p>
+<p class="text-[10px] text-on-surface-variant">6 Active Regions</p>
+</div>
+</div>
+<!-- Landscaping -->
+<div class="bg-surface-container-lowest border border-outline-variant p-md rounded-lg flex flex-col gap-sm">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-primary">forest</span>
+<span class="bg-green-100 text-green-800 text-[10px] px-sm py-[2px] rounded font-bold uppercase">Full</span>
+</div>
+<div>
+<p class="font-bold text-body-md">Landscaping</p>
+<p class="text-[10px] text-on-surface-variant">10 Active Regions</p>
+</div>
+</div>
+<!-- Waste -->
+<div class="bg-surface-container-lowest border border-outline-variant p-md rounded-lg flex flex-col gap-sm">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-primary">delete_outline</span>
+<span class="bg-green-100 text-green-800 text-[10px] px-sm py-[2px] rounded font-bold uppercase">Full</span>
+</div>
+<div>
+<p class="font-bold text-body-md">Waste</p>
+<p class="text-[10px] text-on-surface-variant">12 Active Regions</p>
+</div>
+</div>
+</div>
+<div class="p-md mt-auto border-t border-outline-variant bg-surface-container-lowest">
+<div class="flex items-center gap-md">
+<div class="flex-1">
+<p class="text-[11px] font-bold uppercase text-on-surface-variant tracking-wider mb-base">National Coverage Health</p>
+<div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[94%]"></div>
+</div>
+</div>
+<div class="text-right">
+<p class="font-h2 text-primary">94%</p>
+<p class="text-[10px] text-on-surface-variant">Verified Service Areas</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Service SLA Health -->
+<div class="col-span-12 lg:col-span-4 flex flex-col gap-lg">
+<div class="flex-1 bg-surface-container-lowest border border-outline-variant rounded-xl p-lg">
+<div class="flex justify-between items-start mb-md">
+<h3 class="font-h2 text-h2">SLA Status</h3>
+<span class="material-symbols-outlined text-on-surface-variant">verified</span>
+</div>
+<div class="space-y-md">
+<div class="flex justify-between text-label">
+<span class="text-on-surface-variant">Response Time</span>
+<span class="text-primary font-bold">2.4h Avg</span>
+</div>
+<div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[92%]"></div>
+</div>
+<div class="flex justify-between text-label">
+<span class="text-on-surface-variant">Resolution Time</span>
+<span class="text-primary font-bold">24.1h Avg</span>
+</div>
+<div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[88%]"></div>
+</div>
+<div class="flex justify-between text-label">
+<span class="text-on-surface-variant">Satisfaction Score</span>
+<span class="text-primary font-bold">4.8 / 5.0</span>
+</div>
+<div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[96%]"></div>
+</div>
+</div>
+<div class="mt-lg pt-lg border-t border-outline-variant">
+<p class="text-body-sm text-on-surface-variant italic">"Network performance is exceeding benchmark by 4.2% this quarter."</p>
+</div>
+</div>
+<div class="bg-primary text-on-primary rounded-xl p-lg">
+<div class="flex items-center gap-md mb-sm">
+<span class="material-symbols-outlined">bolt</span>
+<span class="font-label uppercase tracking-widest text-[10px]">Emergency Dispatch</span>
+</div>
+<div class="text-[32px] font-bold leading-tight mb-xs">Active Alerts: 02</div>
+<p class="text-on-primary/70 text-body-sm">All emergency work orders currently assigned to top-tier verified responders.</p>
+</div>
+</div>
+</div>
+<!-- Service Categories Table -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden mb-xl">
+<div class="p-lg flex justify-between items-center border-b border-outline-variant">
+<h3 class="font-h2 text-h2">Service Category Performance</h3>
+<div class="flex gap-md">
+<div class="flex border border-outline-variant rounded overflow-hidden">
+<button class="bg-surface-container-high px-md py-xs text-label">Table</button>
+<button class="px-md py-xs text-label hover:bg-surface-container-low">Visual</button>
+</div>
+<button class="material-symbols-outlined text-on-surface-variant p-xs border border-outline-variant rounded">filter_list</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low border-b border-outline-variant">
+<tr>
+<th class="px-lg py-md font-table-header text-table-header uppercase">Category</th>
+<th class="px-lg py-md font-table-header text-table-header uppercase">Resource Density</th>
+<th class="px-lg py-md font-table-header text-table-header uppercase">Avg. Response</th>
+<th class="px-lg py-md font-table-header text-table-header uppercase">Compliance</th>
+<th class="px-lg py-md font-table-header text-table-header uppercase">Last Audit</th>
+<th class="px-lg py-md font-table-header text-table-header uppercase">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant font-data-tabular text-on-surface">
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-lg py-md flex items-center gap-md">
+<span class="material-symbols-outlined text-primary">cleaning_services</span>
+<span class="font-bold">Cleaning &amp; Janitorial</span>
+</td>
+<td class="px-lg py-md">12 National Partners</td>
+<td class="px-lg py-md">45 Minutes</td>
+<td class="px-lg py-md">100% Verified</td>
+<td class="px-lg py-md">Oct 12, 2023</td>
+<td class="px-lg py-md">
+<span class="bg-green-100 text-green-800 px-sm py-[2px] rounded text-label font-bold uppercase text-[10px]">Optimal</span>
+</td>
+</tr>
+<tr class="bg-surface-container-low/30 hover:bg-surface-container-low transition-colors group">
+<td class="px-lg py-md flex items-center gap-md">
+<span class="material-symbols-outlined text-primary">plumbing</span>
+<span class="font-bold">Plumbing &amp; HVAC</span>
+</td>
+<td class="px-lg py-md">8 Tier-1 Teams</td>
+<td class="px-lg py-md">1.2 Hours</td>
+<td class="px-lg py-md">98.2% Verified</td>
+<td class="px-lg py-md">Nov 02, 2023</td>
+<td class="px-lg py-md">
+<span class="bg-green-100 text-green-800 px-sm py-[2px] rounded text-label font-bold uppercase text-[10px]">Optimal</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-lg py-md flex items-center gap-md">
+<span class="material-symbols-outlined text-primary">electrical_services</span>
+<span class="font-bold">Electrical Systems</span>
+</td>
+<td class="px-lg py-md">6 Multi-state Partners</td>
+<td class="px-lg py-md">55 Minutes</td>
+<td class="px-lg py-md">100% Verified</td>
+<td class="px-lg py-md">Sep 28, 2023</td>
+<td class="px-lg py-md">
+<span class="bg-green-100 text-green-800 px-sm py-[2px] rounded text-label font-bold uppercase text-[10px]">Optimal</span>
+</td>
+</tr>
+<tr class="bg-surface-container-low/30 hover:bg-surface-container-low transition-colors group">
+<td class="px-lg py-md flex items-center gap-md">
+<span class="material-symbols-outlined text-primary">security</span>
+<span class="font-bold">Security &amp; Fire Safety</span>
+</td>
+<td class="px-lg py-md">4 Enterprise Contracts</td>
+<td class="px-lg py-md">15 Minutes</td>
+<td class="px-lg py-md">100% Verified</td>
+<td class="px-lg py-md">Oct 05, 2023</td>
+<td class="px-lg py-md">
+<span class="bg-amber-100 text-amber-800 px-sm py-[2px] rounded text-label font-bold uppercase text-[10px]">Renewal Due</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Compliance & Health Details -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg">
+<h4 class="font-label text-on-surface-variant uppercase mb-md">Network Compliance Health</h4>
+<div class="space-y-md">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">gavel</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-center mb-xs">
+<span class="text-body-md font-bold">Insurance Verification</span>
+<span class="text-label text-green-600">100% Active</span>
+</div>
+<div class="w-full bg-surface-container-high h-1.5 rounded-full overflow-hidden">
+<div class="bg-green-500 h-full w-full"></div>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">history_edu</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-center mb-xs">
+<span class="text-body-md font-bold">Trade Licensing</span>
+<span class="text-label text-green-600">97.8% Valid</span>
+</div>
+<div class="w-full bg-surface-container-high h-1.5 rounded-full overflow-hidden">
+<div class="bg-green-500 h-full w-[97.8%]"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg">
+<h4 class="font-label text-on-surface-variant uppercase mb-md">Response Trends</h4>
+<div class="flex items-end gap-sm h-32 pt-md">
+<div class="flex-1 bg-primary/10 rounded-t h-[60%] relative group">
+<div class="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] font-bold opacity-0 group-hover:opacity-100">60%</div>
+</div>
+<div class="flex-1 bg-primary/10 rounded-t h-[45%] relative group">
+<div class="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] font-bold opacity-0 group-hover:opacity-100">45%</div>
+</div>
+<div class="flex-1 bg-primary/10 rounded-t h-[85%] relative group">
+<div class="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] font-bold opacity-0 group-hover:opacity-100">85%</div>
+</div>
+<div class="flex-1 bg-primary rounded-t h-[95%] relative group">
+<div class="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] font-bold opacity-0 group-hover:opacity-100">95%</div>
+</div>
+<div class="flex-1 bg-primary/10 rounded-t h-[70%] relative group">
+<div class="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] font-bold opacity-0 group-hover:opacity-100">70%</div>
+</div>
+</div>
+<div class="flex justify-between mt-sm text-[10px] font-label text-on-surface-variant">
+<span>WK 41</span>
+<span>WK 42</span>
+<span>WK 43</span>
+<span class="text-primary font-bold">WK 44</span>
+<span>WK 45</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

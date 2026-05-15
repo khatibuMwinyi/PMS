@@ -1,7 +1,13 @@
 import PgBoss from 'pg-boss';
-import { assignmentExpirationWorker, financialReconciliationWorker } from './workers';
-import { priceLockCleanupWorker } from './workers/price-lock-cleanup';
-import { autoVerifyPendingTasks } from '@/features/tasks/actions';
+import {
+  assignmentExpirationWorker,
+  financialReconciliationWorker,
+  priceLockCleanupWorker,
+  settlementWorker,
+  overdueTasksWorker,
+  suspensionExpiryWorker,
+  autoVerifyTasksWorker,
+} from './workers';
 
 if (!process.env.DATABASE_URL) {
   throw new Error('DATABASE_URL is not set — pg-boss cannot start');
@@ -9,7 +15,6 @@ if (!process.env.DATABASE_URL) {
 
 const boss = new PgBoss({
   connectionString: process.env.DATABASE_URL,
-  // Retain completed job records for 7 days for audit purposes
   deleteAfterDays: 7,
 });
 
@@ -21,8 +26,7 @@ export async function startWorker(): Promise<void> {
   await boss.start();
   console.log('[pg-boss] Started');
 
-  // ── Worker 1: Assignment expiration ───────────────────────────────
-  // Polls every minute for assignments past their expiresAt timestamp
+  // Assignment expiration — every minute
   await boss.work(
     assignmentExpirationWorker.name,
     { teamSize: 5, teamConcurrency: 5 },
@@ -30,40 +34,92 @@ export async function startWorker(): Promise<void> {
   );
   await boss.schedule(
     assignmentExpirationWorker.name,
-    '* * * * *',          // Every minute
+    '* * * * *',
     {},
     { singletonKey: 'assignment-expiration' },
   );
 
-  // ── Worker 2: Nightly financial reconciliation ─────────────────────
-  // Runs at 23:00 UTC (02:00 EAT) — after the day's transactions settle
+  // Financial reconciliation — daily 23:00 UTC
   await boss.work(
     financialReconciliationWorker.name,
-    { teamSize: 1, teamConcurrency: 1 },   // Must run serially
+    { teamSize: 1, teamConcurrency: 1 },
     financialReconciliationWorker.handler,
   );
   await boss.schedule(
     financialReconciliationWorker.name,
-    '0 23 * * *',         // 23:00 UTC daily
+    '0 23 * * *',
     {},
     { singletonKey: 'financial-reconciliation' },
   );
 
-  // ── Worker 3: Price‑lock cleanup ────────────────────────────────────────
-// Runs hourly to remove expired locks
-await boss.work(
-  priceLockCleanupWorker.name,
-  { teamSize: 1, teamConcurrency: 1 },
-  priceLockCleanupWorker.handler,
-);
-await boss.schedule(
-  priceLockCleanupWorker.name,
-  '0 * * * *', // every hour at minute 0
-  {},
-  { singletonKey: 'price-lock-cleanup' },
-);
+  // Price-lock cleanup — hourly
+  await boss.work(
+    priceLockCleanupWorker.name,
+    { teamSize: 1, teamConcurrency: 1 },
+    priceLockCleanupWorker.handler,
+  );
+  await boss.schedule(
+    priceLockCleanupWorker.name,
+    '0 * * * *',
+    {},
+    { singletonKey: 'price-lock-cleanup' },
+  );
 
-console.log('[pg-boss] Workers registered: assignment-expiration, financial-reconciliation, price-lock-cleanup');
+  // 24h hold settlement — every 15 min
+  await boss.work(
+    settlementWorker.name,
+    { teamSize: 1, teamConcurrency: 1 },
+    settlementWorker.handler,
+  );
+  await boss.schedule(
+    settlementWorker.name,
+    '*/15 * * * *',
+    {},
+    { singletonKey: 'settlement' },
+  );
+
+  // Overdue task detection — every 30 min
+  await boss.work(
+    overdueTasksWorker.name,
+    { teamSize: 1, teamConcurrency: 1 },
+    overdueTasksWorker.handler,
+  );
+  await boss.schedule(
+    overdueTasksWorker.name,
+    '*/30 * * * *',
+    {},
+    { singletonKey: 'overdue-tasks' },
+  );
+
+  // Suspension expiry — hourly
+  await boss.work(
+    suspensionExpiryWorker.name,
+    { teamSize: 1, teamConcurrency: 1 },
+    suspensionExpiryWorker.handler,
+  );
+  await boss.schedule(
+    suspensionExpiryWorker.name,
+    '0 * * * *',
+    {},
+    { singletonKey: 'suspension-expiry' },
+  );
+
+  // Auto-verify tasks — every 30 min
+  await boss.work(
+    autoVerifyTasksWorker.name,
+    { teamSize: 1, teamConcurrency: 1 },
+    autoVerifyTasksWorker.handler,
+  );
+  await boss.schedule(
+    autoVerifyTasksWorker.name,
+    '*/30 * * * *',
+    {},
+    { singletonKey: 'auto-verify-tasks' },
+  );
+
+  console.log(
+    '[pg-boss] Workers registered: assignment-expiration, financial-reconciliation, price-lock-cleanup, settlement, overdue-tasks, suspension-expiry, auto-verify-tasks',
+  );
 }
 
 export { boss };

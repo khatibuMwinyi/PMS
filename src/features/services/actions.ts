@@ -28,29 +28,26 @@ export async function createServiceType(formData: FormData) {
   }
 
   const raw = {
-    name:        formData.get('name'),
-    description: formData.get('description'),
-    basePrice:   formData.get('basePrice'),
-    priceUnit:   formData.get('priceUnit'),
-    category:    formData.get('category'),
-    rules:       formData.get('rules'),
+    name:         formData.get('name'),
+    description:  formData.get('description'),
+    basePrice:    formData.get('basePrice'),
+    priceUnit:    formData.get('priceUnit'),
+    pricingRules: formData.get('pricingRules'),
   };
 
   const validated = CreateServiceTypeSchema.parse({
     ...raw,
     basePrice: raw.basePrice ? parseFloat(raw.basePrice as string) : undefined,
-    rules: raw.rules ? JSON.parse(raw.rules as string) : undefined,
+    pricingRules: raw.pricingRules ? JSON.parse(raw.pricingRules as string) : undefined,
   });
 
   const serviceType = await serviceRepository.createServiceType({
-    name:        validated.name,
-    description: validated.description,
-    basePrice:   validated.basePrice,
-    priceUnit:   validated.priceUnit,
-    frequency:   validated.frequency,
-    category:    validated.category,
-    rules:       validated.rules || {},
-    isActive:    validated.isActive ?? true,
+    name:         validated.name,
+    description:  validated.description,
+    basePrice:    validated.basePrice,
+    priceUnit:    validated.priceUnit,
+    pricingRules: validated.pricingRules || {},
+    isActive:     validated.isActive ?? true,
   });
 
   return { success: true, serviceType };
@@ -63,19 +60,18 @@ export async function updateServiceType(id: string, formData: FormData) {
   }
 
   const raw = {
-    name:        formData.get('name'),
-    description: formData.get('description'),
-    basePrice:   formData.get('basePrice'),
-    priceUnit:   formData.get('priceUnit'),
-    category:    formData.get('category'),
-    rules:       formData.get('rules'),
-    isActive:    formData.get('isActive'),
+    name:         formData.get('name'),
+    description:  formData.get('description'),
+    basePrice:    formData.get('basePrice'),
+    priceUnit:    formData.get('priceUnit'),
+    pricingRules: formData.get('pricingRules'),
+    isActive:     formData.get('isActive'),
   };
 
   const validated = UpdateServiceTypeSchema.parse({
     ...raw,
     basePrice: raw.basePrice ? parseFloat(raw.basePrice as string) : undefined,
-    rules: raw.rules ? JSON.parse(raw.rules as string) : undefined,
+    pricingRules: raw.pricingRules ? JSON.parse(raw.pricingRules as string) : undefined,
     isActive: raw.isActive === 'true' ? true : raw.isActive === 'false' ? false : undefined,
   });
 

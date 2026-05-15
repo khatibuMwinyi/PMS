@@ -1,8 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Eye, X, Palette } from 'lucide-react';
+import dynamic from 'next/dynamic';
+
+const Option1 = dynamic(() => import('./page.option1'), { ssr: false });
+const Option2 = dynamic(() => import('./page.option2'), { ssr: false });
+const Option3 = dynamic(() => import('./page.option3'), { ssr: false });
 
 const designOptions = [
   {
@@ -10,21 +15,21 @@ const designOptions = [
     name: 'Luxury Modern',
     description: 'Elegant and sophisticated design with gold accents',
     preview: 'A luxurious, sophisticated design featuring elegant typography, gold accents, and premium feel. Perfect for high-end property management.',
-    component: () => import('./page.option1').then(m => m.default)
+    component: Option1
   },
   {
     id: 'option2',
     name: 'Modern Minimalist',
     description: 'Clean, minimalist design focusing on functionality',
     preview: 'A clean, minimalist design with ample whitespace and focus on user experience. Perfect for users who value simplicity and clarity.',
-    component: () => import('./page.option2').then(m => m.default)
+    component: Option2
   },
   {
     id: 'option3',
     name: 'Bold Contemporary',
     description: 'Dynamic, vibrant design with animations',
     preview: 'A bold, contemporary design with dynamic animations and vibrant colors. Perfect for making a strong statement and attracting attention.',
-    component: () => import('./page.option3').then(m => m.default)
+    component: Option3
   }
 ];
 

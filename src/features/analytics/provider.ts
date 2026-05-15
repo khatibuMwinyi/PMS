@@ -90,7 +90,7 @@ async function calculateEarnings(providerId: string) {
         providerId: providerId,
       },
       status: 'SETTLED',
-      type: 'CREDIT',
+      type: 'EARNING',
     },
   });
 
@@ -101,7 +101,7 @@ async function calculateEarnings(providerId: string) {
         providerId: providerId,
       },
       status: 'PENDING',
-      type: 'CREDIT',
+      type: 'EARNING',
     },
   });
 
@@ -126,7 +126,7 @@ async function calculateEarnings(providerId: string) {
     JOIN service_types st ON a.service_type_id = st.id
     WHERE wt.provider_id = ${providerId}
     AND wt.status = 'SETTLED'
-    AND wt.type = 'CREDIT'
+    AND wt.type = 'EARNING'
     GROUP BY st.name
     ORDER BY amount DESC
   ` as Array<{
@@ -145,7 +145,7 @@ async function calculateEarnings(providerId: string) {
         providerId: providerId,
       },
       status: 'SETTLED',
-      type: 'CREDIT',
+      type: 'EARNING',
       createdAt: {
         gte: weekStart,
         lte: weekEnd,
@@ -171,22 +171,13 @@ async function calculateEarnings(providerId: string) {
  * Calculate performance metrics
  */
 async function calculatePerformance(providerId: string) {
-  // Get assignments for rating calculation
-  const ratedAssignments = await prisma.assignment.findMany({
-    where: {
-      providerId: providerId,
-      status: 'COMPLETED',
-    },
-    select: {
-      rating: true,
-    },
+  // Rating placeholder — actual review/rating model TBD.
+  const providerForRating = await prisma.providerProfile.findUnique({
+    where: { id: providerId },
+    select: { rating: true },
   });
-
-  // Calculate average rating
-  const ratings = ratedAssignments.map(a => a.rating).filter(r => r !== null);
-  const rating = ratings.length > 0
-    ? ratings.reduce((sum, r) => sum + (r || 0), 0) / ratings.length
-    : 0;
+  const rating = providerForRating?.rating ?? 0;
+  const ratings: number[] = [];
 
   // Get total assignments
   const totalAssignments = await prisma.assignment.count({
@@ -248,7 +239,7 @@ async function getTaskStats(providerId: string) {
     prisma.task.count({
       where: {
         assignment: { providerId: providerId },
-        status: 'PENDING',
+        status: 'SCHEDULED',
       },
     }),
     prisma.assignment.count({
@@ -271,10 +262,7 @@ async function getTaskStats(providerId: string) {
     where: {
       providerId: providerId,
       status: 'ACCEPTED',
-      OR: [
-        { task: { checkInTime: { lte: weekFromNow } } },
-        { expiresAt: { lte: weekFromNow } },
-      ],
+      expiresAt: { lte: weekFromNow },
     },
     include: {
       serviceType: { select: { name: true } },
@@ -317,7 +305,7 @@ async function getTrends(providerId: string) {
           providerId: providerId,
         },
         status: 'SETTLED',
-        type: 'CREDIT',
+        type: 'EARNING',
         createdAt: {
           gte: dayStart,
           lte: dayEnd,
@@ -341,7 +329,7 @@ async function getTrends(providerId: string) {
           providerId: providerId,
         },
         status: 'SETTLED',
-        type: 'CREDIT',
+        type: 'EARNING',
         createdAt: {
           gte: weekStart,
           lte: weekEnd,
@@ -353,19 +341,8 @@ async function getTrends(providerId: string) {
     earnings30d.push(weekEarnings._sum.amount?.toNumber() || 0);
   }
 
-  // Rating trend (last 10 ratings)
-  const ratings = await prisma.assignment.findMany({
-    where: {
-      providerId: providerId,
-      status: 'COMPLETED',
-      rating: { not: null },
-    },
-    orderBy: { completedAt: 'desc' },
-    take: 10,
-    select: { rating: true },
-  });
-
-  const ratingTrend = ratings.map(a => a.rating || 0);
+  // Rating trend placeholder — actual rating model TBD.
+  const ratingTrend: number[] = [];
 
   return {
     earnings7d,

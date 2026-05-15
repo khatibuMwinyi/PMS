@@ -1,14 +1,17 @@
 import { z } from 'zod';
 
 // Default Dar es Salaam coordinates (city centre)
-export const DAR_ES_SALAAM_LAT =  -6.7924;
-export const DAR_ES_SALAAM_LNG =  39.2083;
+export const DAR_ES_SALAAM_LAT = -6.7924;
+export const DAR_ES_SALAAM_LNG = 39.2083;
 
-// Property type enum
-export const PropertyTypeEnum = z.enum(['APARTMENT', 'HOUSE', 'COMMERCIAL', 'VILLA', 'TOWNHOUSE']);
+export const PropertyTypeEnum = z.enum([
+  'APARTMENT_BUILDING',
+  'SINGLE_FAMILY',
+  'TOWNHOUSE',
+  'COMMERCIAL',
+]);
 export type PropertyType = z.infer<typeof PropertyTypeEnum>;
 
-// Image metadata type
 export interface ImageMetadata {
   url: string;
   caption?: string;
@@ -21,14 +24,14 @@ export const CreatePropertySchema = z.object({
   zone:      z.string().min(2, 'Neighbourhood / zone is required'),
   latitude:  z.coerce.number().min(-90).max(90).default(DAR_ES_SALAAM_LAT),
   longitude: z.coerce.number().min(-180).max(180).default(DAR_ES_SALAAM_LNG),
-  type:      PropertyTypeEnum.default('APARTMENT'),
+  type:      PropertyTypeEnum.default('SINGLE_FAMILY'),
   unitCount: z.coerce.number().min(1, 'At least 1 unit is required').default(1),
   imageUrls: z.array(z.string().url()).default([]),
 });
 
 export const UpdatePropertySchema = CreatePropertySchema.partial().extend({
   id: z.string().uuid(),
-  status: z.enum(['ACTIVE', 'INACTIVE', 'MAINTENANCE']).optional(),
+  status: z.enum(['ACTIVE', 'INACTIVE', 'PENDING']).optional(),
 });
 
 export const AddUnitSchema = z.object({
@@ -40,4 +43,4 @@ export const AddUnitSchema = z.object({
 
 export type CreatePropertyInput = z.infer<typeof CreatePropertySchema>;
 export type UpdatePropertyInput = z.infer<typeof UpdatePropertySchema>;
-export type AddUnitInput        = z.infer<typeof AddUnitSchema>;
+export type AddUnitInput = z.infer<typeof AddUnitSchema>;

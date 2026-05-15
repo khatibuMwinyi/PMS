@@ -1,7 +1,8 @@
 import { prisma } from '@/core/database/client';
 import { quoteRepository } from '../repositories';
-import { calculateQuote, createPriceLock, isLockActive, fireQuoteRequestedEvent, fireQuoteAcceptedEvent } from '@/features/pricing/engine';
+import { calculateQuote, createPriceLock } from '@/features/pricing/engine';
 import { validatePricingParams } from '@/features/pricing/engine';
+import { fireQuoteRequestedEvent, fireQuoteAcceptedEvent } from '@/core/events';
 import { QuoteStatus, CreateQuoteSchema } from '../types';
 
 export class QuoteService {
@@ -59,7 +60,7 @@ export class QuoteService {
       userId: params.ownerId,
       quoteId: quote.id,
       propertyName: property.name,
-      serviceTypeName: serviceType.name,
+      serviceType: serviceType.name,
       quotedPrice: quotedPrice.toNumber(),
     });
 
@@ -76,7 +77,11 @@ export class QuoteService {
     }
 
     await quoteRepository.updateStatus(quoteId, QuoteStatus.ACCEPTED);
-    await fireQuoteAcceptedEvent({ userId: quote.ownerId, quoteId: quote.id, quotedPrice: quote.quotedPrice });
+    await fireQuoteAcceptedEvent({
+      userId: quote.ownerId,
+      quoteId: quote.id,
+      quotedPrice: Number(quote.quotedPrice),
+    });
   }
 
   static async expireOldQuotes() {

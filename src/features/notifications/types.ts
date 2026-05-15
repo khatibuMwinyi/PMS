@@ -1,13 +1,14 @@
 import { z } from 'zod';
-import { NotificationType, NotificationEvent } from '@prisma/client';
 
-// ─── Notification Types ──────────────────────────────────
+// ─── Notification channel / event constants ─────────────────
 
-export const NotificationType = {
+export const NotificationChannel = {
   EMAIL: 'EMAIL',
   SMS: 'SMS',
   IN_APP: 'IN_APP',
+  PUSH: 'PUSH',
 } as const;
+export type NotificationChannel = (typeof NotificationChannel)[keyof typeof NotificationChannel];
 
 export const NotificationEvent = {
   AUTH_REGISTER: 'AUTH_REGISTER',
@@ -18,12 +19,13 @@ export const NotificationEvent = {
   TASK_COMPLETED: 'TASK_COMPLETED',
   PAYMENT_RECEIVED: 'PAYMENT_RECEIVED',
 } as const;
+export type NotificationEvent = (typeof NotificationEvent)[keyof typeof NotificationEvent];
 
-// ─── Zod Schemas ───────────────────────────────────────
+// ─── Zod schemas ────────────────────────────────────────────
 
 export const CreateNotificationSchema = z.object({
-  userId: z.string().uuid(),
-  type: z.enum(['EMAIL', 'SMS', 'IN_APP']),
+  recipientId: z.string().uuid(),
+  channel: z.enum(['EMAIL', 'SMS', 'IN_APP', 'PUSH']),
   event: z.string().min(1),
   payload: z.record(z.any()).optional(),
 });
@@ -33,10 +35,8 @@ export const MarkReadSchema = z.object({
 });
 
 export const MarkAllReadSchema = z.object({
-  userId: z.string().uuid(),
+  recipientId: z.string().uuid(),
 });
-
-// ─── TypeScript Types ───────────────────────────────────
 
 export type CreateNotificationInput = z.infer<typeof CreateNotificationSchema>;
 export type MarkReadInput = z.infer<typeof MarkReadSchema>;
@@ -48,31 +48,31 @@ export interface NotificationPayload {
 
 export interface NotificationWithUser {
   id: string;
-  userId: string;
-  type: string;
+  recipientId: string;
+  channel: string;
   event: string;
   payload: NotificationPayload | null;
   isRead: boolean;
   createdAt: Date;
-  user?: {
+  recipient?: {
     id: string;
     email: string;
     role: string;
   };
 }
 
-// ─── Event Templates ────────────────────────────────────
+// ─── Event templates ────────────────────────────────────────
 
 export interface EventTemplate {
-  type: keyof typeof NotificationType;
-  event: keyof typeof NotificationEvent;
+  channel: NotificationChannel;
+  event: NotificationEvent;
   getPayload: (data: any) => NotificationPayload;
   getMessage: (data: any) => string;
 }
 
 export const EVENT_TEMPLATES: Record<string, EventTemplate> = {
   AUTH_REGISTER: {
-    type: 'IN_APP',
+    channel: 'IN_APP',
     event: 'AUTH_REGISTER',
     getPayload: (data) => ({
       userId: data.userId,
@@ -83,7 +83,7 @@ export const EVENT_TEMPLATES: Record<string, EventTemplate> = {
     getMessage: (data) => `Welcome ${data.email}! Your account has been created.`,
   },
   QUOTE_REQUESTED: {
-    type: 'IN_APP',
+    channel: 'IN_APP',
     event: 'QUOTE_REQUESTED',
     getPayload: (data) => ({
       quoteId: data.quoteId,
@@ -95,7 +95,7 @@ export const EVENT_TEMPLATES: Record<string, EventTemplate> = {
     getMessage: (data) => `New quote requested for ${data.propertyName} - ${data.serviceType}`,
   },
   QUOTE_ACCEPTED: {
-    type: 'IN_APP',
+    channel: 'IN_APP',
     event: 'QUOTE_ACCEPTED',
     getPayload: (data) => ({
       quoteId: data.quoteId,
@@ -106,7 +106,7 @@ export const EVENT_TEMPLATES: Record<string, EventTemplate> = {
     getMessage: (data) => `Quote accepted! Agreement created.`,
   },
   AGREEMENT_SUBMITTED: {
-    type: 'IN_APP',
+    channel: 'IN_APP',
     event: 'AGREEMENT_SUBMITTED',
     getPayload: (data) => ({
       agreementId: data.agreementId,

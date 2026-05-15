@@ -1,16 +1,14 @@
 import NextAuth from 'next-auth';
-import { PrismaAdapter } from '@auth/prisma-adapter'; // Re-add PrismaAdapter
 import Credentials from 'next-auth/providers/credentials';
 import { prisma } from '@/core/database/client';
-import bcrypt from 'bcryptjs'; // For password comparison
-import { UserRole } from '@prisma/client'; // For session typing
-import type { DefaultSession } from 'next-auth'; // For session typing
+import bcrypt from 'bcryptjs';
+import { UserRole } from '@prisma/client';
+import type { DefaultSession } from 'next-auth';
 
 import { jwtCallback, sessionCallback } from './callbacks';
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  adapter: PrismaAdapter(prisma), // Use PrismaAdapter for session management
-  session: { strategy: 'jwt' }, // Keep JWT strategy for statelessness
+  session: { strategy: 'jwt', maxAge: 30 * 24 * 60 * 60 },
   providers: [ // Providers (e.g., Credentials) to be added in Phase 1 Step 2
     Credentials({
       // Define expected fields for credentials provider

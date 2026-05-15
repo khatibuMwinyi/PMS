@@ -1,7 +1,10 @@
 import { prisma } from '@/core/database/client';
 import Decimal from 'decimal.js';
+import { nanoid } from 'nanoid';
+import { addDays } from 'date-fns';
 import { AgreementStatus, CreateAgreementSchema, UpdateAgreementStatusSchema } from './types';
-import { getQuoteById } from '@/features/quotes/actions';
+import { getQuoteDetails } from '@/features/quotes/actions';
+import { findBestProvider } from '@/features/services/queries';
 
 // Helper to write audit event
 async function writeAudit(params: {
@@ -67,7 +70,7 @@ export async function createAgreementFromQuote(
   }
 
   // Get the quote - must be in ACCEPTED status
-  const quote = await getQuoteById(params.quoteId);
+  const quote = await getQuoteDetails(params.quoteId);
   
   if (!quote) {
     throw new Error('Quote not found');
@@ -92,8 +95,10 @@ export async function createAgreementFromQuote(
       quoteId: params.quoteId,
       ownerId: params.ownerId,
       propertyId: params.propertyId,
-      quotedPrice: quote.quotedPrice, // Copy from quote - immutable
-      status: AgreementStatus.QUOTED, // Initial status
+      serviceTypeId: quote.serviceTypeId,
+      quotedPrice: quote.quotedPrice,
+      frequency: quote.frequency ?? 'ONE_TIME',
+      status: AgreementStatus.QUOTED,
     },
   });
 
@@ -119,34 +124,91 @@ export async function createAgreementFromQuote(
 }
 
 /**
- * Submit agreement (transitions status to PENDING_ASSIGNMENT)
+ * Submit agreement:
+ *   - Move to PENDING_ASSIGNMENT
+ *   - Find best provider via §XI scoring
+ *   - Create Assignment (6h offer) with precomputed 80/20 split
+ *   - Generate Invoice (Owner→Oweru, 7 day due date)
  */
-export async function submitAgreement(agreementId: string): Promise<void> {
+export async function submitAgreement(agreementId: string): Promise<{ assignmentId: string; invoiceId: string }> {
   const agreement = await prisma.agreement.findUnique({
     where: { id: agreementId },
   });
-
-  if (!agreement) {
-    throw new Error('Agreement not found');
-  }
-
+  if (!agreement) throw new Error('Agreement not found');
   if (agreement.status !== AgreementStatus.QUOTED) {
     throw new Error(`Agreement cannot be submitted. Current status: ${agreement.status}`);
   }
 
-  // Capture old status for audit
   const oldStatus = agreement.status;
 
-  // Update status to PENDING_ASSIGNMENT
-  const updatedAgreement = await prisma.agreement.update({
-    where: { id: agreementId },
-    data: { 
-      status: AgreementStatus.PENDING_ASSIGNMENT,
-      updatedAt: new Date(),
-    },
+  const provider = await findBestProvider(
+    agreement.propertyId,
+    agreement.serviceTypeId,
+    10,
+    0,
+  );
+
+  const totalAmount = new Decimal(agreement.quotedPrice);
+  const providerPayout = totalAmount.times(0.8);
+  const platformFee = totalAmount.times(0.2);
+  const offerExpiresAt = new Date(Date.now() + 6 * 60 * 60 * 1000);
+  const dueAt = addDays(new Date(), 7);
+
+  const result = await prisma.$transaction(async (tx) => {
+    await tx.agreement.update({
+      where: { id: agreementId },
+      data: {
+        status: provider ? AgreementStatus.PENDING_ASSIGNMENT : AgreementStatus.PENDING_ASSIGNMENT,
+        updatedAt: new Date(),
+      },
+    });
+
+    const assignment = await tx.assignment.create({
+      data: {
+        id: nanoid(),
+        agreementId,
+        propertyId: agreement.propertyId,
+        serviceTypeId: agreement.serviceTypeId,
+        providerId: provider?.id ?? null,
+        status: provider ? 'PENDING_ACCEPTANCE' : 'NO_PROVIDER_AVAILABLE',
+        totalAmount: totalAmount.toString(),
+        providerPayout: providerPayout.toString(),
+        platformFee: platformFee.toString(),
+        expiresAt: offerExpiresAt,
+      },
+    });
+
+    const invoice = await tx.invoice.create({
+      data: {
+        id: nanoid(),
+        agreementId,
+        amount: totalAmount.toString(),
+        status: 'PENDING',
+        dueAt,
+      },
+    });
+
+    if (!provider) {
+      await tx.staffTicket.create({
+        data: {
+          id: nanoid(),
+          type: 'TECHNICAL',
+          priority: 'HIGH',
+          title: `No provider available for Agreement ${agreementId}`,
+          content: {
+            agreementId,
+            propertyId: agreement.propertyId,
+            serviceTypeId: agreement.serviceTypeId,
+            reason: 'No eligible providers in radius',
+          },
+          status: 'PENDING',
+        },
+      });
+    }
+
+    return { assignmentId: assignment.id, invoiceId: invoice.id };
   });
 
-  // Write audit event for status change
   await writeAudit({
     actorId: agreement.ownerId,
     entityType: 'Agreement',
@@ -156,7 +218,6 @@ export async function submitAgreement(agreementId: string): Promise<void> {
     newValue: { status: AgreementStatus.PENDING_ASSIGNMENT },
   });
 
-  // Fire AGREEMENT_SUBMITTED event
   const { fireAgreementSubmittedEvent } = await import('@/core/events');
   await fireAgreementSubmittedEvent({
     userId: agreement.ownerId,
@@ -165,7 +226,7 @@ export async function submitAgreement(agreementId: string): Promise<void> {
     status: AgreementStatus.PENDING_ASSIGNMENT,
   });
 
-  return;
+  return result;
 }
 
 /**

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Eye, X, Palette } from 'lucide-react';
 
@@ -54,7 +54,7 @@ export default function DesignPreview() {
     setTimeout(() => setSelectedOption(null), 300);
   };
 
-  const SelectedComponent = selectedOption ? designOptions.find(opt => opt.id === selectedOption)?.component : null;
+  const SelectedComponent = selectedOption ? designOptions.find(opt => opt.id === selectedOption)?.component as React.ComponentType | null : null;
 
   return (
     <>

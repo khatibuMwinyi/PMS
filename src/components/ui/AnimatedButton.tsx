@@ -46,8 +46,8 @@ export function AnimatedButton({
       disabled={disabled || isLoading}
       whileHover={{ scale: disabled || isLoading ? 1 : 1.02 }}
       whileTap={{ scale: disabled || isLoading ? 1 : 0.98 }}
-      transition={{ type: 'spring', stiffness: 400, damping: 17 }}
-      {...props}
+      transition={{ type: 'spring' as const, stiffness: 400, damping: 17 }}
+      {...(props as any)}
     >
       <motion.span
         className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"

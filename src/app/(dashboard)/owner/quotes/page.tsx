@@ -20,7 +20,7 @@ async function QuotesContent() {
     <div>
       {quotes.length > 0 ? (
         <QuoteList 
-          quotes={quotes.map(q => ({
+          quotes={quotes.map((q: any) => ({
             id: q.id,
             propertyName: q.propertyName,
             serviceTypeName: q.serviceTypeName,

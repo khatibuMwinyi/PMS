@@ -10,17 +10,7 @@ export async function getProviderProfile(providerId: string) {
     where: { id: providerId },
     include: {
       user: {
-        select: {
-          id: true,
-          email: true,
-          status: true,
-        },
-      },
-      assignments: {
-        where: {
-          status: { in: ['ACCEPTED', 'COMPLETED'] },
-        },
-        _count: true,
+        select: { id: true, email: true, status: true },
       },
       wallet: {
         select: {
@@ -29,12 +19,12 @@ export async function getProviderProfile(providerId: string) {
           pendingBalance: true,
         },
       },
+      _count: { select: { assignments: true } },
     },
   });
 
   if (!provider) return null;
 
-  // Calculate performance metrics
   const totalAssignments = provider._count.assignments;
   const completedAssignments = await prisma.assignment.count({
     where: {

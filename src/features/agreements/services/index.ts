@@ -1,11 +1,18 @@
 import { agreementRepository } from '../repositories';
 
 export class AgreementService {
-  static async createFromQuote(quoteId: string, ownerId: string, propertyId: string, quotedPrice: number) {
+  static async createFromQuote(
+    quoteId: string,
+    ownerId: string,
+    propertyId: string,
+    serviceTypeId: string,
+    quotedPrice: number,
+  ) {
     return agreementRepository.create({
       quoteId,
       ownerId,
       propertyId,
+      serviceTypeId,
       quotedPrice,
       status: 'QUOTED',
     });

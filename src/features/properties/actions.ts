@@ -92,8 +92,8 @@ export async function addUnit(formData: FormData): Promise<{ success: boolean; e
 
   await prisma.unit.create({
     data: {
-      name: unitName,
-      type: unitType,
+      unitName,
+      unitType,
       squareFootage,
       propertyId: property.id,
     },
@@ -105,7 +105,7 @@ export async function addUnit(formData: FormData): Promise<{ success: boolean; e
 
 export async function updatePropertyStatus(
   propertyId: string,
-  status: 'ACTIVE' | 'INACTIVE' | 'MAINTENANCE'
+  status: 'ACTIVE' | 'INACTIVE' | 'PENDING'
 ): Promise<{ success: boolean; error?: string }> {
   const session = await auth();
   if (!session?.user || session.user.role !== 'OWNER') {

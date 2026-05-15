@@ -22,6 +22,8 @@ interface EmptyStateProps {
   className?: string;
   /** Animation variant */
   variant?: 'default' | 'compact';
+  /** Children content */
+  children?: React.ReactNode;
 }
 
 /**
@@ -126,6 +128,17 @@ export const EmptyState = React.forwardRef<HTMLDivElement, EmptyStateProps>(
             </motion.div>
           )}
         </div>
+
+        {/* Children */}
+        {children && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.15 }}
+          >
+            {children}
+          </motion.div>
+        )}
 
         {/* Additional info */}
         {variant === 'default' && (

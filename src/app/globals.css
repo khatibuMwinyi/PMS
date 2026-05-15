@@ -1,3 +1,9 @@
+/* Import Inter font from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* Import Material Symbols Outlined */
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -6,12 +12,6 @@
    OPSMP DESIGN SYSTEM — CSS CUSTOM PROPERTIES
    Never hardcode hex values in components; use these tokens.
 ───────────────────────────────────────────────── */
-
-/* Import Inter font from Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-
-/* Import Material Symbols Outlined */
-@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap');
 
 :root {
   /* ─── OPSMP BRAND COLORS ─────────────────── */
@@ -223,12 +223,12 @@ html, body {
 /* ─── Component Classes ────────────────────── */
 @layer components {
   .card {
-    @apply bg-surface-card rounded-lg shadow-card border border-border-subtle;
+    @apply bg-surface rounded-lg shadow-card border border-border-subtle;
   }
 
   .input {
     @apply w-full px-4 py-2.5 rounded-md border border-border-subtle;
-    @apply bg-surface-card text-text-primary placeholder:text-text-muted;
+    @apply bg-surface text-text-primary placeholder:text-text-muted;
     @apply focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent;
     @apply transition-all duration-base;
   }

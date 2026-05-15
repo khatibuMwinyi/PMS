@@ -23,7 +23,7 @@ export async function listAgreementsByOwner(ownerId: string) {
   }));
 }
 
-export async function listAgreementsByStatus(status: string) {
+export async function listAgreementsByStatus(status: AgreementStatus) {
   return agreementRepository.findByStatus(status);
 }
 

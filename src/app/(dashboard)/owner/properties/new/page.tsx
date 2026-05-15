@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 import { auth } from '@/core/auth';
-import { RoleGuard } from '@/components/RoleGuard';
+import RoleGuard from '@/components/RoleGuard';
 import { DashboardShell } from '@/components/layout/DashboardShell';
 import { CreatePropertyForm } from '@/features/properties/components/CreatePropertyForm';
 

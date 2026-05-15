@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Bell, X, CheckCheck, Loader2 } from 'lucide-react';
 import { cn } from '@/core/lib/utils';
-import { getMyNotifications, getMyUnreadCount, markNotificationAsRead, markAllNotificationsAsRead } from '@/features/notifications/queries';
+import { getUserNotifications, getUnreadNotificationCount, markNotificationAsRead, markAllNotificationsAsRead } from '@/features/notifications/actions';
 import type { NotificationWithUser } from '@/features/notifications/types';
 
 export function NotificationBell() {
@@ -17,8 +17,8 @@ export function NotificationBell() {
     try {
       setIsLoading(true);
       const [notes, count] = await Promise.all([
-        getMyNotifications(20, 0),
-        getMyUnreadCount(),
+        getUserNotifications(),
+        getUnreadNotificationCount(),
       ]);
       setNotifications(notes as NotificationWithUser[]);
       setUnreadCount(count);

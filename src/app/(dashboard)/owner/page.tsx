@@ -6,7 +6,7 @@ import { PortfolioOverview } from '@/features/dashboard/components/PortfolioOver
 import { FinancialSummaryCards } from '@/features/dashboard/components/FinancialSummaryCards';
 import { PropertyCardGrid } from '@/features/dashboard/components/PropertyCardGrid';
 import { ServiceRequestsTable } from '@/features/dashboard/components/ServiceRequestsTable';
-import { RoleGuard } from '@/components/RoleGuard';
+import RoleGuard from '@/components/RoleGuard';
 
 export const dynamic = 'force-dynamic';
 

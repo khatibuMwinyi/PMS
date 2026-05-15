@@ -75,7 +75,7 @@ export default function Footer() {
           >
             <Link href="/" className="inline-flex items-center gap-2 mb-6">
               <Image
-                src="/oweru/logo.jpeg"
+                src="/oweru.jpeg"
                 alt="Oweru Logo"
                 width={120}
                 height={40}

@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import { auth } from '@/core/auth';
 import { redirect } from 'next/navigation';
-import { RoleGuard } from '@/components/RoleGuard';
+import RoleGuard from '@/components/RoleGuard';
 import { DashboardShell } from '@/components/layout/DashboardShell';
 import { ServiceList } from '@/features/services/components/ServiceList';
 import { getServiceTypes } from '@/features/services/actions';
@@ -42,15 +42,15 @@ async function AdminServicesContent() {
 
   const services = await getServiceTypes(true); // include inactive
 
-  const serviceCards: ServiceWithCounts[] = services.map((s) => ({
+  const serviceCards: ServiceWithCounts[] = services.map((s: any) => ({
     id:          s.id,
     name:        s.name,
     description: s.description || '',
     basePrice:   Number(s.basePrice),
-    priceUnit:   s.priceUnit,
-    category:    s.category,
-    isActive:    s.isActive,
-    _count:      (s as any)._count,
+    priceUnit:   'PER_UNIT' as const,
+    category:    'general',
+    isActive:    s.isActive ?? true,
+    _count:      s._count || { assignments: 0, quotes: 0 },
   }));
 
   return (

@@ -8,7 +8,7 @@ export type ButtonVariant = 'default' | 'primary' | 'secondary' | 'ghost' | 'out
 export type ButtonSize = 'sm' | 'md' | 'lg';
 export type ButtonState = 'default' | 'loading' | 'disabled' | 'success';
 
-interface UnifiedButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface UnifiedButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /** Visual style variant */
   variant?: ButtonVariant;
   /** Size of the button */

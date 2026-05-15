@@ -3,7 +3,7 @@ import { Wrench, Tag, DollarSign } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { StatusBadge } from '@/components/shared/StatusBadge';
 
-interface ServiceCardProps {
+export interface ServiceCardProps {
   service: {
     id:          string;
     name:        string;

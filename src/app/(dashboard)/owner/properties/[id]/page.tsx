@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import { notFound, redirect } from 'next/navigation';
 import { auth } from '@/core/auth';
-import { RoleGuard } from '@/components/RoleGuard';
+import RoleGuard from '@/components/RoleGuard';
 import { DashboardShell } from '@/components/layout/DashboardShell';
 import { PropertyDetail } from '@/features/properties/components/PropertyDetail';
 import { getPropertyForOwner } from '@/features/properties/actions';
@@ -53,8 +53,8 @@ async function PropertyDetailContent({ propertyId }: { propertyId: string }) {
           name:             property.name,
           encryptedAddress: property.encryptedAddress,
           zone:             property.zone,
-          type:             property.type || undefined,
-          status:           property.status,
+          type:             (property as any).type || 'residential',
+          status:           (property as any).status || 'active',
           imageUrls:        property.imageUrls || [],
           units:            property.units || [],
           createdAt:        property.createdAt,

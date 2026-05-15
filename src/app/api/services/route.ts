@@ -19,16 +19,12 @@ export async function GET() {
   try {
     const services = await prisma.serviceType.findMany({
       where: isAdminOrStaff ? {} : { isActive: true },
-      orderBy: { category: 'asc' },
       select: {
         id:          true,
         name:        true,
         description: true,
         basePrice:   true,
-        priceUnit:   true,
-        category:    true,
         isActive:    true,
-        rules:       true,
         _count: {
           select: {
             quotes: true,
@@ -37,17 +33,14 @@ export async function GET() {
       },
     });
 
-    // Transform to include formatted price and rules
-    const catalog = services.map((service) => ({
+    // Transform to include formatted price
+    const catalog = services.map((service: any) => ({
       id:          service.id,
       name:        service.name,
       description: service.description,
       basePrice:   Number(service.basePrice),
-      priceUnit:   service.priceUnit,
-      category:    service.category,
       isActive:    service.isActive,
-      rules:       service.rules,
-      quoteCount:  service._count.quotes,
+      quoteCount:  service._count?.quotes || 0,
     }));
 
     return NextResponse.json({

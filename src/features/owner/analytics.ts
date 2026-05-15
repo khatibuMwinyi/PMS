@@ -21,14 +21,14 @@ export async function getOwnerAnalytics() {
     prisma.property.count({ where: { ownerId: owner.id } }),
     prisma.assignment.findMany({
       where: { property: { ownerId: owner.id }, status: 'COMPLETED' },
-      select: { serviceType: { select: { basePrice: true } } },
+      select: { totalAmount: true },
     }),
   ])
 
-  const totalRevenue = completedAssignments.reduce((sum, a) => {
-    const price = a.serviceType.basePrice?.toNumber?.() ?? Number(a.serviceType.basePrice)
-    return sum + price
-  }, 0)
+  const totalRevenue = completedAssignments.reduce(
+    (sum, a) => sum + Number(a.totalAmount),
+    0,
+  )
 
   return {
     totalProperties,

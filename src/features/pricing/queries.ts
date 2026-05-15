@@ -39,7 +39,7 @@ export async function listQuotesByOwner(ownerId: string) {
 /**
  * List quotes by status
  */
-export async function listQuotesByStatus(status: string) {
+export async function listQuotesByStatus(status: import('@prisma/client').QuoteStatus) {
   return prisma.quote.findMany({
     where: { status },
     include: {
