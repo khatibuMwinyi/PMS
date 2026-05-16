@@ -12,6 +12,7 @@ import {
   PlusCircle,
   LifeBuoy,
   BookOpen,
+  Users,
 } from 'lucide-react';
 import { cn } from '@/core/lib/utils';
 
@@ -35,11 +36,12 @@ const NAV_ITEMS: Record<string, NavItem[]> = {
     { href: '/staff/assignments', label: 'Assignments', icon: ClipboardList },
   ],
   OWNER: [
-    { href: '/owner/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { href: '/owner/properties', label: 'Properties', icon: Home },
-    { href: '/owner/services', label: 'Services', icon: Wrench },
-    { href: '/owner/leases', label: 'Leases', icon: FileText },
-    { href: '/owner/analytics', label: 'Analytics', icon: BarChart3 },
+    { href: '/owner/dashboard',       label: 'Dashboard',       icon: LayoutDashboard },
+    { href: '/owner/properties',      label: 'Properties',      icon: Home },
+    { href: '/owner/work-orders',     label: 'Work Orders',     icon: Wrench },
+    { href: '/owner/financials',      label: 'Financials',      icon: BarChart3 },
+    { href: '/owner/service-network', label: 'Service Network', icon: Users },
+    { href: '/owner/reports',         label: 'Reports',         icon: FileText },
   ],
   PROVIDER: [
     { href: '/provider/assignments', label: 'Assignments', icon: ClipboardList },
@@ -100,11 +102,11 @@ export function Sidebar({ role, userName }: SidebarProps) {
       {role === 'OWNER' && (
         <div className="p-3 border-t border-[var(--border-subtle)]">
           <Link
-            href="/owner/services/new"
+            href="/owner/work-orders"
             className="flex items-center justify-center gap-2 w-full rounded-lg bg-[var(--brand-gold)] px-4 py-2.5 text-sm font-medium text-[var(--brand-primary)] hover:bg-[var(--brand-gold-dark)] transition-colors duration-120"
           >
             <PlusCircle size={16} />
-            New Service Request
+            New Work Order
           </Link>
         </div>
       )}
