@@ -1,131 +1,145 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { useRouter } from 'next/navigation';
-import { z } from 'zod';
-import { useSearchParams } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Home, Wrench, ArrowLeft } from 'lucide-react';
 
-// Import role-specific forms
-import { RoleToggle } from './RoleToggle';
+import { RoleSelectCard } from '@/components/auth/RoleSelectCard';
+import { Button } from '@/components/ui/Button';
 import { OwnerRegisterForm } from './OwnerRegisterForm';
 import { ProviderRegisterForm } from './ProviderRegisterForm';
 
-// Validation schema for base fields
-const RegisterSchema = z.object({
-  email: z.string().email('Enter a valid email'),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
-});
-
 type Role = 'owner' | 'provider';
+type Step = 'role' | 'form';
+
+const ROLES: Array<{
+  role: Role;
+  title: string;
+  description: string;
+  Icon: typeof Home;
+}> = [
+  {
+    role: 'owner',
+    title: 'Property Owner',
+    description: 'Book trusted services for my property and track work in real time.',
+    Icon: Home,
+  },
+  {
+    role: 'provider',
+    title: 'Service Provider',
+    description: 'Offer my services and earn through Oweru’s vetted network.',
+    Icon: Wrench,
+  },
+];
 
 export default function RegisterForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [role, setRole] = useState<Role>('owner');
+  const [step, setStep] = useState<Step>('role');
+  const [role, setRole] = useState<Role | null>(null);
   const [selectedPlan, setSelectedPlan] = useState<string>('');
-  const [password, setPassword] = useState('');
-  const [passwordStrength, setPasswordStrength] = useState<'weak' | 'medium' | 'strong'>('weak');
 
-  // Preselect plan from URL query param
   useEffect(() => {
     const plan = searchParams.get('plan');
     if (plan) setSelectedPlan(plan);
   }, [searchParams]);
-
-  // Calculate password strength (UI only)
-  useEffect(() => {
-    const strength = calculatePasswordStrength(password);
-    setPasswordStrength(strength);
-  }, [password]);
-
-  const calculatePasswordStrength = (pwd: string): 'weak' | 'medium' | 'strong' => {
-    if (pwd.length >= 12) return 'strong';
-    if (pwd.length >= 8) return 'medium';
-    return 'weak';
-  };
-
-  const getStrengthColor = (strength: 'weak' | 'medium' | 'strong') => {
-    switch (strength) {
-      case 'strong': return 'text-[var(--state-success)]';
-      case 'medium': return 'text-[var(--state-warning)]';
-      default: return 'text-[var(--text-muted)]';
-    }
-  };
 
   const handleSuccess = () => {
     router.push('/login?registered=true');
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto space-y-6">
-      <motion.div
-        className="text-center"
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
-      >
-        <h2 className="text-2xl font-bold text-white mb-2">Create Account</h2>
-        <p className="text-[var(--text-muted)]">Join Oweru today</p>
-      </motion.div>
+    <div className="w-full">
+      <AnimatePresence mode="wait">
+        {step === 'role' ? (
+          <motion.div
+            key="role"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <header className="mb-8 text-center">
+              <h1 className="text-2xl font-semibold text-white mb-2">I am a...</h1>
+              <p className="text-sm text-white/55">Choose your role to get started</p>
+            </header>
 
-      <motion.div
-        className="relative bg-[var(--surface-card)] p-6 rounded-2xl shadow-card border border-[var(--border-default)]"
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -10 }}
-      >
-        {/* Role Toggle */}
-        <div className="mb-6">
-          <RoleToggle value={role} onChange={setRole} />
-        </div>
+            <div className="space-y-3 mb-6">
+              {ROLES.map((r) => (
+                <RoleSelectCard
+                  key={r.role}
+                  role={r.role}
+                  title={r.title}
+                  description={r.description}
+                  Icon={r.Icon}
+                  selected={role === r.role}
+                  onSelect={(value) => setRole(value as Role)}
+                />
+              ))}
+            </div>
 
-        {/* Role-Specific Forms */}
-        <div className="space-y-6">
-          {role === 'owner' && (
-            <OwnerRegisterForm onSuccess={handleSuccess} />
-          )}
-          {role === 'provider' && (
-            <ProviderRegisterForm onSuccess={handleSuccess} />
-          )}
-        </div>
+            {selectedPlan && (
+              <div className="mb-6 p-3 rounded-lg border border-[var(--brand-gold)]/30 bg-[var(--brand-gold)]/10">
+                <p className="text-sm text-white">
+                  Selected plan: <span className="text-[var(--brand-gold)] font-medium">{selectedPlan}</span>
+                </p>
+              </div>
+            )}
 
-        {/* Password Strength Indicator */}
-        <div className="mt-4 pt-4 border-t border-[var(--border-default)]">
-          <div className="flex items-center gap-2 mb-2">
-            <span className="text-sm font-medium text-white">Password Strength: </span>
-            <div className={`h-2 rounded-full transition-all ${getStrengthColor(passwordStrength)}`} style={{ width: '100px' }} />
-            <span className="text-xs text-[var(--text-muted)]">{passwordStrength}</span>
-          </div>
-          {password && (
-            <motion.span
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className={`text-xs ${getStrengthColor(passwordStrength)}`}
+            <Button
+              type="button"
+              variant="primary"
+              disabled={!role}
+              onClick={() => role && setStep('form')}
             >
-              {passwordStrength === 'weak' && 'Consider adding uppercase, numbers, or symbols'}
-              {passwordStrength === 'medium' && 'Good strength, but can be stronger'}
-              {passwordStrength === 'strong' && 'Strong password! ✅'}
-            </motion.span>
-          )}
-        </div>
+              Continue
+            </Button>
 
-        {/* Plan Selection */}
-        {selectedPlan && (
-          <div className="mt-4 p-3 bg-[var(--surface-overlay)] rounded-lg border border-[var(--brand-gold)]/20">
-            <p className="text-sm text-white font-medium">Selected Plan: <span className="text-[var(--brand-gold)]">{selectedPlan}</span></p>
-            <p className="text-xs text-[var(--text-muted)] mt-1">Plan will be applied during registration</p>
-          </div>
+            <p className="mt-6 text-center text-sm text-white/55">
+              Already have an account?{' '}
+              <a
+                href="/login"
+                className="text-[var(--brand-gold)] font-medium hover:text-[var(--brand-gold-light)] transition-colors"
+              >
+                Sign in
+              </a>
+            </p>
+          </motion.div>
+        ) : (
+          <motion.div
+            key="form"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 20 }}
+            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <header className="mb-6">
+              <button
+                type="button"
+                onClick={() => setStep('role')}
+                className="inline-flex items-center gap-1.5 text-sm text-white/55 hover:text-white transition-colors mb-3 group"
+              >
+                <ArrowLeft size={14} className="transition-transform group-hover:-translate-x-0.5" />
+                Change role
+              </button>
+              <h1 className="text-2xl font-semibold text-white mb-1">
+                {role === 'owner' ? 'Owner registration' : 'Provider registration'}
+              </h1>
+              <p className="text-sm text-white/55">
+                {role === 'owner'
+                  ? 'Tell us a bit about you and your property.'
+                  : 'Tell us about your business and services.'}
+              </p>
+            </header>
+
+            <div>
+              {role === 'owner' && <OwnerRegisterForm onSuccess={handleSuccess} />}
+              {role === 'provider' && <ProviderRegisterForm onSuccess={handleSuccess} />}
+            </div>
+          </motion.div>
         )}
-      </motion.div>
+      </AnimatePresence>
     </div>
   );
 }
-
-// Helper component for role indicator pins
-const RolePin: React.FC<{ icon: string; label: string }> = ({ icon, label }) => (
-  <div className="flex items-center gap-2 text-white/70 text-xs">
-    <span>{icon}</span>
-    <span>{label}</span>
-  </div>
-);

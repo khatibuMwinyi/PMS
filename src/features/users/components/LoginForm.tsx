@@ -61,112 +61,82 @@ export function LoginForm() {
 
   return (
     <motion.div
-      className="w-full space-y-6"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay: 0.4 }}
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+      className="w-full"
     >
-      <motion.div
-        className="text-center mb-8"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5 }}
-      >
-        <h2 className="text-2xl font-bold text-white mb-2">Welcome Back</h2>
-        <p className="text-sm text-white/60">Sign in to continue to Oweru</p>
-      </motion.div>
+      <header className="mb-8 text-center">
+        <h1 className="text-2xl font-semibold text-white mb-2">Welcome back</h1>
+        <p className="text-sm text-white/55">Sign in to continue to Oweru</p>
+      </header>
 
       {serverError && (
-        <motion.div
-          className="px-4 py-3 rounded-xl bg-red-500/10 border border-red-500/30"
-          initial={{ opacity: 0, x: -10 }}
-          animate={{ opacity: 1, x: 0 }}
+        <div
+          role="alert"
+          className="mb-5 px-4 py-3 rounded-xl bg-red-500/10 border border-red-500/30"
         >
-          <p className="text-sm text-red-400">{serverError}</p>
-        </motion.div>
+          <p className="text-sm text-red-300">{serverError}</p>
+        </div>
       )}
 
-      <form onSubmit={handleSubmit(onSubmit)} noValidate>
-        <motion.div
-          className="space-y-5"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.6 }}
-        >
+      <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
+        <Input
+          label="Email address"
+          type="email"
+          autoComplete="email"
+          error={errors.email?.message}
+          {...register('email')}
+        />
+
+        <div className="relative">
           <Input
-            label="Email Address"
-            type="email"
-            autoComplete="email"
-            state={errors.email ? 'error' : 'default'}
-            error={errors.email?.message}
-            {...register('email')}
-            aria-describedby={errors.email ? 'email-error' : undefined}
+            label="Password"
+            type={showPassword ? 'text' : 'password'}
+            autoComplete="current-password"
+            error={errors.password?.message}
+            {...register('password')}
           />
-
-          <div className="relative">
-            <Input
-              label="Password"
-              type={showPassword ? 'text' : 'password'}
-              autoComplete="current-password"
-              state={errors.password ? 'error' : 'default'}
-              error={errors.password?.message}
-              {...register('password')}
-              leftIcon={showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-              aria-describedby={errors.password ? 'password-error' : undefined}
-            />
-            <button
-              type="button"
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-[var(--brand-gold)] transition-colors"
-              onClick={() => setShowPassword((v) => !v)}
-              aria-label={showPassword ? 'Hide password' : 'Show password'}
-              aria-pressed={showPassword}
-            >
-              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-            </button>
-          </div>
-
-          <div className="text-right">
-            <a
-              href="/forgot-password"
-              className="text-sm text-[var(--brand-gold)] hover:text-[var(--brand-gold-light)] transition-colors"
-            >
-              Forgot password?
-            </a>
-          </div>
-
-          <Button
-            type="submit"
-            loading={isSubmitting}
-            variant="primary"
-            className="mt-2"
+          <button
+            type="button"
+            className="absolute right-3 top-[38px] text-white/40 hover:text-[var(--brand-gold)] transition-colors"
+            onClick={() => setShowPassword((v) => !v)}
+            aria-label={showPassword ? 'Hide password' : 'Show password'}
+            aria-pressed={showPassword}
           >
-            Sign In
-          </Button>
-        </motion.div>
+            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+          </button>
+        </div>
+
+        <div className="flex justify-end">
+          <a
+            href="/forgot-password"
+            className="text-sm text-[var(--brand-gold)] hover:text-[var(--brand-gold-light)] transition-colors"
+          >
+            Forgot password?
+          </a>
+        </div>
+
+        <Button type="submit" loading={isSubmitting} variant="primary">
+          Sign in
+        </Button>
       </form>
 
-      <motion.div
-        className="flex items-center gap-4"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.8 }}
-      >
-        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[var(--brand-gold)]/30 to-transparent" />
-        <span className="text-xs text-white/40">or</span>
-        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[var(--brand-gold)]/30 to-transparent" />
-      </motion.div>
+      <div className="my-6 flex items-center gap-3">
+        <div className="flex-1 h-px bg-white/12" />
+        <span className="text-xs uppercase tracking-wider text-white/40">or</span>
+        <div className="flex-1 h-px bg-white/12" />
+      </div>
 
-      <motion.p
-        className="text-center text-sm text-white/60"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.9 }}
-      >
+      <p className="text-center text-sm text-white/55">
         Don&apos;t have an account?{' '}
-        <a href="/register" className="text-[var(--brand-gold)] font-medium hover:text-[var(--brand-gold-light)] transition-colors">
-          Register →
+        <a
+          href="/register"
+          className="text-[var(--brand-gold)] font-medium hover:text-[var(--brand-gold-light)] transition-colors"
+        >
+          Create one
         </a>
-      </motion.p>
+      </p>
     </motion.div>
   );
 }
