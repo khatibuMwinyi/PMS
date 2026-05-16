@@ -16,10 +16,11 @@ import {
   findOwnerProfileIdByUserId,
   findPaidInvoicesInRange,
   countAssignmentsByStatus,
+  countAgreementsByStatus,
   findActiveProperties,
   findRecentRequests,
 } from '@/features/dashboard/repositories/owner-dashboard.repository';
-import { AssignmentStatus } from '@prisma/client';
+import { AgreementStatus, AssignmentStatus } from '@prisma/client';
 
 const userId = 'user-123';
 const ownerProfileId = 'owner-456';
@@ -73,6 +74,17 @@ describe('countAssignmentsByStatus', () => {
   });
 });
 
+describe('countAgreementsByStatus', () => {
+  it('counts agreements scoped to owner', async () => {
+    (prisma.agreement.count as any).mockResolvedValue(3);
+    const result = await countAgreementsByStatus(userId, [AgreementStatus.COMPLETED]);
+    expect(result).toBe(3);
+    const call = (prisma.agreement.count as any).mock.calls[0][0];
+    expect(call.where.ownerId).toBe(userId);
+    expect(call.where.status).toEqual({ in: ['COMPLETED'] });
+  });
+});
+
 describe('findActiveProperties', () => {
   it('does NOT select encryptedAddress', async () => {
     (prisma.property.findMany as any).mockResolvedValue([]);
@@ -80,6 +92,9 @@ describe('findActiveProperties', () => {
     const call = (prisma.property.findMany as any).mock.calls[0][0];
     expect(call.select).not.toHaveProperty('encryptedAddress');
     expect(call.select).toHaveProperty('zone', true);
+    expect(call.where).toEqual({ ownerId: ownerProfileId, status: 'ACTIVE' });
+    expect(call.orderBy).toEqual({ updatedAt: 'desc' });
+    expect(call.take).toBe(4);
   });
 
   it('computes occupancy from units occupantCount', async () => {
@@ -126,5 +141,8 @@ describe('findRecentRequests', () => {
     const call = (prisma.agreement.findMany as any).mock.calls[0][0];
     expect(call.select.assignment).toEqual({ select: { status: true } });
     expect(call.select).not.toHaveProperty('provider');
+    expect(call.where).toEqual({ ownerId: userId });
+    expect(call.orderBy).toEqual({ createdAt: 'desc' });
+    expect(call.take).toBe(5);
   });
 });
