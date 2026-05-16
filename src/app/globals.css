@@ -228,6 +228,8 @@ html, body {
   width: 100vw;
   min-height: 100vh;
   overflow-x: hidden;
+  position: relative;
+  z-index: 1;
 }
 
 @media (max-width: 1023px) {
@@ -243,8 +245,8 @@ html, body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 2.5rem;
-  background: linear-gradient(135deg, var(--surface-card) 0%, var(--surface-page) 50%, var(--surface-card) 100%);
+  padding: 3rem 3.5rem;
+  position: relative;
 }
 
 .auth-panel-right {
@@ -253,7 +255,109 @@ html, body {
   align-items: center;
   justify-content: center;
   padding: 2rem;
-  background: linear-gradient(135deg, var(--surface-page) 0%, var(--surface-card) 50%, var(--surface-page) 100%);
   width: 100%;
   min-height: 100vh;
+}
+
+/* ─── Auth Backdrop (photo + overlay + accent) ─── */
+.auth-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -10;
+  overflow: hidden;
+}
+.auth-backdrop-image {
+  position: absolute;
+  inset: 0;
+}
+.auth-backdrop-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(13, 18, 38, 0.88) 0%, rgba(19, 27, 46, 0.78) 100%);
+}
+.auth-backdrop-glow {
+  position: absolute;
+  top: 25%;
+  left: 15%;
+  width: 480px;
+  height: 480px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(240, 165, 0, 0.20) 0%, transparent 70%);
+  filter: blur(60px);
+  pointer-events: none;
+}
+.auth-backdrop-glow-2 {
+  position: absolute;
+  bottom: 10%;
+  right: 5%;
+  width: 360px;
+  height: 360px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(79, 70, 229, 0.18) 0%, transparent 70%);
+  filter: blur(50px);
+  pointer-events: none;
+}
+
+/* ─── Glass Panel (reusable) ──────────────────── */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--radius-xl);
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.40),
+    inset 0 1px 0 rgba(255, 255, 255, 0.10);
+}
+
+/* Glass form inputs (white on glass) — override Tailwind utility colors */
+.glass-panel input,
+.glass-panel select,
+.glass-panel textarea {
+  background-color: rgba(255, 255, 255, 0.06) !important;
+  border-color: rgba(255, 255, 255, 0.14) !important;
+  color: #ffffff !important;
+  caret-color: var(--brand-gold);
+}
+.glass-panel input::placeholder,
+.glass-panel textarea::placeholder {
+  color: rgba(255, 255, 255, 0.35) !important;
+}
+.glass-panel input:hover,
+.glass-panel select:hover,
+.glass-panel textarea:hover {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(255, 255, 255, 0.22) !important;
+}
+.glass-panel input:focus,
+.glass-panel select:focus,
+.glass-panel textarea:focus {
+  background-color: rgba(255, 255, 255, 0.10) !important;
+  border-color: rgba(240, 165, 0, 0.55) !important;
+  box-shadow: 0 0 0 3px rgba(240, 165, 0, 0.20) !important;
+  outline: none;
+}
+.glass-panel input[aria-invalid="true"],
+.glass-panel input[aria-invalid="true"]:focus {
+  border-color: rgba(239, 68, 68, 0.65) !important;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.20) !important;
+}
+.glass-panel label {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+.glass-panel p[id$="-helper"] {
+  color: rgba(255, 255, 255, 0.55) !important;
+}
+.glass-panel input[aria-invalid="true"] ~ p[id$="-helper"],
+.glass-panel p[id$="-helper"].text-state-error {
+  color: rgb(252, 165, 165) !important;
+}
+
+/* Mobile fallback: collapse photo backdrop into card header */
+@media (max-width: 1023px) {
+  .auth-backdrop-glow,
+  .auth-backdrop-glow-2 {
+    width: 220px;
+    height: 220px;
+  }
 }
