@@ -205,7 +205,7 @@ html, body {
 /* ─── Component Classes ────────────────────── */
 @layer components {
   .card {
-    @apply bg-surface rounded-lg shadow-card border border-border-subtle;
+    @apply bg-surface-card rounded-lg shadow-card border border-border-subtle;
   }
 
   .input {
