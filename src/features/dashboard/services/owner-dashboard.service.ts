@@ -104,7 +104,12 @@ export function formatAge(createdAt: Date, now: Date): string {
   if (diffH < 1) return 'Just now';
   if (diffH < 24) return `${Math.floor(diffH)}h ago`;
   return createdAt.toLocaleString('en-GB', {
-    month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false,
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+    timeZone: 'Africa/Dar_es_Salaam',
   });
 }
 
@@ -129,6 +134,12 @@ const ACTIVE_ASSIGNMENT_STATUSES = [
   AssignmentStatus.COMPLETED,
 ] as const;
 
+/**
+ * Assemble owner-facing KPIs. The `maintenanceRoiPct` field is a service
+ * completion rate (completed / paid-eligible agreements), not financial
+ * ROI — naming preserved for UI-label compatibility with the dashboard
+ * mockup. Future spec may rename when revenue/cost data lands.
+ */
 export async function buildOwnerKpis(
   ownerUserId: string,
   now: Date = new Date(),
@@ -147,7 +158,12 @@ export async function buildOwnerKpis(
       countAssignmentsByStatus(ownerUserId, [...ACTIVE_ASSIGNMENT_STATUSES]),
       countAssignmentsByStatus(ownerUserId, [AssignmentStatus.PENDING_ACCEPTANCE]),
       countAgreementsByStatus(ownerUserId, [AgreementStatus.COMPLETED]),
-      // "paid agreements" = agreements with a PAID invoice = agreements not QUOTED/CANCELLED
+      // Denominator for "completion rate" KPI surfaced as maintenanceRoiPct
+      // (true ROI requires cost data we don't track yet). "Paid-eligible
+      // agreements" approximated as those past the QUOTED stage and not yet
+      // CANCELLED, since those are the agreements we expect a PAID invoice
+      // for. Result can exceed 100% if more completed than currently
+      // active+suspended+completed — rare in practice but not impossible.
       countAgreementsByStatus(ownerUserId, [
         AgreementStatus.ACTIVE, AgreementStatus.COMPLETED, AgreementStatus.SUSPENDED,
       ]),
@@ -184,7 +200,15 @@ export async function buildActivePropertyCards(
   limit: number = 4,
 ): Promise<OwnerPropertyCard[]> {
   const ownerProfileId = await findOwnerProfileIdByUserId(ownerUserId);
-  if (!ownerProfileId) return [];
+  if (!ownerProfileId) {
+    // Logged-in OWNER without an OwnerProfile is a provisioning bug,
+    // not a normal zero-state. Surface to ops without breaking the
+    // dashboard render.
+    console.warn(
+      `[owner-dashboard] missing OwnerProfile for userId=${ownerUserId} — returning empty property list`,
+    );
+    return [];
+  }
 
   const rows = await findActiveProperties(ownerProfileId, limit);
   return rows.map((r) => ({
