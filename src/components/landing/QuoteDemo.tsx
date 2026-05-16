@@ -40,7 +40,7 @@ export function QuoteDemo() {
         <div className="text-center mb-12">
           <p className="text-caption uppercase text-accent tracking-widest mb-3">Instant pricing</p>
           <h2 className="font-serif text-h1 text-text-on-dark">Get an instant quote.</h2>
-          <p className="text-body-lg text-text-secondary mt-3 max-w-lg mx-auto">
+          <p className="text-body-lg text-text-secondary-on-dark mt-3 max-w-lg mx-auto">
             Prices are locked for 24 hours. No card required to estimate.
           </p>
         </div>

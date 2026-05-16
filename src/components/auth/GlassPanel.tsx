@@ -9,8 +9,8 @@ interface GlassPanelProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 const PADDING_MAP: Record<Padding, string> = {
-  comfortable: 'p-6 sm:p-8',
-  spacious: 'p-8 sm:p-10',
+  comfortable: 'p-5 sm:p-7 lg:p-8',
+  spacious: 'p-6 sm:p-8 lg:p-10',
 };
 
 export const GlassPanel = forwardRef<HTMLDivElement, GlassPanelProps>(

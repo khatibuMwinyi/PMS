@@ -226,9 +226,9 @@ html, body {
 .auth-split {
   display: grid;
   grid-template-columns: 45fr 55fr;
-  grid-template-rows: 100vh;
-  width: 100vw;
+  width: 100%;
   min-height: 100vh;
+  min-height: 100dvh;
   overflow-x: hidden;
   position: relative;
   z-index: 1;
@@ -237,9 +237,6 @@ html, body {
 @media (max-width: 1023px) {
   .auth-split {
     grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr;
-    height: auto;
-    min-height: 100dvh;
   }
 }
 
@@ -251,6 +248,19 @@ html, body {
   position: relative;
 }
 
+@media (max-width: 1023px) {
+  .auth-panel-left {
+    padding: 2.5rem 1.5rem 1rem;
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-panel-left {
+    padding: 1.75rem 1rem 0.5rem;
+  }
+}
+
 .auth-panel-right {
   display: flex;
   flex-direction: column;
@@ -258,7 +268,29 @@ html, body {
   justify-content: center;
   padding: 2rem;
   width: 100%;
-  min-height: 100vh;
+}
+
+@media (max-width: 1023px) {
+  .auth-panel-right {
+    padding: 1.5rem 1.25rem 2rem;
+    min-height: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-panel-right {
+    padding: 1rem 0.75rem 1.5rem;
+  }
+}
+
+/* Landscape phones: keep stack but tighter vertical rhythm */
+@media (max-width: 1023px) and (orientation: landscape) and (max-height: 500px) {
+  .auth-panel-left {
+    padding: 1rem 1.5rem 0.5rem;
+  }
+  .auth-panel-right {
+    padding: 1rem 1.5rem 1.5rem;
+  }
 }
 
 /* ─── Auth Backdrop (photo + overlay + accent) ─── */

@@ -52,11 +52,13 @@ const config: Config = {
           'dark-card': 'var(--surface-dark-card)',
         },
         text: {
-          primary:    'var(--text-primary)',
-          secondary:  'var(--text-secondary)',
-          muted:      'var(--text-muted)',
-          'on-dark':  'var(--text-on-dark)',
-          'on-brand': 'var(--text-on-brand)',
+          primary:             'var(--text-primary)',
+          secondary:           'var(--text-secondary)',
+          muted:               'var(--text-muted)',
+          'on-dark':           'var(--text-on-dark)',
+          'on-brand':          'var(--text-on-brand)',
+          'secondary-on-dark': 'var(--text-secondary-on-dark)',
+          'muted-on-dark':     'var(--text-muted-on-dark)',
         },
         border: {
           DEFAULT:  'var(--border-default)',

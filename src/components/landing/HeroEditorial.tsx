@@ -46,7 +46,7 @@ export function HeroEditorial() {
               ))}
             </h1>
 
-            <p className="text-body-lg text-text-secondary max-w-md mb-8">
+            <p className="text-body-lg text-text-secondary-on-dark max-w-md mb-8">
               {HERO.subhead}
             </p>
 
@@ -72,7 +72,7 @@ export function HeroEditorial() {
                 return (
                   <span
                     key={pill.label}
-                    className="inline-flex items-center gap-2 px-3 py-1.5 rounded-pill bg-white/8 text-text-secondary text-body-sm border border-white/10"
+                    className="inline-flex items-center gap-2 px-3 py-1.5 rounded-pill bg-white/8 text-text-secondary-on-dark text-body-sm border border-white/10"
                   >
                     {Icon && <Icon size={14} className="text-accent" />}
                     {pill.label}
