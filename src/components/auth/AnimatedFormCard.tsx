@@ -31,7 +31,7 @@ export function AnimatedFormCard({ children }: AnimatedFormCardProps) {
     >
       <div className="glass-card p-6 relative overflow-hidden">
         <motion.div
-          className="absolute inset-0 bg-gradient-to-br from-[#C89128]/5 to-transparent"
+          className="absolute inset-0 bg-gradient-to-br from-accent/5 to-transparent"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5, duration: 1 }}
@@ -42,7 +42,7 @@ export function AnimatedFormCard({ children }: AnimatedFormCardProps) {
         </div>
 
         <motion.div
-          className="absolute -bottom-10 -right-10 w-40 h-40 rounded-full bg-[#C89128]/10 blur-2xl"
+          className="absolute -bottom-10 -right-10 w-40 h-40 rounded-full bg-accent/10 blur-2xl"
           animate={{
             scale: [1, 1.2, 1],
             opacity: [0.3, 0.6, 0.3],

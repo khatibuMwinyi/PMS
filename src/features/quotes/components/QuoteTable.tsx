@@ -1,7 +1,7 @@
 import React from 'react';
-import { DataTable } from '@/components/ui/DataTable';
+import { Table } from '@/components/ui/Table';
 import { QuoteStatus } from '../types';
-import { StatusBadge } from '@/components/ui/StatusBadge';
+import { StatusBadge } from '@/components/ui/Badge';
 
 interface Quote {
   id: string;
@@ -126,11 +126,11 @@ export function QuoteTable({ quotes, onView, onAccept }: QuoteTableProps) {
   ];
 
   return (
-    <DataTable
+    <Table
       columns={columns}
       data={quotes}
       keyExtractor={(quote) => quote.id}
-      emptyMessage="No quotes found. Request a quote to get started."
+      emptyState="No quotes found. Request a quote to get started."
       className="w-full"
     />
   );

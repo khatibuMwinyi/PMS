@@ -7,8 +7,8 @@ import { z } from 'zod';
 import { Eye, EyeOff } from 'lucide-react';
 import { OwnerRegisterSchema } from '@/features/users/types';
 import { registerOwner } from '@/features/users/actions';
-import { UnifiedInput } from '@/components/ui/UnifiedInput';
-import { UnifiedButton } from '@/components/ui/UnifiedButton';
+import { Input } from '@/components/ui/Input';
+import { Button } from '@/components/ui/Button';
 import { PasswordStrengthMeter } from '@/components/shared/PasswordStrengthMeter';
 
 // Extend schema to add confirmPassword
@@ -69,7 +69,7 @@ export function OwnerRegisterForm({ onSuccess, selectedPlan }: OwnerRegisterForm
         {/* First + Last name row */}
         <div className="grid grid-cols-2 gap-4">
           <div className="relative">
-            <UnifiedInput
+            <Input
               label="First Name"
               type="text"
               autoComplete="given-name"
@@ -80,7 +80,7 @@ export function OwnerRegisterForm({ onSuccess, selectedPlan }: OwnerRegisterForm
             />
           </div>
           <div className="relative">
-            <UnifiedInput
+            <Input
               label="Last Name"
               type="text"
               autoComplete="family-name"
@@ -93,7 +93,7 @@ export function OwnerRegisterForm({ onSuccess, selectedPlan }: OwnerRegisterForm
         </div>
 
         <div className="relative">
-          <UnifiedInput
+          <Input
             label="Email Address"
             type="email"
             autoComplete="email"
@@ -105,7 +105,7 @@ export function OwnerRegisterForm({ onSuccess, selectedPlan }: OwnerRegisterForm
         </div>
 
         <div className="relative">
-          <UnifiedInput
+          <Input
             label="Phone Number"
             type="tel"
             autoComplete="tel"
@@ -120,7 +120,7 @@ export function OwnerRegisterForm({ onSuccess, selectedPlan }: OwnerRegisterForm
         {/* Password + strength meter */}
         <div>
           <div className="relative">
-            <UnifiedInput
+            <Input
               label="Password"
               type={showPass ? 'text' : 'password'}
               autoComplete="new-password"
@@ -139,7 +139,7 @@ export function OwnerRegisterForm({ onSuccess, selectedPlan }: OwnerRegisterForm
         </div>
 
         <div className="relative">
-          <UnifiedInput
+          <Input
             label="Confirm Password"
             type={showConfirm ? 'text' : 'password'}
             autoComplete="new-password"
@@ -155,17 +155,16 @@ export function OwnerRegisterForm({ onSuccess, selectedPlan }: OwnerRegisterForm
           />
         </div>
 
-        <UnifiedButton
+        <Button
           type="submit"
-          state={isSubmitting ? 'loading' : 'default'}
+          loading={isSubmitting}
           variant="primary"
           size="lg"
           fullWidth
           className="mt-4"
-          leftIcon={isSubmitting ? <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> : undefined}
         >
           Create Owner Account
-        </UnifiedButton>
+        </Button>
 
         <div className="mt-6 text-center">
           <p className="text-xs text-white/60">

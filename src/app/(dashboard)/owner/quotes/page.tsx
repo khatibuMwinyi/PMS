@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import { listOwnerQuotes } from '@/features/quotes/actions';
 import { QuoteList } from '@/features/quotes/components/QuoteList';
 import { ErrorBoundaryWrapper } from '@/components/ui/ErrorBoundary';
-import { UnifiedButton } from '@/components/ui/UnifiedButton';
+import { Button } from '@/components/ui/Button';
 import Link from 'next/link';
 import { auth } from '@/core/auth';
 
@@ -41,9 +41,9 @@ async function QuotesContent() {
         <div className="text-center py-12">
           <p className="text-[var(--text-muted)] mb-4">No quotes yet</p>
           <Link href="/owner/quotes/new">
-            <UnifiedButton variant="primary">
+            <Button variant="primary">
               Request Your First Quote
-            </UnifiedButton>
+            </Button>
           </Link>
         </div>
       )}
@@ -68,9 +68,9 @@ export default function OwnerQuotesPage() {
 
         {/* Link to request new quote */}
         <Link href="/owner/quotes/new">
-          <UnifiedButton variant="primary">
+          <Button variant="primary">
             Request Quote
-          </UnifiedButton>
+          </Button>
         </Link>
       </div>
 

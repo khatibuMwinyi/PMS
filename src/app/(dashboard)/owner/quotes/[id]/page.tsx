@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import { getQuoteDetails } from '@/features/quotes/actions';
 import { QuoteCard } from '@/features/quotes/components/QuoteCard';
 import { ErrorBoundaryWrapper } from '@/components/ui/ErrorBoundary';
-import { UnifiedButton } from '@/components/ui/UnifiedButton';
+import { Button } from '@/components/ui/Button';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { Decimal } from 'decimal.js';
@@ -24,9 +24,9 @@ async function QuoteDetailContent({ quoteId }: { quoteId: string }) {
       <div className="text-center py-12">
         <p className="text-[var(--text-muted)] mb-4">Quote not found</p>
         <Link href="/owner/quotes">
-          <UnifiedButton variant="outline">
+          <Button variant="outline">
             Back to Quotes
-          </UnifiedButton>
+          </Button>
         </Link>
       </div>
     );
@@ -128,14 +128,14 @@ async function QuoteDetailContent({ quoteId }: { quoteId: string }) {
         {/* Actions */}
         <div className="flex gap-3 mt-6 pt-4 border-t border-[var(--border-default)]">
           {quote.status === 'QUOTED' && !isExpired && (
-            <UnifiedButton variant="primary">
+            <Button variant="primary">
               Accept Quote
-            </UnifiedButton>
+            </Button>
           )}
           <Link href="/owner/quotes">
-            <UnifiedButton variant="outline">
+            <Button variant="outline">
               Back to List
-            </UnifiedButton>
+            </Button>
           </Link>
         </div>
       </div>

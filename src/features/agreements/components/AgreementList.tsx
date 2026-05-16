@@ -1,7 +1,7 @@
 import React from 'react';
-import { DataTable } from '@/components/ui/DataTable';
+import { Table } from '@/components/ui/Table';
 import { AgreementStatus } from '../types';
-import { StatusBadge } from '@/components/ui/StatusBadge';
+import { StatusBadge } from '@/components/ui/Badge';
 
 interface Agreement {
   id: string;
@@ -127,11 +127,11 @@ export function AgreementList({ agreements, onView }: AgreementListProps) {
   ];
 
   return (
-    <DataTable
+    <Table
       columns={columns}
       data={agreements}
       keyExtractor={(agreement) => agreement.id}
-      emptyMessage="No agreements found. Accept a quote to create an agreement."
+      emptyState="No agreements found. Accept a quote to create an agreement."
       className="w-full"
     />
   );

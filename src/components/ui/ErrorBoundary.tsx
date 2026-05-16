@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { motion } from 'framer-motion';
 import { AlertTriangle, RefreshCw, ExternalLink } from 'lucide-react';
-import { UnifiedButton } from '@/components/ui/UnifiedButton';
+import { Button } from '@/components/ui/Button';
 import { cn } from '@/core/lib/utils';
 
 interface ErrorBoundaryProps {
@@ -126,23 +126,23 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
 
             {/* Action buttons */}
             <div className="space-y-3">
-              <UnifiedButton
+              <Button
                 variant="primary"
                 onClick={this.resetErrorBoundary}
-                leftIcon={<RefreshCw className="w-4 h-4" />}
+                iconLeft={<RefreshCw className="w-4 h-4" />}
                 className="w-full"
               >
                 Try again
-              </UnifiedButton>
+              </Button>
 
-              <UnifiedButton
+              <Button
                 variant="outline"
                 onClick={() => window.location.reload()}
-                leftIcon={<ExternalLink className="w-4 h-4" />}
+                iconLeft={<ExternalLink className="w-4 h-4" />}
                 className="w-full"
               >
                 Reload page
-              </UnifiedButton>
+              </Button>
             </div>
 
             {/* Support info */}
@@ -204,9 +204,9 @@ export const ErrorBoundaryWrapper = ({
             <p className="text-sm text-muted mb-4">
               {error.message}
             </p>
-            <UnifiedButton onClick={handleRetry} size="sm">
+            <Button onClick={handleRetry} size="sm">
               Reset
-            </UnifiedButton>
+            </Button>
           </div>
         )}
       </div>

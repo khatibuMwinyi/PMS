@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { signOut } from 'next-auth/react';
 import { LogOut, ChevronDown, User, Bell, HelpCircle, Settings } from 'lucide-react';
-import { RoleBadge } from '@/components/shared/RoleBadge';
+import { Badge } from '@/components/ui/Badge';
 import { Logo } from '@/components/ui/Logo';
 import { cn } from '@/core/lib/utils';
 import { NotificationBell } from '@/features/notifications/components';
@@ -102,7 +102,7 @@ export function TopbarUserMenu({ userName, userRole }: TopbarUserMenuProps) {
         <Settings size={18} className="text-[var(--text-muted)]" />
       </button>
 
-      {userRole && <RoleBadge role={userRole} />}
+      {userRole && <Badge variant="gold">{userRole}</Badge>}
 
       <div className="relative" ref={dropdownRef}>
         <button

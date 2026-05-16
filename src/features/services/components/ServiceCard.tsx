@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { Wrench, Tag, DollarSign } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
-import { StatusBadge } from '@/components/shared/StatusBadge';
+import { Card, CardContent } from '@/components/ui/Card';
+import { StatusBadge } from '@/components/ui/Badge';
 
 export interface ServiceCardProps {
   service: {
@@ -26,7 +26,7 @@ export function ServiceCard({ service, href }: ServiceCardProps) {
   return (
     <Card
       {...wrapperProps}
-      className="overflow-hidden border rounded-[var(--radius-lg)] transition-all duration-200 hover:border-[var(--on-surface)] hover:shadow-[var(--shadow-modal)] flex flex-col"
+      className="overflow-hidden border rounded-[var(--radius-lg)] transition-all duration-200 hover:border-[var(--text-primary)] hover:shadow-[var(--shadow-modal)] flex flex-col"
     >
       <CardContent className="flex flex-col gap-3 p-4 flex-1">
         {/* Header: Service name (font-h2, 14px, font-bold) + Status */}
@@ -45,7 +45,7 @@ export function ServiceCard({ service, href }: ServiceCardProps) {
           <Tag size={11} style={{ color: 'var(--brand-primary)' }} />
           <span
             className="px-2 py-0.5 rounded-[var(--radius-pill)] text-[10px] font-medium uppercase tracking-wider"
-            style={{ background: '#f1f5f9', color: 'var(--text-secondary)' }}
+            style={{ background: 'var(--surface-page)', color: 'var(--text-secondary)' }}
           >
             {service.category}
           </span>

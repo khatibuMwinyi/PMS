@@ -2,10 +2,10 @@ import { Suspense } from 'react';
 import { auth } from '@/core/auth';
 import { redirect } from 'next/navigation';
 import { DashboardShell } from '@/components/layout/DashboardShell';
-import RoleGuard from '@/components/RoleGuard';
-import { DataTable } from '@/components/ui/DataTable';
-import { StatusBadge } from '@/components/shared/StatusBadge';
-import type { Column } from '@/components/ui/DataTable';
+import { RoleGuard } from '@/components/RoleGuard';
+import { Table } from '@/components/ui/Table';
+import { StatusBadge } from '@/components/ui/Badge';
+import type { Column } from '@/components/ui/Table';
 import { Users, UserCheck, UserX } from 'lucide-react';
 import { getUsers } from '@/features/users/queries';
 import { activateUser, suspendUser } from '@/features/users/actions';
@@ -159,11 +159,11 @@ async function AdminUsersContent() {
         <h2 className="mb-4 text-[var(--font-h2)] text-[var(--text-primary)]">
           All Users
         </h2>
-        <DataTable
+        <Table
           columns={columns}
           data={userRows}
           keyExtractor={(row) => row.id}
-          emptyMessage="No users found."
+          emptyState="No users found."
         />
       </div>
     </DashboardShell>

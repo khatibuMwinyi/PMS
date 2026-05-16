@@ -1,10 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { UnifiedButton } from '@/components/ui/UnifiedButton';
+import { Button } from '@/components/ui/Button';
 import {
   TrendingUp,
   TrendingDown,
@@ -292,14 +292,14 @@ export function ProviderDashboard({ providerId }: ProviderDashboardProps) {
         </CardHeader>
         <CardContent>
           <div className="flex gap-2">
-            <UnifiedButton className="flex-1">
+            <Button className="flex-1">
               <Clock className="mr-2 h-4 w-4" />
               View Schedule
-            </UnifiedButton>
-            <UnifiedButton variant="outline" className="flex-1">
+            </Button>
+            <Button variant="outline" className="flex-1">
               <TrendingUp className="mr-2 h-4 w-4" />
               Request Payout
-            </UnifiedButton>
+            </Button>
           </div>
         </CardContent>
       </Card>

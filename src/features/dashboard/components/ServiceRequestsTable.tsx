@@ -1,6 +1,6 @@
-import { DataTable } from '@/components/ui/DataTable';
-import { StatusBadge } from '@/components/ui/StatusBadge';
-import type { Column } from '@/components/ui/DataTable';
+import { Table } from '@/components/ui/Table';
+import { StatusBadge } from '@/components/ui/Badge';
+import type { Column } from '@/components/ui/Table';
 
 interface ServiceRequest {
   id: string;
@@ -95,11 +95,11 @@ export function ServiceRequestsTable({ requests = defaultRequests }: ServiceRequ
   return (
     <div>
       <h2 className="mb-4 text-[var(--font-h2)] text-[var(--text-primary)]">Service Requests</h2>
-      <DataTable
+      <Table
         columns={columns}
         data={requests}
         keyExtractor={(row) => row.id}
-        emptyMessage="No service requests yet."
+        emptyState="No service requests yet."
       />
     </div>
   );
