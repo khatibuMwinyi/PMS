@@ -6,16 +6,18 @@ import { PropertyDetail } from '@/features/properties/components/PropertyDetail'
 import { getPropertyForOwner } from '@/features/properties/actions';
 
 interface PropertyDetailPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
-export default function PropertyDetailPage({ params }: PropertyDetailPageProps) {
+export default async function PropertyDetailPage({ params }: PropertyDetailPageProps) {
+  const { id } = await params;
+
   return (
     <RoleGuard allowedRoles={['OWNER']}>
       <Suspense fallback={<div>Loading property details...</div>}>
-        <PropertyDetailContent propertyId={params.id} />
+        <PropertyDetailContent propertyId={id} />
       </Suspense>
     </RoleGuard>
   );
@@ -58,6 +60,7 @@ async function PropertyDetailContent({ propertyId }: { propertyId: string }) {
 }
 
 export async function generateMetadata({ params }: PropertyDetailPageProps) {
+  await params;
   return {
     title: `Property Details — Oweru`,
   };
