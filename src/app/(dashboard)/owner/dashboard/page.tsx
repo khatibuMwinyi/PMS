@@ -1,7 +1,6 @@
 import { Suspense } from 'react';
 import { redirect } from 'next/navigation';
 import { auth } from '@/core/auth';
-import { DashboardShell } from '@/components/layout/DashboardShell';
 import RoleGuard from '@/components/RoleGuard';
 import { DashboardHeader } from '@/shared/components/dashboard/DashboardHeader';
 import { OwnerKpiCards } from '@/features/dashboard/components/owner/OwnerKpiCards';
@@ -25,8 +24,7 @@ export default async function OwnerDashboardPage() {
 
   return (
     <RoleGuard allowedRoles={['OWNER']}>
-      <DashboardShell role="OWNER" userName={session.user.name} pageTitle="Dashboard">
-        <DashboardHeader
+      <DashboardHeader
           title="Dashboard Overview"
           subtitle="High-level metrics across all active properties."
           asOf={now}
@@ -48,7 +46,6 @@ export default async function OwnerDashboardPage() {
             </Suspense>
           </div>
         </div>
-      </DashboardShell>
     </RoleGuard>
   );
 }

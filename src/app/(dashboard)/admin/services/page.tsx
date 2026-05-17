@@ -2,7 +2,6 @@ import { Suspense } from 'react';
 import { auth } from '@/core/auth';
 import { redirect } from 'next/navigation';
 import RoleGuard from '@/components/RoleGuard';
-import { DashboardShell } from '@/components/layout/DashboardShell';
 import { ServiceList } from '@/features/services/components/ServiceList';
 import { getServiceTypes } from '@/features/services/actions';
 import { AddServiceButton } from '@/features/services/components/AddServiceButton';
@@ -54,48 +53,42 @@ async function AdminServicesContent() {
   }));
 
   return (
-    <DashboardShell
-      role="ADMIN"
-      userName={session.user.name}
-      pageTitle="Service Catalog"
-    >
-      <div className="flex flex-col gap-6 max-w-6xl">
-        {/* Header */}
-        <div className="flex items-start justify-between gap-4 flex-wrap">
-          <div>
-            <h1 className="text-[20px] font-semibold text-[var(--text-primary)] leading-tight">
-              Service Catalog
-            </h1>
-            <p className="text-[14px] mt-0.5" style={{ color: 'var(--text-secondary)' }}>
-              Manage service types, pricing, and catalog settings
-            </p>
-          </div>
-          <AddServiceButton />
+    <div className="flex flex-col gap-6 max-w-6xl">
+      {/* Header */}
+      <div className="flex items-start justify-between gap-4 flex-wrap">
+        <div>
+          <h1 className="text-[20px] font-semibold text-[var(--text-primary)] leading-tight">
+            Service Catalog
+          </h1>
+          <p className="text-[14px] mt-0.5" style={{ color: 'var(--text-secondary)' }}>
+            Manage service types, pricing, and catalog settings
+          </p>
         </div>
-
-        {/* Stats */}
-        <div className="grid grid-cols-3 gap-4">
-          <div className="p-4 rounded-[var(--radius-lg)] border" style={{ background: 'var(--surface)', borderColor: 'var(--border-default)' }}>
-            <p className="text-[var(--text-sm)]" style={{ color: 'var(--text-secondary)' }}>Total Services</p>
-            <p className="text-[var(--font-h2)] font-bold text-[var(--text-primary)]">{serviceCards.length}</p>
-          </div>
-          <div className="p-4 rounded-[var(--radius-lg)] border" style={{ background: 'var(--surface)', borderColor: 'var(--border-default)' }}>
-            <p className="text-[var(--text-sm)]" style={{ color: 'var(--text-secondary)' }}>Active</p>
-            <p className="text-[var(--font-h2)] font-bold text-[var(--text-primary)]">
-              {serviceCards.filter((s) => s.isActive).length}
-            </p>
-          </div>
-          <div className="p-4 rounded-[var(--radius-lg)] border" style={{ background: 'var(--surface)', borderColor: 'var(--border-default)' }}>
-            <p className="text-[var(--text-sm)]" style={{ color: 'var(--text-secondary)' }}>Inactive</p>
-            <p className="text-[var(--font-h2)] font-bold text-[var(--text-primary)]">
-              {serviceCards.filter((s) => !s.isActive).length}
-            </p>
-          </div>
-        </div>
-
-        {/* Service Grid */}
-        <ServiceList services={serviceCards} isAdmin={true} />
+        <AddServiceButton />
       </div>
-    </DashboardShell>
+
+      {/* Stats */}
+      <div className="grid grid-cols-3 gap-4">
+        <div className="p-4 rounded-[var(--radius-lg)] border" style={{ background: 'var(--surface)', borderColor: 'var(--border-default)' }}>
+          <p className="text-[var(--text-sm)]" style={{ color: 'var(--text-secondary)' }}>Total Services</p>
+          <p className="text-[var(--font-h2)] font-bold text-[var(--text-primary)]">{serviceCards.length}</p>
+        </div>
+        <div className="p-4 rounded-[var(--radius-lg)] border" style={{ background: 'var(--surface)', borderColor: 'var(--border-default)' }}>
+          <p className="text-[var(--text-sm)]" style={{ color: 'var(--text-secondary)' }}>Active</p>
+          <p className="text-[var(--font-h2)] font-bold text-[var(--text-primary)]">
+            {serviceCards.filter((s) => s.isActive).length}
+          </p>
+        </div>
+        <div className="p-4 rounded-[var(--radius-lg)] border" style={{ background: 'var(--surface)', borderColor: 'var(--border-default)' }}>
+          <p className="text-[var(--text-sm)]" style={{ color: 'var(--text-secondary)' }}>Inactive</p>
+          <p className="text-[var(--font-h2)] font-bold text-[var(--text-primary)]">
+            {serviceCards.filter((s) => !s.isActive).length}
+          </p>
+        </div>
+      </div>
+
+      {/* Service Grid */}
+      <ServiceList services={serviceCards} isAdmin={true} />
+    </div>
   );
 }

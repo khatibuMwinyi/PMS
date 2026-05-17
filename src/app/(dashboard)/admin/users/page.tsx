@@ -1,7 +1,6 @@
 import { Suspense } from 'react';
 import { auth } from '@/core/auth';
 import { redirect } from 'next/navigation';
-import { DashboardShell } from '@/components/layout/DashboardShell';
 import { RoleGuard } from '@/components/RoleGuard';
 import { Table } from '@/components/ui/Table';
 import { StatusBadge } from '@/components/ui/Badge';
@@ -114,7 +113,7 @@ async function AdminUsersContent() {
   ];
 
   return (
-    <DashboardShell role="ADMIN" userName={session.user.name} pageTitle="User Management">
+    <>
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
         <div className="flex items-center gap-4 p-4 rounded-[var(--radius-lg)] bg-[var(--surface)] border border-[var(--border-default)]">
@@ -166,7 +165,7 @@ async function AdminUsersContent() {
           emptyState="No users found."
         />
       </div>
-    </DashboardShell>
+    </>
   );
 }
 

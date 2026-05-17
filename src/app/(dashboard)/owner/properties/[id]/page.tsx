@@ -2,7 +2,6 @@ import { Suspense } from 'react';
 import { notFound, redirect } from 'next/navigation';
 import { auth } from '@/core/auth';
 import RoleGuard from '@/components/RoleGuard';
-import { DashboardShell } from '@/components/layout/DashboardShell';
 import { PropertyDetail } from '@/features/properties/components/PropertyDetail';
 import { getPropertyForOwner } from '@/features/properties/actions';
 
@@ -39,15 +38,7 @@ async function PropertyDetailContent({ propertyId }: { propertyId: string }) {
   }
 
   return (
-    <DashboardShell
-      role="OWNER"
-      userName={
-        session.user.name ||
-        `${session.user.email?.split('@')[0] || 'User'}`
-      }
-      pageTitle={property.name}
-    >
-      <PropertyDetail
+    <PropertyDetail
         property={{
           id:               property.id,
           name:             property.name,
@@ -63,7 +54,6 @@ async function PropertyDetailContent({ propertyId }: { propertyId: string }) {
         }}
         isOwner={true}
       />
-    </DashboardShell>
   );
 }
 

@@ -1,7 +1,6 @@
 import { Suspense } from 'react';
 import { auth } from '@/core/auth';
 import { redirect } from 'next/navigation';
-import { DashboardShell } from '@/components/layout/DashboardShell';
 import { RoleGuard } from '@/components/RoleGuard';
 import { Stat } from '@/components/ui/Stat';
 import { Card } from '@/components/ui/Card';
@@ -107,7 +106,7 @@ async function AdminDashboardContent() {
   ];
 
   return (
-    <DashboardShell role="ADMIN" userName={session.user.name} pageTitle="Dashboard">
+    <>
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
         <Card padding="compact">
@@ -134,6 +133,6 @@ async function AdminDashboardContent() {
           emptyState="No users found."
         />
       </div>
-    </DashboardShell>
+    </>
   );
 }

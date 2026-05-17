@@ -5,11 +5,12 @@ interface LogoProps {
   width?: number;
   height?: number;
   className?: string;
+  href?: string;
 }
 
-export function Logo({ width = 120, height = 40, className = '' }: LogoProps) {
+export function Logo({ width = 120, height = 40, className = '', href = '/' }: LogoProps) {
   return (
-    <Link href="/dashboard" className={`flex items-center gap-2 ${className}`}>
+    <Link href={href} className={`flex items-center gap-2 ${className}`}>
       <Image
         src="/oweru.jpeg"
         alt="Oweru Logo"
@@ -29,7 +30,7 @@ export function LogoIcon({ size = 32, className = '' }: { size?: number; classNa
       alt="Oweru"
       width={size}
       height={size}
-      className={`rounded object-contain ${className}`}
+      className={`rounded object-contain w-auto h-auto ${className}`}
       priority
     />
   );

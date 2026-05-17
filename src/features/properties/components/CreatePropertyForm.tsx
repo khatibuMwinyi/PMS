@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useForm }  from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -19,10 +20,11 @@ const Schema = z.object({
 type FormValues = z.infer<typeof Schema>;
 
 interface CreatePropertyFormProps {
-  onSuccess: () => void;
+  redirectTo?: string;
 }
 
-export function CreatePropertyForm({ onSuccess }: CreatePropertyFormProps) {
+export function CreatePropertyForm({ redirectTo }: CreatePropertyFormProps) {
+  const router = useRouter();
   const [files, setFiles]           = useState<File[]>([]);
   const [serverError, setServerError] = useState<string | null>(null);
 
@@ -54,7 +56,9 @@ export function CreatePropertyForm({ onSuccess }: CreatePropertyFormProps) {
 
     reset();
     setFiles([]);
-    onSuccess();
+    if (redirectTo) {
+      router.push(redirectTo);
+    }
   };
 
   return (

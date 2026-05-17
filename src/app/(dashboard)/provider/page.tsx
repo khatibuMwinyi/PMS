@@ -1,6 +1,5 @@
 import { auth } from '@/core/auth';
 import { redirect } from 'next/navigation';
-import { DashboardShell } from '@/components/layout/DashboardShell';
 import { getProviderDashboardData } from '@/features/analytics/queries';
 import RoleGuard from '@/components/RoleGuard';
 import ProviderDashboardSkeleton from '@/components/dashboard/ProviderDashboardSkeleton';
@@ -29,7 +28,7 @@ async function ProviderDashboardContent() {
   const data = await getProviderDashboardData(session.user.id);
 
   return (
-    <DashboardShell role="PROVIDER" userName={session.user.name} pageTitle="Dashboard">
+    <>
       <h2 className="text-xl font-semibold mb-4">Provider Dashboard</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
         <div className="p-4 bg-[var(--surface-card)] rounded-[var(--radius-md)]">
@@ -49,6 +48,6 @@ async function ProviderDashboardContent() {
           <p className="text-2xl font-bold">{data.rating.toFixed(1)} ★</p>
         </div>
       </div>
-    </DashboardShell>
+    </>
   );
 }

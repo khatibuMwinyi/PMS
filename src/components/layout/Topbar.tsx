@@ -2,9 +2,8 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { signOut } from 'next-auth/react';
-import { LogOut, ChevronDown, User, Bell, HelpCircle, Settings } from 'lucide-react';
+import { LogOut, ChevronDown, HelpCircle, Settings } from 'lucide-react';
 import { Badge } from '@/components/ui/Badge';
-import { Logo } from '@/components/ui/Logo';
 import { cn } from '@/core/lib/utils';
 import { NotificationBell } from '@/features/notifications/components';
 
@@ -161,31 +160,4 @@ export function TopbarUserMenu({ userName, userRole }: TopbarUserMenuProps) {
   );
 }
 
-export function TopNavBar() {
-  return (
-    <header className="sticky top-0 z-50 h-16 flex items-center gap-3 px-4 sm:px-6 bg-[var(--surface-card)] border-b border-[var(--border-subtle)] shadow-sm">
-      {/* Logo */}
-      <div className="flex items-center">
-        <span className="text-lg font-bold text-[var(--brand-primary)]">PropManager Pro</span>
-      </div>
 
-      {/* Nav Links */}
-      <nav className="hidden md:flex items-center gap-6 ml-8">
-        <a href="/dashboard" className="text-sm font-medium text-[var(--text-primary)] hover:text-[var(--brand-gold)] transition-colors">
-          Dashboard
-        </a>
-        <a href="/owner/properties" className="text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--brand-gold)] transition-colors">
-          Portfolio
-        </a>
-        <a href="/owner/leases" className="text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--brand-gold)] transition-colors">
-          Leases
-        </a>
-      </nav>
-
-      {/* Right side - User Menu */}
-      <div className="ml-auto">
-        <TopbarUserMenu userName="User" userRole="OWNER" />
-      </div>
-    </header>
-  );
-}
