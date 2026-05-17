@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Location Verification Modal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-surface": "#303032",
+                        "on-secondary": "#ffffff",
+                        "surface-tint": "#565e74",
+                        "surface-container-lowest": "#ffffff",
+                        "background": "#fcf8fa",
+                        "tertiary-container": "#271901",
+                        "on-secondary-container": "#63646c",
+                        "on-primary-container": "#7c839b",
+                        "outline-variant": "#c6c6cd",
+                        "secondary": "#5d5e66",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "on-secondary-fixed-variant": "#46464e",
+                        "surface-bright": "#fcf8fa",
+                        "inverse-primary": "#bec6e0",
+                        "error-container": "#ffdad6",
+                        "surface-dim": "#dcd9db",
+                        "on-error-container": "#93000a",
+                        "on-secondary-fixed": "#1a1b22",
+                        "primary": "#000000",
+                        "inverse-on-surface": "#f3f0f2",
+                        "surface-variant": "#e4e2e4",
+                        "on-background": "#1b1b1d",
+                        "secondary-container": "#e3e1ec",
+                        "primary-container": "#131b2e",
+                        "on-primary": "#ffffff",
+                        "surface": "#fcf8fa",
+                        "secondary-fixed-dim": "#c6c5cf",
+                        "tertiary-fixed-dim": "#dec29a",
+                        "secondary-fixed": "#e3e1ec",
+                        "on-primary-fixed": "#131b2e",
+                        "on-surface": "#1b1b1d",
+                        "error": "#ba1a1a",
+                        "on-surface-variant": "#45464d",
+                        "primary-fixed": "#dae2fd",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-low": "#f6f3f5",
+                        "surface-container-highest": "#e4e2e4",
+                        "on-tertiary-fixed": "#271901",
+                        "on-tertiary-container": "#98805d",
+                        "primary-fixed-dim": "#bec6e0",
+                        "surface-container-high": "#eae7e9",
+                        "tertiary-fixed": "#fcdeb5",
+                        "outline": "#76777d",
+                        "surface-container": "#f0edef",
+                        "on-tertiary-fixed-variant": "#574425",
+                        "tertiary": "#000000",
+                        "on-error": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "sm": "8px",
+                        "md": "16px",
+                        "table-cell-padding-y": "8px",
+                        "table-cell-padding-x": "12px",
+                        "base": "4px",
+                        "lg": "24px",
+                        "xl": "32px"
+                    },
+                    "fontFamily": {
+                        "data-tabular": ["Inter"],
+                        "h2": ["Inter"],
+                        "table-header": ["Inter"],
+                        "label": ["Inter"],
+                        "h1": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "data-tabular": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+                        "h2": ["18px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "table-header": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "label": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "h1": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background font-body-md text-body-md text-on-surface antialiased h-screen w-screen overflow-hidden">
+<!-- Background Screen Context -->
+<div class="absolute inset-0 z-0 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAbVb9OhDpDqZizbnG8h4IBCPAMGE3JE8mAsU00SrLoQqqt20mLebu13458qoZ2_egnUJj3Ig2nqZfvZ4NA_idSlClBkLJETOB-FgRohjS_Jb8zkUELLw7m00LHErQkzmmvHqT6R-Mtx8VvRulQww-t73_JEXt0GfcGX5U4Zhuc7oUp9at1-1Yvz197x1afvEAxYEo_8p2eWX3jV1RJo8Am7eCPvbxrUuzmapAJPaiw5TR3L2M3WKM7jk5h4LnNSLVhSKGCJ4r1VXI');"></div>
+<!-- Modal Overlay -->
+<div class="absolute inset-0 z-10 bg-inverse-surface/40 backdrop-blur-[2px] flex items-center justify-center p-md">
+<!-- Modal Container (Level 2 Elevation) -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-[0_4px_12px_rgba(15,23,42,0.08)] w-full max-w-[400px] flex flex-col overflow-hidden">
+<!-- Header -->
+<div class="px-md py-sm border-b border-outline-variant flex justify-between items-center bg-surface">
+<h2 class="font-h2 text-h2 text-on-surface">Location Verification</h2>
+<button class="text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined" style="font-size: 20px;">close</span>
+</button>
+</div>
+<!-- Map View -->
+<div class="h-[180px] w-full relative bg-surface-container-high border-b border-outline-variant">
+<img alt="Map showing current location versus job site" class="w-full h-full object-cover grayscale opacity-80" data-alt="A top-down digital map view showing a sleek, minimalist street layout in a light-mode color scheme. The map displays a clear path and location area. The streets are clean lines in soft greys against a pristine background, conveying precision and modern corporate efficiency. The overall aesthetic is highly functional, high-density, and devoid of unnecessary visual clutter." data-location="Downtown Commercial District" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQnwCz6Qvz8qCNacTVbxkecEKGGzERDIstjCd3s2UGmxTcPQPTuPPDDC2coErhbO7QoaWGo4NPUpsDjXijOYaB0zTXCcItuaFLA0HjFGOW6fhR0N8Qn8Y53f7PJk06O3wMnbUFKS3lSccA4gZiWNJcbyYGQe8OcHQnLK-oo5Ke8WRcZt5wxLFKDFjWss8xJDwcJ8637iViAR3bNlW87GuOGG7Ljq9UekfbRdtwuX0YhIQTx1J30bGOgx2ZeCxLQjNfbCkpvfAkkzU"/>
+<!-- Location Markers Overlay (Simulated) -->
+<div class="absolute inset-0 flex items-center justify-center gap-xl">
+<div class="flex flex-col items-center">
+<div class="w-8 h-8 rounded-full bg-surface-container-lowest border-2 border-primary flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-primary" style="font-size: 16px;">person_pin</span>
+</div>
+<span class="font-label text-label text-primary mt-xs bg-surface-container-lowest/80 px-1 rounded">You</span>
+</div>
+<div class="w-12 border-t-2 border-dashed border-primary"></div>
+<div class="flex flex-col items-center">
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-sm text-on-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">location_on</span>
+</div>
+<span class="font-label text-label text-primary mt-xs bg-surface-container-lowest/80 px-1 rounded">Site</span>
+</div>
+</div>
+</div>
+<!-- Details Section -->
+<div class="p-md flex flex-col gap-md">
+<!-- Distance and Status -->
+<div class="flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Distance to site</span>
+<div class="flex items-baseline gap-xs">
+<span class="font-h1 text-h1 text-primary">0.2</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">miles</span>
+</div>
+</div>
+<!-- Verified Badge (Adhering to theme colors while conveying success via icon/opacity) -->
+<div class="inline-flex items-center gap-xs px-sm py-[6px] rounded-DEFAULT bg-surface-container-highest border border-outline-variant">
+<span class="material-symbols-outlined text-primary" style="font-size: 16px; font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-label text-label text-primary">Location Verified</span>
+</div>
+</div>
+<div class="border-t border-outline-variant pt-md">
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-md">
+                        GPS coordinates match the assigned property location bounds. You are cleared to begin the task execution sequence.
+                    </p>
+<!-- Primary Action -->
+<button class="w-full h-10 bg-primary text-on-primary rounded-DEFAULT font-label text-label flex justify-center items-center gap-sm hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+<span class="material-symbols-outlined" style="font-size: 18px;">lock_open</span>
+                        Unlock Task
+                    </button>
+</div>
+</div>
+</div>
+</div>
+</body></html>

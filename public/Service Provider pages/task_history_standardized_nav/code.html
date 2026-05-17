@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Task History - Service Portal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;  /* Preferred icon size */
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error-container": "#ffdad6",
+                        "surface-dim": "#dcd9db",
+                        "surface-variant": "#e4e2e4",
+                        "surface-container-high": "#eae7e9",
+                        "on-tertiary-container": "#98805d",
+                        "primary-fixed": "#dae2fd",
+                        "primary": "#000000",
+                        "tertiary-fixed-dim": "#dec29a",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-container": "#131b2e",
+                        "secondary-fixed": "#e3e1ec",
+                        "on-tertiary-fixed": "#271901",
+                        "background": "#fcf8fa",
+                        "inverse-primary": "#bec6e0",
+                        "surface-container-highest": "#e4e2e4",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "error": "#ba1a1a",
+                        "tertiary": "#000000",
+                        "secondary-container": "#e3e1ec",
+                        "inverse-surface": "#303032",
+                        "on-tertiary-fixed-variant": "#574425",
+                        "surface": "#fcf8fa",
+                        "on-error-container": "#93000a",
+                        "tertiary-container": "#271901",
+                        "surface-container": "#f0edef",
+                        "tertiary-fixed": "#fcdeb5",
+                        "secondary-fixed-dim": "#c6c5cf",
+                        "primary-fixed-dim": "#bec6e0",
+                        "on-secondary-fixed": "#1a1b22",
+                        "inverse-on-surface": "#f3f0f2",
+                        "outline-variant": "#c6c6cd",
+                        "surface-bright": "#fcf8fa",
+                        "on-background": "#1b1b1d",
+                        "on-surface": "#1b1b1d",
+                        "on-error": "#ffffff",
+                        "surface-container-low": "#f6f3f5",
+                        "secondary": "#5d5e66",
+                        "outline": "#76777d",
+                        "surface-tint": "#565e74",
+                        "on-primary-fixed": "#131b2e",
+                        "on-tertiary": "#ffffff",
+                        "on-surface-variant": "#45464d",
+                        "on-primary": "#ffffff",
+                        "on-secondary-fixed-variant": "#46464e",
+                        "on-secondary-container": "#63646c",
+                        "on-secondary": "#ffffff",
+                        "on-primary-container": "#7c839b"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "table-cell-padding-x": "12px",
+                        "sm": "8px",
+                        "base": "4px",
+                        "xl": "32px",
+                        "xs": "4px",
+                        "table-cell-padding-y": "8px",
+                        "lg": "24px",
+                        "md": "16px"
+                    },
+                    "fontFamily": {
+                        "body-sm": ["Inter"],
+                        "h1": ["Inter"],
+                        "table-header": ["Inter"],
+                        "label": ["Inter"],
+                        "h2": ["Inter"],
+                        "data-tabular": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                        "h1": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "table-header": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "label": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "h2": ["18px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "data-tabular": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md text-body-md antialiased flex h-screen overflow-hidden">
+<!-- SideNavBar -->
+<nav class="bg-surface h-screen w-64 fixed left-0 top-0 border-r border-outline-variant flex flex-col h-full py-lg z-20 hidden md:flex">
+<div class="px-md mb-xl flex flex-col gap-xs">
+<h2 class="font-h2 text-h2 text-primary">Service Portal</h2>
+<span class="font-label text-label text-on-surface-variant">Operational View</span>
+</div>
+<ul class="flex flex-col gap-xs px-sm flex-1">
+<!-- Dashboard -->
+<li>
+<a class="flex items-center gap-sm px-md py-sm cursor-pointer text-on-surface-variant hover:bg-surface-container-highest hover:text-primary transition-all duration-150 rounded-lg" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="dashboard">dashboard</span>
+<span class="font-label text-label">Dashboard</span>
+</a>
+</li>
+<!-- Active Assignments -->
+<li>
+<a class="flex items-center gap-sm px-md py-sm cursor-pointer text-on-surface-variant hover:bg-surface-container-highest hover:text-primary transition-all duration-150 rounded-lg" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="assignment_turned_in">assignment_turned_in</span>
+<span class="font-label text-label">Active Assignments</span>
+</a>
+</li>
+<!-- Task History (ACTIVE) -->
+<li>
+<a class="flex items-center gap-sm px-md py-sm cursor-pointer bg-secondary-container text-on-secondary-container rounded-lg" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="history" data-weight="fill" style="font-variation-settings: 'FILL' 1;">history</span>
+<span class="font-label text-label">Task History</span>
+</a>
+</li>
+<!-- Wallet & Earnings -->
+<li>
+<a class="flex items-center gap-sm px-md py-sm cursor-pointer text-on-surface-variant hover:bg-surface-container-highest hover:text-primary transition-all duration-150 rounded-lg" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="account_balance_wallet">account_balance_wallet</span>
+<span class="font-label text-label">Wallet &amp; Earnings</span>
+</a>
+</li>
+</ul>
+<div class="px-sm mt-auto">
+<!-- Account Settings -->
+<a class="flex items-center gap-sm px-md py-sm cursor-pointer text-on-surface-variant hover:bg-surface-container-highest hover:text-primary transition-all duration-150 rounded-lg" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="settings">settings</span>
+<span class="font-label text-label">Account Settings</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Wrapper -->
+<div class="flex-1 flex flex-col md:ml-64 h-screen overflow-hidden">
+<!-- TopNavBar -->
+<header class="bg-surface w-full h-16 border-b border-outline-variant flex justify-between items-center px-lg shrink-0 z-10">
+<!-- Left: Brand & Search -->
+<div class="flex items-center gap-xl">
+<h1 class="text-h1 font-h1 text-primary md:hidden">PropOps Manager</h1>
+<div class="hidden md:flex items-center bg-surface-container-low border border-outline-variant rounded px-sm py-xs focus-within:border-primary transition-colors">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant mr-xs">search</span>
+<input class="bg-transparent border-none outline-none font-body-sm text-body-sm text-on-surface placeholder:text-on-surface-variant w-64" placeholder="Search tasks..." type="text"/>
+</div>
+</div>
+<!-- Middle: Navigation Links (Web) -->
+<ul class="hidden md:flex items-center gap-lg h-full">
+<li class="h-full flex items-center">
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-200 cursor-pointer active:opacity-70 font-label text-label" href="#">Dashboard</a>
+</li>
+<li class="h-full flex items-center border-b-2 border-primary pb-1 mt-[2px]">
+<!-- Assignments (Active intent match for Task History context) -->
+<a class="text-primary font-bold hover:text-primary transition-colors duration-200 cursor-pointer active:opacity-70 font-label text-label" href="#">Assignments</a>
+</li>
+<li class="h-full flex items-center">
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-200 cursor-pointer active:opacity-70 font-label text-label" href="#">Wallet</a>
+</li>
+</ul>
+<!-- Right: Actions -->
+<div class="flex items-center gap-md">
+<div class="flex items-center gap-sm">
+<button aria-label="help" class="text-on-surface-variant hover:text-primary transition-colors duration-200 flex items-center justify-center cursor-pointer active:opacity-70">
+<span class="material-symbols-outlined text-[20px]" data-icon="help">help</span>
+</button>
+<button aria-label="notifications" class="text-on-surface-variant hover:text-primary transition-colors duration-200 flex items-center justify-center cursor-pointer active:opacity-70 relative">
+<span class="material-symbols-outlined text-[20px]" data-icon="notifications">notifications</span>
+<span class="absolute top-[2px] right-[2px] w-2 h-2 bg-error rounded-full"></span>
+</button>
+</div>
+<button class="bg-primary text-on-primary font-label text-label px-md py-sm rounded hover:opacity-90 transition-opacity cursor-pointer active:opacity-70">
+                    New Task
+                </button>
+<img alt="Service Provider Profile" class="w-8 h-8 rounded-full border border-outline-variant object-cover cursor-pointer" data-alt="A small, circular avatar portrait of a professional service provider. They have a neutral expression, good lighting, and are set against a clean, light-mode background typical of modern corporate dashboards." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0bK4UubumIeNYlWGuJpUoAvcOLHFEWdhdaDGRfwmwa4Tvlo2palfCXYpZj2KTIAZBO8Kq7XKsXfgwraTfDHMcT3k6NCojMc2RF1aZ_ZjKFoOanOjPHMiIcJSAmAsP3_q_frl_52kCHxA-PcqpLVQCeJDYYgffz_W6Z0B7puZG5bj7cHto3AP2I_gGxD4ngDR2dkcqfGzDcgpwoRKTcLmQ4IPZ0iCds3-zNTjPGR04Ebg58bS8BXzcjlAAFfGDu63TrlNb6LlsR1Q"/>
+</div>
+</header>
+<!-- Page Content: Canvas -->
+<main class="flex-1 overflow-y-auto p-lg bg-surface-container-low">
+<div class="flex justify-between items-end mb-lg">
+<div>
+<h2 class="font-h1 text-h1 text-primary mb-xs">Task History</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Review all completed, cancelled, and disputed service assignments.</p>
+</div>
+<div class="flex gap-sm">
+<button class="border border-outline-variant bg-surface-container-lowest text-primary font-label text-label px-md py-sm rounded flex items-center gap-xs hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[16px]">filter_list</span> Filter
+                    </button>
+<button class="border border-outline-variant bg-surface-container-lowest text-primary font-label text-label px-md py-sm rounded flex items-center gap-xs hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[16px]">download</span> Export CSV
+                    </button>
+</div>
+</div>
+<!-- High-Density Table Container -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden w-full">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-high border-b border-outline-variant">
+<tr>
+<th class="font-table-header text-table-header text-on-surface-variant px-table-cell-padding-x py-table-cell-padding-y w-24">Date</th>
+<th class="font-table-header text-table-header text-on-surface-variant px-table-cell-padding-x py-table-cell-padding-y w-24">Task ID</th>
+<th class="font-table-header text-table-header text-on-surface-variant px-table-cell-padding-x py-table-cell-padding-y">Service Type</th>
+<th class="font-table-header text-table-header text-on-surface-variant px-table-cell-padding-x py-table-cell-padding-y">Property</th>
+<th class="font-table-header text-table-header text-on-surface-variant px-table-cell-padding-x py-table-cell-padding-y text-right">Payout</th>
+<th class="font-table-header text-table-header text-on-surface-variant px-table-cell-padding-x py-table-cell-padding-y w-32">Status</th>
+<th class="font-table-header text-table-header text-on-surface-variant px-table-cell-padding-x py-table-cell-padding-y w-16 text-center"></th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<!-- Row 1: Completed -->
+<tr class="bg-surface-container-lowest hover:bg-surface-container-highest transition-colors group">
+<td class="font-data-tabular text-data-tabular text-on-surface px-table-cell-padding-x py-table-cell-padding-y">Oct 24, 2023</td>
+<td class="font-data-tabular text-data-tabular text-on-surface-variant px-table-cell-padding-x py-table-cell-padding-y">#TSK-8921</td>
+<td class="font-body-sm text-body-sm text-on-surface px-table-cell-padding-x py-table-cell-padding-y font-medium">HVAC Inspection</td>
+<td class="font-body-sm text-body-sm text-on-surface-variant px-table-cell-padding-x py-table-cell-padding-y">101 Skyline Towers, Unit 4B</td>
+<td class="font-data-tabular text-data-tabular text-primary px-table-cell-padding-x py-table-cell-padding-y text-right font-medium">$125.00</td>
+<td class="px-table-cell-padding-x py-table-cell-padding-y">
+<span class="inline-flex items-center gap-xs px-2 py-1 rounded bg-secondary-fixed text-on-secondary-fixed font-label text-label">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span> Completed
+                                </span>
+</td>
+<td class="px-table-cell-padding-x py-table-cell-padding-y text-center">
+<button class="text-on-surface-variant hover:text-primary opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+</td>
+</tr>
+<!-- Row 2: Completed -->
+<tr class="bg-surface hover:bg-surface-container-highest transition-colors group">
+<td class="font-data-tabular text-data-tabular text-on-surface px-table-cell-padding-x py-table-cell-padding-y">Oct 22, 2023</td>
+<td class="font-data-tabular text-data-tabular text-on-surface-variant px-table-cell-padding-x py-table-cell-padding-y">#TSK-8874</td>
+<td class="font-body-sm text-body-sm text-on-surface px-table-cell-padding-x py-table-cell-padding-y font-medium">Emergency Plumbing</td>
+<td class="font-body-sm text-body-sm text-on-surface-variant px-table-cell-padding-x py-table-cell-padding-y">45 Maple Street, Apt 2</td>
+<td class="font-data-tabular text-data-tabular text-primary px-table-cell-padding-x py-table-cell-padding-y text-right font-medium">$350.00</td>
+<td class="px-table-cell-padding-x py-table-cell-padding-y">
+<span class="inline-flex items-center gap-xs px-2 py-1 rounded bg-secondary-fixed text-on-secondary-fixed font-label text-label">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span> Completed
+                                </span>
+</td>
+<td class="px-table-cell-padding-x py-table-cell-padding-y text-center">
+<button class="text-on-surface-variant hover:text-primary opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+</td>
+</tr>
+<!-- Row 3: Disputed -->
+<tr class="bg-surface-container-lowest hover:bg-surface-container-highest transition-colors group">
+<td class="font-data-tabular text-data-tabular text-on-surface px-table-cell-padding-x py-table-cell-padding-y">Oct 18, 2023</td>
+<td class="font-data-tabular text-data-tabular text-on-surface-variant px-table-cell-padding-x py-table-cell-padding-y">#TSK-8750</td>
+<td class="font-body-sm text-body-sm text-on-surface px-table-cell-padding-x py-table-cell-padding-y font-medium">Move-out Cleaning</td>
+<td class="font-body-sm text-body-sm text-on-surface-variant px-table-cell-padding-x py-table-cell-padding-y">780 Riverside Dr, Unit 12A</td>
+<td class="font-data-tabular text-data-tabular text-on-surface-variant px-table-cell-padding-x py-table-cell-padding-y text-right line-through">$180.00</td>
+<td class="px-table-cell-padding-x py-table-cell-padding-y">
+<span class="inline-flex items-center gap-xs px-2 py-1 rounded bg-tertiary-fixed text-on-tertiary-fixed-variant font-label text-label">
+<span class="w-1.5 h-1.5 rounded-full bg-on-tertiary-fixed-variant"></span> Disputed
+                                </span>
+</td>
+<td class="px-table-cell-padding-x py-table-cell-padding-y text-center">
+<button class="text-on-surface-variant hover:text-primary opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+</td>
+</tr>
+<!-- Row 4: Cancelled -->
+<tr class="bg-surface hover:bg-surface-container-highest transition-colors group">
+<td class="font-data-tabular text-data-tabular text-on-surface px-table-cell-padding-x py-table-cell-padding-y">Oct 15, 2023</td>
+<td class="font-data-tabular text-data-tabular text-on-surface-variant px-table-cell-padding-x py-table-cell-padding-y">#TSK-8612</td>
+<td class="font-body-sm text-body-sm text-on-surface px-table-cell-padding-x py-table-cell-padding-y font-medium">Appliance Repair</td>
+<td class="font-body-sm text-body-sm text-on-surface-variant px-table-cell-padding-x py-table-cell-padding-y">220 West Ave, Apt 3C</td>
+<td class="font-data-tabular text-data-tabular text-on-surface-variant px-table-cell-padding-x py-table-cell-padding-y text-right">$0.00</td>
+<td class="px-table-cell-padding-x py-table-cell-padding-y">
+<span class="inline-flex items-center gap-xs px-2 py-1 rounded bg-error-container text-on-error-container font-label text-label">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span> Cancelled
+                                </span>
+</td>
+<td class="px-table-cell-padding-x py-table-cell-padding-y text-center">
+<button class="text-on-surface-variant hover:text-primary opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+</td>
+</tr>
+<!-- Row 5: Completed -->
+<tr class="bg-surface-container-lowest hover:bg-surface-container-highest transition-colors group">
+<td class="font-data-tabular text-data-tabular text-on-surface px-table-cell-padding-x py-table-cell-padding-y">Oct 10, 2023</td>
+<td class="font-data-tabular text-data-tabular text-on-surface-variant px-table-cell-padding-x py-table-cell-padding-y">#TSK-8401</td>
+<td class="font-body-sm text-body-sm text-on-surface px-table-cell-padding-x py-table-cell-padding-y font-medium">Routine Landscaping</td>
+<td class="font-body-sm text-body-sm text-on-surface-variant px-table-cell-padding-x py-table-cell-padding-y">Oakwood Estate Common Areas</td>
+<td class="font-data-tabular text-data-tabular text-primary px-table-cell-padding-x py-table-cell-padding-y text-right font-medium">$450.00</td>
+<td class="px-table-cell-padding-x py-table-cell-padding-y">
+<span class="inline-flex items-center gap-xs px-2 py-1 rounded bg-secondary-fixed text-on-secondary-fixed font-label text-label">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span> Completed
+                                </span>
+</td>
+<td class="px-table-cell-padding-x py-table-cell-padding-y text-center">
+<button class="text-on-surface-variant hover:text-primary opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+<!-- Pagination Footer -->
+<div class="bg-surface-container-lowest border-t border-outline-variant px-md py-sm flex justify-between items-center">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Showing 1-5 of 142 tasks</span>
+<div class="flex gap-xs">
+<button class="border border-outline-variant text-on-surface-variant px-sm py-xs rounded hover:bg-surface-container-highest disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<button class="border border-outline-variant text-on-surface-variant px-sm py-xs rounded hover:bg-surface-container-highest">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

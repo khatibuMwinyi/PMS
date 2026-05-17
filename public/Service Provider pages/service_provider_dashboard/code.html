@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Service Provider Dashboard - OPSMP</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Theme Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                            "error-container": "#ffdad6",
+                            "surface-dim": "#dcd9db",
+                            "surface-variant": "#e4e2e4",
+                            "surface-container-high": "#eae7e9",
+                            "on-tertiary-container": "#98805d",
+                            "primary-fixed": "#dae2fd",
+                            "primary": "#000000",
+                            "tertiary-fixed-dim": "#dec29a",
+                            "surface-container-lowest": "#ffffff",
+                            "primary-container": "#131b2e",
+                            "secondary-fixed": "#e3e1ec",
+                            "on-tertiary-fixed": "#271901",
+                            "background": "#fcf8fa",
+                            "inverse-primary": "#bec6e0",
+                            "surface-container-highest": "#e4e2e4",
+                            "on-primary-fixed-variant": "#3f465c",
+                            "error": "#ba1a1a",
+                            "tertiary": "#000000",
+                            "secondary-container": "#e3e1ec",
+                            "inverse-surface": "#303032",
+                            "on-tertiary-fixed-variant": "#574425",
+                            "surface": "#fcf8fa",
+                            "on-error-container": "#93000a",
+                            "tertiary-container": "#271901",
+                            "surface-container": "#f0edef",
+                            "tertiary-fixed": "#fcdeb5",
+                            "secondary-fixed-dim": "#c6c5cf",
+                            "primary-fixed-dim": "#bec6e0",
+                            "on-secondary-fixed": "#1a1b22",
+                            "inverse-on-surface": "#f3f0f2",
+                            "outline-variant": "#c6c6cd",
+                            "surface-bright": "#fcf8fa",
+                            "on-background": "#1b1b1d",
+                            "on-surface": "#1b1b1d",
+                            "on-error": "#ffffff",
+                            "surface-container-low": "#f6f3f5",
+                            "secondary": "#5d5e66",
+                            "outline": "#76777d",
+                            "surface-tint": "#565e74",
+                            "on-primary-fixed": "#131b2e",
+                            "on-tertiary": "#ffffff",
+                            "on-surface-variant": "#45464d",
+                            "on-primary": "#ffffff",
+                            "on-secondary-fixed-variant": "#46464e",
+                            "on-secondary-container": "#63646c",
+                            "on-secondary": "#ffffff",
+                            "on-primary-container": "#7c839b"
+                    },
+                    "borderRadius": {
+                            "DEFAULT": "0.125rem",
+                            "lg": "0.25rem",
+                            "xl": "0.5rem",
+                            "full": "0.75rem"
+                    },
+                    "spacing": {
+                            "table-cell-padding-x": "12px",
+                            "sm": "8px",
+                            "base": "4px",
+                            "xl": "32px",
+                            "xs": "4px",
+                            "table-cell-padding-y": "8px",
+                            "lg": "24px",
+                            "md": "16px"
+                    },
+                    "fontFamily": {
+                            "body-sm": ["Inter"],
+                            "h1": ["Inter"],
+                            "table-header": ["Inter"],
+                            "label": ["Inter"],
+                            "h2": ["Inter"],
+                            "data-tabular": ["Inter"],
+                            "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                            "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                            "h1": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                            "table-header": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                            "label": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                            "h2": ["18px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                            "data-tabular": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                            "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        /* Base styles to enforce font families */
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-background flex h-screen overflow-hidden">
+<!-- Shared Component: SideNavBar -->
+<aside class="h-screen w-64 fixed left-0 top-0 border-r border-outline-variant bg-surface flex flex-col h-full py-lg z-20 hidden md:flex">
+<!-- Header -->
+<div class="px-lg mb-lg flex items-center gap-md">
+<div class="w-10 h-10 rounded-full bg-surface-variant overflow-hidden flex-shrink-0 border border-outline-variant">
+<img alt="Provider Organization Logo" class="w-full h-full object-cover" data-alt="A clean, minimalist corporate logo depicting an abstract geometric building shape in subtle monochromatic tones of slate and white, designed for a modern property management company. High resolution, bright lighting, professional branding context." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMPqHcDBKYt6PBN2X0zQ0U3dMR_6wmRmMcuXX4zvDrWVx4ijxmbKscGml61px3TMjPLlSL_N72csP6mu8m5XOytxyp4SvP3bwlo3U1SFMI3-PqyGnl_2dPrKh6N5IJsGuKnNCBz1BbRmf1bB6-KWDv-1f9cCN5rq3eMzwzeTuKFubibC6ht3rrJBP_E7F4dK69XxbWnvP2Ox2qJ7XzLd6NZnDFiY8LKTRy5LzaxRzP9stPWaSXfJI0ol7tLGJ5lpV26eD58YhqYjw"/>
+</div>
+<div>
+<h2 class="font-h2 text-h2 text-primary font-bold">Service Portal</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Operational View</p>
+</div>
+</div>
+<!-- Navigation -->
+<nav class="flex-1 px-md flex flex-col gap-xs">
+<!-- Active Tab -->
+<a class="flex items-center gap-sm px-md py-sm cursor-pointer bg-secondary-container text-on-secondary-container rounded-lg font-label text-label transition-colors" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+                Dashboard
+            </a>
+<!-- Inactive Tabs -->
+<a class="flex items-center gap-sm px-md py-sm cursor-pointer text-on-surface-variant hover:bg-surface-container-highest rounded-lg font-label text-label transition-all duration-150" href="#">
+<span class="material-symbols-outlined">assignment_turned_in</span>
+                Active Assignments
+            </a>
+<a class="flex items-center gap-sm px-md py-sm cursor-pointer text-on-surface-variant hover:bg-surface-container-highest rounded-lg font-label text-label transition-all duration-150" href="#">
+<span class="material-symbols-outlined">history</span>
+                Task History
+            </a>
+<a class="flex items-center gap-sm px-md py-sm cursor-pointer text-on-surface-variant hover:bg-surface-container-highest rounded-lg font-label text-label transition-all duration-150" href="#">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+                Wallet &amp; Earnings
+            </a>
+<a class="flex items-center gap-sm px-md py-sm cursor-pointer text-on-surface-variant hover:bg-surface-container-highest rounded-lg font-label text-label transition-all duration-150" href="#">
+<span class="material-symbols-outlined">settings</span>
+                Account Settings
+            </a>
+</nav>
+</aside>
+<!-- Main Content Wrapper -->
+<div class="flex-1 flex flex-col md:ml-64 w-full h-full">
+<!-- Shared Component: TopNavBar -->
+<header class="w-full h-16 border-b border-outline-variant bg-surface flex justify-between items-center px-lg max-w-full z-10 flex-shrink-0">
+<!-- Left: Brand & Search -->
+<div class="flex items-center gap-xl h-full">
+<h1 class="font-h1 text-h1 text-primary hidden lg:block">PropOps Manager</h1>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-sm text-on-surface-variant text-[18px]">search</span>
+<input class="pl-xl pr-sm py-xs border border-surface-variant rounded focus:border-primary focus:ring-0 font-body-sm text-body-sm bg-surface-container-lowest w-48 md:w-64 transition-colors" placeholder="Search tasks, properties..." type="text"/>
+</div>
+</div>
+<!-- Center: Navigation Links (Desktop) -->
+<nav class="hidden lg:flex items-center gap-lg h-full">
+<a class="flex items-center h-full text-primary font-bold border-b-2 border-primary pb-1 font-label text-label mt-1" href="#">Dashboard</a>
+<a class="flex items-center h-full text-on-surface-variant font-medium hover:text-primary transition-colors duration-200 font-label text-label cursor-pointer active:opacity-70 mt-1" href="#">Assignments</a>
+<a class="flex items-center h-full text-on-surface-variant font-medium hover:text-primary transition-colors duration-200 font-label text-label cursor-pointer active:opacity-70 mt-1" href="#">Wallet</a>
+</nav>
+<!-- Right: Actions -->
+<div class="flex items-center gap-md">
+<button class="hidden md:flex bg-primary text-on-primary px-md py-sm rounded border border-primary font-label text-label hover:opacity-90 transition-opacity">
+                    New Task
+                </button>
+<div class="flex items-center gap-sm">
+<button class="p-xs text-on-surface-variant hover:text-primary transition-colors rounded hover:bg-surface-container-high">
+<span class="material-symbols-outlined text-[20px]">help</span>
+</button>
+<button class="p-xs text-on-surface-variant hover:text-primary transition-colors rounded hover:bg-surface-container-high relative">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-error rounded-full"></span>
+</button>
+</div>
+<div class="w-8 h-8 rounded border border-outline-variant overflow-hidden cursor-pointer">
+<img alt="Service Provider Profile" class="w-full h-full object-cover" data-alt="A professional headshot of a smiling male service provider wearing a crisp collared shirt. He is outdoors with a blurred architectural background. Natural, high-key lighting creates a friendly, trustworthy corporate aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMAn5HQVKkqDKYecRDX68gIM-pgtSalT10rLeWXmY8wVh00pFggtDEYeWoX75o5WjbQI1idV18BtyOqnX_efvSZExvbkeDGpHJYguS-ZveVerjmqCHDLUlxhN6QaYFWiQcHTZfBN90iToC6aCqfeAgBRaGY-bhV-MjyJI_bA_68PvnyfizjE2V1UmdFGSIStnFthuBgyRbij4hL_PAyq3suxcupV06oUGohGF1Qex1tGAFP6PsAl51x57fw2IJj10ycbtQne8B1Xs"/>
+</div>
+</div>
+</header>
+<!-- Canvas (Dashboard Content) -->
+<main class="flex-1 overflow-y-auto bg-background p-md md:p-lg">
+<div class="max-w-7xl mx-auto space-y-lg">
+<!-- Page Header -->
+<div class="flex items-end justify-between border-b border-surface-variant pb-sm">
+<div>
+<h1 class="font-h1 text-h1 text-on-surface">Overview</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-xs">Today's operational metrics and active assignments.</p>
+</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant hidden md:block">
+                        Updated: Today, 08:42 AM
+                    </div>
+</div>
+<!-- Metrics Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-md">
+<!-- Earnings Card -->
+<div class="bg-surface-container-lowest border border-surface-variant rounded p-md flex flex-col justify-between">
+<div class="flex items-center justify-between mb-sm">
+<span class="font-label text-label text-on-surface-variant uppercase tracking-wider">Today's Earnings</span>
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]">account_balance_wallet</span>
+</div>
+<div>
+<div class="font-h1 text-[32px] font-bold text-primary">$450.00</div>
+<div class="flex items-center gap-xs mt-xs">
+<span class="bg-secondary-container text-on-secondary-container px-xs py-[2px] rounded font-label text-[10px]">80% Share</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">of total billed</span>
+</div>
+</div>
+</div>
+<!-- Active Tasks Card -->
+<div class="bg-surface-container-lowest border border-surface-variant rounded p-md flex flex-col justify-between">
+<div class="flex items-center justify-between mb-sm">
+<span class="font-label text-label text-on-surface-variant uppercase tracking-wider">Active Tasks</span>
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]">assignment</span>
+</div>
+<div>
+<div class="font-h1 text-[32px] font-bold text-primary">5</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant mt-xs">Requires attention today</div>
+</div>
+</div>
+<!-- Acceptance Rate Card -->
+<div class="bg-surface-container-lowest border border-surface-variant rounded p-md flex flex-col justify-between">
+<div class="flex items-center justify-between mb-sm">
+<span class="font-label text-label text-on-surface-variant uppercase tracking-wider">Acceptance Rate</span>
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]">check_circle</span>
+</div>
+<div>
+<div class="font-h1 text-[32px] font-bold text-primary">98%</div>
+<div class="flex items-center gap-xs mt-xs text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[16px] text-primary">trending_up</span>
+                                +2% from last week
+                            </div>
+</div>
+</div>
+<!-- Rating Card -->
+<div class="bg-surface-container-lowest border border-surface-variant rounded p-md flex flex-col justify-between">
+<div class="flex items-center justify-between mb-sm">
+<span class="font-label text-label text-on-surface-variant uppercase tracking-wider">Average Rating</span>
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]">star</span>
+</div>
+<div>
+<div class="font-h1 text-[32px] font-bold text-primary flex items-baseline gap-xs">
+                                4.9 <span class="font-body-sm text-body-sm text-on-surface-variant font-normal">/ 5.0</span>
+</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant mt-xs">Based on 142 reviews</div>
+</div>
+</div>
+</div>
+<!-- Main Content Split -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-lg">
+<!-- Left Column: Upcoming & Tracker -->
+<div class="lg:col-span-2 space-y-lg">
+<!-- Next Upcoming Assignment -->
+<section class="bg-surface-container-lowest border border-surface-variant rounded p-md">
+<div class="flex items-center justify-between mb-md">
+<h2 class="font-h2 text-h2 text-on-surface">Next Upcoming Assignment</h2>
+<span class="bg-error-container text-on-error-container font-label text-label px-sm py-xs rounded flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px]">schedule</span> Starts in 45m
+                                </span>
+</div>
+<div class="flex flex-col md:flex-row gap-md bg-surface p-md rounded border border-surface-variant">
+<div class="flex-1 border-b md:border-b-0 md:border-r border-surface-variant pb-md md:pb-0 md:pr-md">
+<div class="font-label text-label text-on-surface-variant mb-xs">Location</div>
+<div class="font-body-md text-body-md text-primary font-bold">1204 Oakwood Apartments, Unit 3B</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant mt-xs flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px]">location_on</span>
+                                        Seattle, WA 98104
+                                    </div>
+</div>
+<div class="flex-1 flex flex-col justify-between">
+<div>
+<div class="font-label text-label text-on-surface-variant mb-xs">Task Details</div>
+<div class="font-body-md text-body-md text-on-surface">HVAC Routine Maintenance</div>
+<div class="mt-xs">
+<span class="bg-secondary-container text-on-secondary-container font-label text-label px-xs py-base rounded inline-block mr-xs">Priority: Routine</span>
+<span class="bg-surface-container-highest text-on-surface font-label text-label px-xs py-base rounded inline-block">Est: 1.5h</span>
+</div>
+</div>
+<div class="mt-md flex gap-sm">
+<button class="flex-1 bg-primary text-on-primary font-label text-label py-sm px-md rounded border border-primary hover:opacity-90 transition-opacity text-center">
+                                            Start Task
+                                        </button>
+<button class="bg-surface-container-lowest text-primary font-label text-label py-sm px-md rounded border border-outline-variant hover:bg-surface-container transition-colors text-center">
+                                            Details
+                                        </button>
+</div>
+</div>
+</div>
+</section>
+<!-- High Density Table: Active Pipeline -->
+<section>
+<h2 class="font-h2 text-h2 text-on-surface mb-sm">Active Pipeline</h2>
+<div class="border border-surface-variant rounded bg-surface-container-lowest overflow-hidden">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container border-b border-surface-variant">
+<th class="font-table-header text-table-header text-on-surface-variant py-table-cell-padding-y px-table-cell-padding-x font-semibold">ID</th>
+<th class="font-table-header text-table-header text-on-surface-variant py-table-cell-padding-y px-table-cell-padding-x font-semibold">Property</th>
+<th class="font-table-header text-table-header text-on-surface-variant py-table-cell-padding-y px-table-cell-padding-x font-semibold">Type</th>
+<th class="font-table-header text-table-header text-on-surface-variant py-table-cell-padding-y px-table-cell-padding-x font-semibold">Scheduled</th>
+<th class="font-table-header text-table-header text-on-surface-variant py-table-cell-padding-y px-table-cell-padding-x font-semibold text-right">Status</th>
+</tr>
+</thead>
+<tbody class="font-data-tabular text-data-tabular">
+<tr class="border-b border-surface-variant even:bg-surface-container-low hover:bg-surface-container-high transition-colors">
+<td class="py-table-cell-padding-y px-table-cell-padding-x text-on-surface-variant">#TSK-882</td>
+<td class="py-table-cell-padding-y px-table-cell-padding-x font-medium text-primary">Pine View Estates</td>
+<td class="py-table-cell-padding-y px-table-cell-padding-x">Plumbing Repair</td>
+<td class="py-table-cell-padding-y px-table-cell-padding-x">Today, 1:00 PM</td>
+<td class="py-table-cell-padding-y px-table-cell-padding-x text-right">
+<span class="bg-secondary-container text-on-secondary-container font-label text-[11px] px-xs py-base rounded uppercase">Confirmed</span>
+</td>
+</tr>
+<tr class="border-b border-surface-variant even:bg-surface-container-low hover:bg-surface-container-high transition-colors">
+<td class="py-table-cell-padding-y px-table-cell-padding-x text-on-surface-variant">#TSK-885</td>
+<td class="py-table-cell-padding-y px-table-cell-padding-x font-medium text-primary">Grand Plaza Retail</td>
+<td class="py-table-cell-padding-y px-table-cell-padding-x">Electrical Inspect</td>
+<td class="py-table-cell-padding-y px-table-cell-padding-x">Today, 3:30 PM</td>
+<td class="py-table-cell-padding-y px-table-cell-padding-x text-right">
+<span class="bg-secondary-container text-on-secondary-container font-label text-[11px] px-xs py-base rounded uppercase">Dispatched</span>
+</td>
+</tr>
+<tr class="even:bg-surface-container-low hover:bg-surface-container-high transition-colors">
+<td class="py-table-cell-padding-y px-table-cell-padding-x text-on-surface-variant">#TSK-889</td>
+<td class="py-table-cell-padding-y px-table-cell-padding-x font-medium text-primary">Sunset Villas</td>
+<td class="py-table-cell-padding-y px-table-cell-padding-x">Move-out Clean</td>
+<td class="py-table-cell-padding-y px-table-cell-padding-x">Tmrw, 9:00 AM</td>
+<td class="py-table-cell-padding-y px-table-cell-padding-x text-right">
+<span class="bg-surface-variant text-on-surface font-label text-[11px] px-xs py-base rounded uppercase">Pending</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</div>
+<!-- Right Column: Timeline / Sidebar widgets -->
+<div class="space-y-lg">
+<!-- Operational Workflow Tracker -->
+<div class="bg-surface-container-lowest border border-surface-variant rounded p-md">
+<h3 class="font-h2 text-h2 text-on-surface mb-md">Today's Progress</h3>
+<div class="relative pl-sm">
+<!-- Line connecting steps -->
+<div class="absolute left-[15px] top-4 bottom-4 w-[1px] bg-surface-variant"></div>
+<!-- Step 1: Completed -->
+<div class="relative flex items-start gap-md mb-md">
+<div class="w-6 h-6 rounded-full bg-surface-container-lowest border border-primary flex items-center justify-center z-10 mt-xs">
+<span class="material-symbols-outlined text-[14px] text-primary">check</span>
+</div>
+<div>
+<div class="font-label text-label text-primary font-bold">Morning Briefing</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">Completed at 08:00 AM</div>
+</div>
+</div>
+<!-- Step 2: Active -->
+<div class="relative flex items-start gap-md mb-md">
+<div class="w-6 h-6 rounded-full bg-primary flex items-center justify-center z-10 mt-xs shadow-[0_0_0_4px_rgba(20,27,46,0.1)]">
+<div class="w-2 h-2 bg-surface-container-lowest rounded-full"></div>
+</div>
+<div>
+<div class="font-label text-label text-primary font-bold">In Transit: Task #881</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">Expected arrival 09:15 AM</div>
+</div>
+</div>
+<!-- Step 3: Pending -->
+<div class="relative flex items-start gap-md">
+<div class="w-6 h-6 rounded-full bg-surface-container-lowest border border-outline-variant flex items-center justify-center z-10 mt-xs"></div>
+<div>
+<div class="font-label text-label text-on-surface-variant">Task #882 Execution</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant opacity-70">Scheduled 1:00 PM</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Quick Actions -->
+<div class="bg-surface-container-lowest border border-surface-variant rounded p-md">
+<h3 class="font-h2 text-h2 text-on-surface mb-sm">Quick Actions</h3>
+<div class="flex flex-col gap-sm">
+<button class="flex items-center gap-sm p-sm border border-surface-variant rounded hover:border-primary transition-colors text-left group">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">add_box</span>
+<div>
+<div class="font-label text-label text-on-surface">Log Expense</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant text-[11px]">Submit receipt for reimbursement</div>
+</div>
+</button>
+<button class="flex items-center gap-sm p-sm border border-surface-variant rounded hover:border-primary transition-colors text-left group">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">calendar_month</span>
+<div>
+<div class="font-label text-label text-on-surface">Update Availability</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant text-[11px]">Manage schedule blocks</div>
+</div>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>
