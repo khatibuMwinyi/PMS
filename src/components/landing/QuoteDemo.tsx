@@ -35,7 +35,7 @@ export function QuoteDemo() {
   );
 
   return (
-    <section id="quote" className="bg-primary py-20 md:py-28">
+    <section id="quote" data-nav-theme="dark" className="bg-primary py-20 md:py-28">
       <div className="mx-auto max-w-editorial px-6">
         <div className="text-center mb-12">
           <p className="text-caption uppercase text-accent tracking-widest mb-3">Instant pricing</p>

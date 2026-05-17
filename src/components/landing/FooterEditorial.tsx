@@ -1,17 +1,29 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { FOOTER } from '@/lib/landingContent';
 
 export function FooterEditorial() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="bg-primary border-t border-white/10 pt-16 pb-10">
+    <footer data-nav-theme="dark" className="bg-primary border-t border-white/10 pt-16 pb-10">
       <div className="mx-auto max-w-editorial px-6">
         {/* Top: logo + columns */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
-            <p className="font-serif text-h3 text-accent mb-3">Oweru</p>
+            <div className="flex items-center gap-2.5 mb-3">
+              <div className="relative w-8 h-8 rounded-lg overflow-hidden shrink-0">
+                <Image
+                  src="/images/logo.jpeg"
+                  alt="Oweru"
+                  fill
+                  sizes="32px"
+                  className="object-cover"
+                />
+              </div>
+              <span className="font-serif text-h3 text-accent">Oweru</span>
+            </div>
             <p className="text-body-sm text-text-secondary-on-dark max-w-xs">
               Tanzania's managed property service platform. One contract. One invoice.
             </p>

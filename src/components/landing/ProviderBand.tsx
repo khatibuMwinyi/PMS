@@ -3,7 +3,7 @@ import { PROVIDER_BAND } from '@/lib/landingContent';
 
 export function ProviderBand() {
   return (
-    <section id="become-provider" className="bg-primary py-20 md:py-28">
+    <section id="become-provider" data-nav-theme="dark" className="bg-primary py-20 md:py-28">
       <div className="mx-auto max-w-editorial px-6">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div>

@@ -8,7 +8,7 @@ const PILL_ICONS = { Lock, ShieldCheck, Smartphone } as const;
 
 export function HeroEditorial() {
   return (
-    <section className="relative overflow-hidden bg-primary pt-24 pb-20 md:pt-32 md:pb-28">
+    <section data-nav-theme="dark" className="relative overflow-hidden bg-primary pt-24 pb-20 md:pt-32 md:pb-28">
       {/* Subtle grid texture */}
       <div
         aria-hidden
