@@ -565,6 +565,225 @@ async function main() {
   ])
   console.log('✓ Wallet transactions created')
 
+  // ============ ACTIVATE PROPERTIES ============
+  await prisma.property.updateMany({ data: { status: 'ACTIVE' } });
+  console.log('✓ All properties set to ACTIVE')
+
+  // ============ ADDITIONAL STANDALONE QUOTES ============
+  const extraQuotes = [
+    { ownerId: owners[0].id, propIdx: 0, svcIdx: 4, price: 120000, status: 'QUOTED' as const, lockedForHours: 24 },
+    { ownerId: owners[0].id, propIdx: 1, svcIdx: 5, price: 100000, status: 'EXPIRED' as const, lockedForHours: -48 },
+    { ownerId: owners[1].id, propIdx: 3, svcIdx: 6, price: 120000, status: 'QUOTED' as const, lockedForHours: 24 },
+    { ownerId: owners[2].id, propIdx: 5, svcIdx: 1, price: 150000, status: 'QUOTED' as const, lockedForHours: 24 },
+    { ownerId: owners[2].id, propIdx: 7, svcIdx: 0, price: 50000, status: 'EXPIRED' as const, lockedForHours: -48 },
+  ];
+
+  for (const q of extraQuotes) {
+    await prisma.quote.create({
+      data: {
+        ownerId: q.ownerId,
+        propertyId: properties[q.propIdx].id,
+        serviceTypeId: serviceTypes[q.svcIdx].id,
+        quotedPrice: q.price,
+        priceLockedUntil: new Date(Date.now() + q.lockedForHours * 60 * 60 * 1000),
+        frequency: 'ONE_TIME',
+        unitCount: 1,
+        status: q.status,
+      },
+    });
+  }
+  console.log('✓ 5 standalone quotes created')
+
+  // ============ ADDITIONAL WORK ORDERS WITH VARIED STATUSES ============
+  const extraConfigs = [
+    { propIdx: 1, svcIdx: 0, providerIdx: 0, ownerIdx: 0, status: 'SCHEDULED' as const, price: 150000, acceptedHoursAgo: 24, agreedStatus: 'ACTIVE' as const },
+    { propIdx: 6, svcIdx: 3, providerIdx: 1, ownerIdx: 2, status: 'VERIFIED' as const, price: 200000, acceptedHoursAgo: 72, agreedStatus: 'COMPLETED' as const },
+    { propIdx: 4, svcIdx: 4, providerIdx: 2, ownerIdx: 1, status: 'DISPUTED' as const, price: 120000, acceptedHoursAgo: 48, agreedStatus: 'ACTIVE' as const },
+    { propIdx: 5, svcIdx: 0, providerIdx: 3, ownerIdx: 2, status: 'COMPLETED' as const, price: 50000, acceptedHoursAgo: 96, agreedStatus: 'ACTIVE' as const },
+  ];
+
+  for (const cfg of extraConfigs) {
+    const ownerId = owners[cfg.ownerIdx].id;
+
+    const quote = await prisma.quote.create({
+      data: {
+        ownerId,
+        propertyId: properties[cfg.propIdx].id,
+        serviceTypeId: serviceTypes[cfg.svcIdx].id,
+        quotedPrice: cfg.price,
+        priceLockedUntil: new Date(Date.now() + 24 * 60 * 60 * 1000),
+        frequency: 'ONE_TIME',
+        status: 'ACCEPTED',
+      },
+    });
+
+    const agreement = await prisma.agreement.create({
+      data: {
+        quoteId: quote.id,
+        ownerId,
+        propertyId: properties[cfg.propIdx].id,
+        serviceTypeId: serviceTypes[cfg.svcIdx].id,
+        quotedPrice: cfg.price,
+        frequency: 'ONE_TIME',
+        status: cfg.agreedStatus,
+      },
+    });
+
+    const total = cfg.price;
+    const providerPayout = Math.round(total * 0.8);
+    const platformFee = total - providerPayout;
+
+    const acceptedAt = new Date(Date.now() - cfg.acceptedHoursAgo * 60 * 60 * 1000);
+    const completedAt = cfg.status === 'VERIFIED' || cfg.status === 'COMPLETED'
+      ? new Date(Date.now() - 24 * 60 * 60 * 1000)
+      : undefined;
+    const verifiedAt = cfg.status === 'VERIFIED'
+      ? new Date(Date.now() - 12 * 60 * 60 * 1000)
+      : undefined;
+    const disputedAt = cfg.status === 'DISPUTED'
+      ? new Date(Date.now() - 6 * 60 * 60 * 1000)
+      : undefined;
+
+    const assignment = await prisma.assignment.create({
+      data: {
+        agreementId: agreement.id,
+        propertyId: properties[cfg.propIdx].id,
+        serviceTypeId: serviceTypes[cfg.svcIdx].id,
+        providerId: providerProfiles[cfg.providerIdx].id,
+        status: cfg.status,
+        totalAmount: total,
+        providerPayout,
+        platformFee,
+        acceptedAt,
+        completedAt,
+        verifiedAt,
+        disputedAt,
+        expiresAt: new Date(Date.now() + 48 * 60 * 60 * 1000),
+      },
+    });
+
+    await prisma.invoice.create({
+      data: {
+        agreementId: agreement.id,
+        amount: total,
+        status: cfg.status === 'VERIFIED' || cfg.status === 'COMPLETED' ? 'PAID' : 'PENDING',
+        dueAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+        paidAt: cfg.status === 'VERIFIED' || cfg.status === 'COMPLETED'
+          ? new Date(Date.now() - 24 * 60 * 60 * 1000)
+          : null,
+      },
+    });
+
+    await prisma.task.create({
+      data: {
+        assignmentId: assignment.id,
+        scheduledFor: cfg.status === 'SCHEDULED'
+          ? new Date(Date.now() + 2 * 60 * 60 * 1000)
+          : new Date(Date.now() - 24 * 60 * 60 * 1000),
+        status: cfg.status,
+        checkOutTime: cfg.status !== 'SCHEDULED' ? new Date(Date.now() - 20 * 60 * 60 * 1000) : undefined,
+        evidenceImages: cfg.status !== 'SCHEDULED'
+          ? ['https://images.unsplash.com/photo-1581578731548-cdea95ad99ae?w=800']
+          : [],
+      },
+    });
+
+    if (cfg.status === 'DISPUTED') {
+      const disputeTask = await prisma.task.findFirst({
+        where: { assignmentId: assignment.id },
+      });
+      if (disputeTask) {
+        await prisma.dispute.create({
+          data: {
+            taskId: disputeTask.id,
+            reason: 'Service was not completed to the agreed standard. Areas were left uncleaned and items were damaged during the cleaning process.',
+            status: 'OPEN',
+            expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+          },
+        });
+      }
+    }
+  }
+  console.log('✓ 4 additional work orders created with varied statuses')
+
+  // ============ AGED PAID INVOICES FOR REPORTS CHARTS ============
+  const agedInvoiceConfigs = [
+    { ownerIdx: 0, propIdx: 0, svcIdx: 0, price: 50000, monthsAgo: 2 },
+    { ownerIdx: 1, propIdx: 3, svcIdx: 2, price: 250000, monthsAgo: 4 },
+    { ownerIdx: 2, propIdx: 5, svcIdx: 7, price: 150000, monthsAgo: 5 },
+  ];
+
+  for (const acfg of agedInvoiceConfigs) {
+    const ownerId = owners[acfg.ownerIdx].id;
+
+    const agedQuote = await prisma.quote.create({
+      data: {
+        ownerId,
+        propertyId: properties[acfg.propIdx].id,
+        serviceTypeId: serviceTypes[acfg.svcIdx].id,
+        quotedPrice: acfg.price,
+        priceLockedUntil: new Date(Date.now() + 24 * 60 * 60 * 1000),
+        frequency: 'ONE_TIME',
+        status: 'ACCEPTED',
+      },
+    });
+
+    const agedAgreement = await prisma.agreement.create({
+      data: {
+        quoteId: agedQuote.id,
+        ownerId,
+        propertyId: properties[acfg.propIdx].id,
+        serviceTypeId: serviceTypes[acfg.svcIdx].id,
+        quotedPrice: acfg.price,
+        frequency: 'ONE_TIME',
+        status: 'COMPLETED',
+      },
+    });
+
+    const paidAt = new Date();
+    paidAt.setMonth(paidAt.getMonth() - acfg.monthsAgo);
+    paidAt.setDate(15);
+
+    const dueAt = new Date(paidAt);
+    dueAt.setDate(dueAt.getDate() + 30);
+
+    await prisma.invoice.create({
+      data: {
+        agreementId: agedAgreement.id,
+        amount: acfg.price,
+        status: 'PAID',
+        dueAt,
+        paidAt,
+      },
+    });
+  }
+  console.log('✓ 3 aged paid invoices created for reports charts')
+
+  // ============ UTILITY BILLS ============
+  const utilityBills = [
+    { propIdx: 0, type: 'WATER' as const, amount: 450000, period: 'March 2026' },
+    { propIdx: 0, type: 'ELECTRICITY' as const, amount: 850000, period: 'March 2026' },
+    { propIdx: 1, type: 'WATER' as const, amount: 600000, period: 'March 2026' },
+    { propIdx: 1, type: 'ELECTRICITY' as const, amount: 1200000, period: 'March 2026' },
+    { propIdx: 1, type: 'WASTE' as const, amount: 150000, period: 'March 2026' },
+    { propIdx: 3, type: 'WATER' as const, amount: 300000, period: 'March 2026' },
+    { propIdx: 3, type: 'ELECTRICITY' as const, amount: 700000, period: 'March 2026' },
+    { propIdx: 6, type: 'ELECTRICITY' as const, amount: 950000, period: 'March 2026' },
+  ];
+
+  for (const ub of utilityBills) {
+    await prisma.utilityBill.create({
+      data: {
+        propertyId: properties[ub.propIdx].id,
+        type: ub.type,
+        amount: ub.amount,
+        billingPeriod: ub.period,
+        allocationMethod: 'PER_UNIT',
+      },
+    });
+  }
+  console.log('✓ 8 utility bills created')
+
   console.log('\n✅ Database seeded successfully!')
   console.log('\n📋 Login credentials:')
   console.log('   Email: admin@oweru.co.tz | Password: password | Role: ADMIN')
