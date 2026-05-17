@@ -97,8 +97,7 @@ export function ProviderRegisterForm({ onSuccess }: ProviderRegisterFormProps) {
             autoComplete="organization"
             placeholder="Your Business Name"
             error={errors.businessName?.message}
-            variant="auth"
-            {...register('businessName')}
+                  {...register('businessName')}
           />
         </div>
 
@@ -110,8 +109,7 @@ export function ProviderRegisterForm({ onSuccess }: ProviderRegisterFormProps) {
             autoComplete="email"
             placeholder="you@example.com"
             error={errors.email?.message}
-            variant="auth"
-            {...register('email')}
+                  {...register('email')}
           />
         </div>
 
@@ -124,8 +122,7 @@ export function ProviderRegisterForm({ onSuccess }: ProviderRegisterFormProps) {
             placeholder="+255 71x xxx xxxx"
             helper="+255 71x or +255 68x format"
             error={errors.phone?.message}
-            variant="auth"
-            {...register('phone')}
+                  {...register('phone')}
           />
         </div>
 
@@ -138,8 +135,7 @@ export function ProviderRegisterForm({ onSuccess }: ProviderRegisterFormProps) {
               autoComplete="new-password"
               placeholder="••••••••"
               error={errors.password?.message}
-              variant="auth"
-              rightElement={
+                  rightElement={
                 <button type="button" tabIndex={-1} onClick={() => setShowPass((v) => !v)} aria-label="Toggle password">
                   <EyeOff className="text-[var(--brand-gold-light)]/60 hover:text-white transition-colors" size={18} />
                 </button>
@@ -158,8 +154,7 @@ export function ProviderRegisterForm({ onSuccess }: ProviderRegisterFormProps) {
             autoComplete="new-password"
             placeholder="••••••••"
             error={errors.confirmPassword?.message}
-            variant="auth"
-            rightElement={
+                  rightElement={
               <button type="button" tabIndex={-1} onClick={() => setShowConfirm((v) => !v)} aria-label="Toggle confirm password">
                 <EyeOff className="text-[var(--brand-gold-light)]/60 hover:text-white transition-colors" size={18} />
               </button>

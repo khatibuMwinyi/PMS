@@ -75,8 +75,7 @@ export function OwnerRegisterForm({ onSuccess, selectedPlan }: OwnerRegisterForm
               autoComplete="given-name"
               placeholder="Amina"
               error={errors.firstName?.message}
-              variant="auth"
-              {...register('firstName')}
+                  {...register('firstName')}
             />
           </div>
           <div className="relative">
@@ -86,8 +85,7 @@ export function OwnerRegisterForm({ onSuccess, selectedPlan }: OwnerRegisterForm
               autoComplete="family-name"
               placeholder="Bakari"
               error={errors.lastName?.message}
-              variant="auth"
-              {...register('lastName')}
+                  {...register('lastName')}
             />
           </div>
         </div>
@@ -98,9 +96,8 @@ export function OwnerRegisterForm({ onSuccess, selectedPlan }: OwnerRegisterForm
             type="email"
             autoComplete="email"
             placeholder="you@example.com"
-            error={errors.email?.message}
-            variant="auth"
-            {...register('email')}
+              error={errors.email?.message}
+                  {...register('email')}
           />
         </div>
 
@@ -111,9 +108,8 @@ export function OwnerRegisterForm({ onSuccess, selectedPlan }: OwnerRegisterForm
             autoComplete="tel"
             placeholder="+255 71x xxx xxxx"
             helper="+255 71x or +255 68x format"
-            error={errors.phone?.message}
-            variant="auth"
-            {...register('phone')}
+              error={errors.phone?.message}
+                  {...register('phone')}
           />
         </div>
 
@@ -126,8 +122,7 @@ export function OwnerRegisterForm({ onSuccess, selectedPlan }: OwnerRegisterForm
               autoComplete="new-password"
               placeholder="••••••••"
               error={errors.password?.message}
-              variant="auth"
-              rightElement={
+                  rightElement={
                 <button type="button" tabIndex={-1} onClick={() => setShowPass((v) => !v)} aria-label="Toggle password">
                   <EyeOff className="text-[var(--brand-gold-light)]/60 hover:text-white transition-colors" size={18} />
                 </button>
@@ -145,8 +140,7 @@ export function OwnerRegisterForm({ onSuccess, selectedPlan }: OwnerRegisterForm
             autoComplete="new-password"
             placeholder="••••••••"
             error={errors.confirmPassword?.message}
-            variant="auth"
-            rightElement={
+                  rightElement={
               <button type="button" tabIndex={-1} onClick={() => setShowConfirm((v) => !v)} aria-label="Toggle confirm password">
                 <EyeOff className="text-[var(--brand-gold-light)]/60 hover:text-white transition-colors" size={18} />
               </button>
