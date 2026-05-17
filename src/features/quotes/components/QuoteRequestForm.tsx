@@ -1,13 +1,12 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { Decimal } from 'decimal.js';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
-import { requestQuote, listOwnerQuotes } from '../actions';
-import { QuoteStatus } from '../types';
+import { requestQuote } from '../actions';
 
 interface Property {
   id: string;
@@ -23,13 +22,13 @@ interface ServiceType {
 
 interface QuoteRequestFormProps {
   ownerId: string;
+  properties: Property[];
+  serviceTypes: ServiceType[];
   onSuccess?: (quoteId: string) => void;
 }
 
-export function QuoteRequestForm({ ownerId, onSuccess }: QuoteRequestFormProps) {
+export function QuoteRequestForm({ ownerId, properties, serviceTypes, onSuccess }: QuoteRequestFormProps) {
   const router = useRouter();
-  const [properties, setProperties] = useState<Property[]>([]);
-  const [serviceTypes, setServiceTypes] = useState<ServiceType[]>([]);
   const [selectedPropertyId, setSelectedPropertyId] = useState('');
   const [selectedServiceTypeId, setSelectedServiceTypeId] = useState('');
   const [locationFactor, setLocationFactor] = useState(1.0);
@@ -38,25 +37,6 @@ export function QuoteRequestForm({ ownerId, onSuccess }: QuoteRequestFormProps) 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [quotedPrice, setQuotedPrice] = useState<Decimal | null>(null);
-
-  // Fetch properties and service types on mount
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        // In a real app, these would be server actions
-        // For now, we'll use placeholder data
-        setProperties([
-          // Would fetch from API
-        ]);
-        setServiceTypes([
-          // Would fetch from API
-        ]);
-      } catch (err) {
-        setError('Failed to load form data');
-      }
-    }
-    fetchData();
-  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

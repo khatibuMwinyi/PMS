@@ -37,6 +37,19 @@ async function QuoteDetailContent({ quoteId }: { quoteId: string }) {
     ? new Date() > quote.priceLockedUntil 
     : false;
 
+  const unitCount = quote.unitCount ?? 1;
+  const frequencyMultiplier =
+    quote.frequency === 'WEEKLY' ? 0.9 :
+    quote.frequency === 'BIWEEKLY' ? 0.95 :
+    quote.frequency === 'MONTHLY' ? 1.0 :
+    1.0;
+
+  const basePrice = new Decimal(Number(quote.serviceType.basePrice));
+  const denom = basePrice.times(frequencyMultiplier).times(unitCount);
+  const locationFactor = denom.isZero()
+    ? new Decimal(1)
+    : quotedPrice.div(denom);
+
   return (
     <div className="max-w-4xl space-y-6">
       {/* Quote Details Card */}
@@ -100,20 +113,19 @@ async function QuoteDetailContent({ quoteId }: { quoteId: string }) {
             <div className="flex justify-between">
               <span className="text-sm text-[var(--text-muted)]">Location Factor</span>
               <span className="text-sm font-data-tabular text-[var(--text-primary)]">
-                {/* Would be stored in a real system */}
-                1.0
+                {locationFactor.toFixed(2)}
               </span>
             </div>
             <div className="flex justify-between">
               <span className="text-sm text-[var(--text-muted)]">Frequency Multiplier</span>
               <span className="text-sm font-data-tabular text-[var(--text-primary)]">
-                1.0
+                {frequencyMultiplier.toFixed(1)}
               </span>
             </div>
             <div className="flex justify-between">
               <span className="text-sm text-[var(--text-muted)]">Unit Count</span>
               <span className="text-sm font-data-tabular text-[var(--text-primary)]">
-                1
+                {unitCount}
               </span>
             </div>
             <div className="flex justify-between font-semibold border-t border-[var(--border-default)] pt-2">

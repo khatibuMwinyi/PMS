@@ -1,15 +1,38 @@
+import { auth } from '@/core/auth';
+import { prisma } from '@/core/database/client';
+import { getAllServiceTypes } from '@/lib/api/services';
 import { QuoteRequestForm } from '@/features/quotes/components/QuoteRequestForm';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 
-export default function NewQuotePage() {
+export default async function NewQuotePage() {
+  const session = await auth();
+  const ownerId = session?.user?.id ?? '';
+
+  const ownerProfile = ownerId
+    ? await prisma.ownerProfile.findUnique({ where: { userId: ownerId } })
+    : null;
+
+  const properties = ownerProfile
+    ? await prisma.property.findMany({
+        where: { ownerId: ownerProfile.id },
+        select: { id: true, name: true, zone: true },
+      })
+    : [];
+
+  const rawServiceTypes = await getAllServiceTypes();
+  const serviceTypes = rawServiceTypes.map((st) => ({
+    id: st.id,
+    name: st.name,
+    basePrice: Number(st.basePrice),
+  }));
+
   return (
     <div className="flex flex-col gap-6 max-w-6xl">
-      
-      {/* ── Page header ─────────────────────────────────── */}
+
       <div className="flex items-start gap-4">
-        <Link 
-          href="/owner/quotes" 
+        <Link
+          href="/owner/quotes"
           className="mt-1 p-2 hover:bg-[var(--surface-overlay)] rounded-lg transition-colors"
         >
           <ArrowLeft size={20} className="text-[var(--text-muted)]" />
@@ -24,9 +47,10 @@ export default function NewQuotePage() {
         </div>
       </div>
 
-      {/* ── Quote Request Form ────────────────────────── */}
-      <QuoteRequestForm 
-        ownerId="" // TODO: Get from session
+      <QuoteRequestForm
+        ownerId={ownerId}
+        properties={properties}
+        serviceTypes={serviceTypes}
         onSuccess={(quoteId) => {
           window.location.href = `/owner/quotes/${quoteId}`;
         }}
