@@ -21,7 +21,7 @@ const VARIANT: Record<Variant, { bg: string; text: string; dot: string }> = {
   error:   { bg: 'bg-state-error-bg',   text: 'text-state-error',     dot: 'bg-state-error' },
   neutral: { bg: 'bg-surface-overlay',  text: 'text-text-secondary',  dot: 'bg-text-muted' },
   gold:    { bg: 'bg-accent/15',        text: 'text-accent-dark',     dot: 'bg-accent' },
-  dark:    { bg: 'bg-primary',          text: 'text-text-on-brand',   dot: 'bg-accent' },
+  dark:    { bg: 'bg-primary',          text: 'text-white',   dot: 'bg-accent' },
 };
 
 const SIZE: Record<Size, string> = {

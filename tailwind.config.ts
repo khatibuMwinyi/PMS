@@ -50,6 +50,11 @@ const config: Config = {
           overlay:   'var(--surface-overlay)',
           dark:      'var(--surface-dark)',
           'dark-card': 'var(--surface-dark-card)',
+          'container-lowest':  'var(--surface-container-lowest)',
+          'container-low':     'var(--surface-container-low)',
+          container:           'var(--surface-container)',
+          'container-high':    'var(--surface-container-high)',
+          'container-highest': 'var(--surface-container-highest)',
         },
         text: {
           primary:             'var(--text-primary)',
@@ -66,6 +71,7 @@ const config: Config = {
           strong:   'var(--border-strong)',
           focus:    'var(--border-focus)',
         },
+        'outline-variant': 'var(--outline-variant)',
         state: {
           success:      'var(--state-success)',
           'success-bg': 'var(--state-success-bg)',

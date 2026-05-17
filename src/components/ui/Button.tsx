@@ -23,11 +23,11 @@ type ButtonAsAnchor = BaseProps & Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 
 type ButtonProps = ButtonAsButton | ButtonAsAnchor;
 
 const VARIANT_CLASSES: Record<Variant, string> = {
-  primary:   'bg-primary text-text-on-brand hover:bg-primary-light active:translate-y-px',
+  primary:   'bg-primary text-white hover:bg-primary-light active:translate-y-px border border-white/15',
   gold:      'bg-accent text-accent-foreground hover:bg-accent-light active:translate-y-px shadow-card',
   secondary: 'bg-transparent text-text-primary border border-border-default hover:bg-surface-overlay',
   ghost:     'bg-transparent text-text-primary hover:bg-surface-overlay',
-  danger:    'bg-state-error text-text-on-brand hover:opacity-90',
+  danger:    'bg-state-error text-white hover:opacity-90',
   outline:   'bg-transparent border border-border-default text-text-primary hover:bg-surface-overlay',
 };
 
