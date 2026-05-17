@@ -15,9 +15,9 @@ test.describe('Owner Dashboard', () => {
   test('renders dashboard page and core sections', async ({ page }) => {
     await page.goto('/owner/dashboard');
     await expect(page.getByRole('heading', { name: 'Dashboard Overview' })).toBeVisible();
-    await expect(page.getByText('Total Spent (YTD)')).toBeVisible();
-    await expect(page.getByText('Active Work Orders')).toBeVisible();
-    await expect(page.getByText('Maintenance ROI')).toBeVisible();
+    await expect(page.getByText('Total Paid to Oweru (YTD)')).toBeVisible();
+    await expect(page.getByText('Active Services')).toBeVisible();
+    await expect(page.getByText('Completion Rate')).toBeVisible();
     await expect(page.getByText('Active Properties')).toBeVisible();
     await expect(page.getByText('Recent Requests')).toBeVisible();
   });
@@ -32,11 +32,12 @@ test.describe('Owner Dashboard', () => {
     const sidebar = page.locator('aside').first();
     await expect(sidebar.getByText('Dashboard')).toBeVisible();
     await expect(sidebar.getByText('Properties')).toBeVisible();
-    await expect(sidebar.getByText('Work Orders')).toBeVisible();
+    await expect(sidebar.getByText('Services')).toBeVisible();
     await expect(sidebar.getByText('Financials')).toBeVisible();
-    await expect(sidebar.getByText('Service Network')).toBeVisible();
+    await expect(sidebar.getByText('Service Catalog')).toBeVisible();
     await expect(sidebar.getByText('Reports')).toBeVisible();
-    await expect(sidebar.getByText('Services')).toHaveCount(0);
+    await expect(sidebar.getByText('Work Orders')).toHaveCount(0);
+    await expect(sidebar.getByText('Service Network')).toHaveCount(0);
     await expect(sidebar.getByText('Leases')).toHaveCount(0);
     await expect(sidebar.getByText('Analytics')).toHaveCount(0);
   });

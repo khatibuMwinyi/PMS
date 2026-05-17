@@ -20,10 +20,10 @@ export interface OwnerKpis {
   totalSpentYtdFormatted: string;
   ytdTrendPct: Decimal | null;
   ytdTrendDirection: TrendDirection | null;
-  activeWorkOrders: number;
+  activeServices: number;
   pendingAcceptance: number;
-  maintenanceRoiPct: Decimal;
-  maintenanceRoiFormatted: string;
+  completionRatePct: Decimal;
+  completionRateFormatted: string;
   asOf: Date;
 }
 
@@ -62,10 +62,10 @@ export const ownerKpisSchema = z.object({
   totalSpentYtdFormatted: z.string(),
   ytdTrendPct: decimalSchema.nullable(),
   ytdTrendDirection: z.enum(TREND_DIRECTIONS).nullable(),
-  activeWorkOrders: z.number().int().nonnegative(),
+  activeServices: z.number().int().nonnegative(),
   pendingAcceptance: z.number().int().nonnegative(),
-  maintenanceRoiPct: decimalSchema,
-  maintenanceRoiFormatted: z.string(),
+  completionRatePct: decimalSchema,
+  completionRateFormatted: z.string(),
   asOf: z.date(),
 });
 

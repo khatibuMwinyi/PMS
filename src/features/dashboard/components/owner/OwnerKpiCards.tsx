@@ -1,5 +1,4 @@
-// src/features/dashboard/components/owner/OwnerKpiCards.tsx
-import { DollarSign, Wrench, TrendingUp, CheckCircle2 } from 'lucide-react';
+import { DollarSign, Wrench, CheckCircle2 } from 'lucide-react';
 import { KpiCard } from '@/shared/components/ui/KpiCard';
 import { getOwnerKpis } from '@/features/dashboard/queries/owner';
 
@@ -13,7 +12,7 @@ export async function OwnerKpiCards({ ownerUserId }: Props) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
       <KpiCard
-        label="Total Spent (YTD)"
+        label="Total Paid to Oweru (YTD)"
         value={kpis.totalSpentYtdFormatted}
         icon={DollarSign}
         trend={
@@ -27,16 +26,16 @@ export async function OwnerKpiCards({ ownerUserId }: Props) {
         }
       />
       <KpiCard
-        label="Active Work Orders"
-        value={String(kpis.activeWorkOrders)}
+        label="Active Services"
+        value={String(kpis.activeServices)}
         icon={Wrench}
         subtext={{ text: `${kpis.pendingAcceptance} Pending Acceptance` }}
       />
       <KpiCard
-        label="Maintenance ROI"
-        value={kpis.maintenanceRoiFormatted}
-        icon={TrendingUp}
-        subtext={{ icon: CheckCircle2, text: 'Of agreements completed' }}
+        label="Completion Rate"
+        value={kpis.completionRateFormatted}
+        icon={CheckCircle2}
+        subtext={{ text: 'Verified services to date' }}
       />
     </div>
   );

@@ -79,7 +79,7 @@ export async function OwnerRecentRequestsPanel({ ownerUserId, limit = 5 }: Props
             {requests.map((r) => <RequestItem key={r.agreementId} r={r} />)}
           </ul>
           <div className="p-3 border-t border-[var(--border-subtle)] text-center">
-            <Link href="/owner/work-orders" className="text-label text-[var(--brand-gold)] hover:underline">
+            <Link href="/owner/services" className="text-label text-[var(--brand-gold)] hover:underline">
               View All Activity
             </Link>
           </div>

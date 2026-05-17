@@ -129,9 +129,9 @@ describe('buildOwnerKpis', () => {
     const kpis = await buildOwnerKpis('user-1', new Date('2026-05-16T12:00:00Z'));
 
     expect(kpis.totalSpentYtdFormatted).toBe('TZS 42,500.00');
-    expect(kpis.activeWorkOrders).toBe(24);
+    expect(kpis.activeServices).toBe(24);
     expect(kpis.pendingAcceptance).toBe(8);
-    expect(kpis.maintenanceRoiFormatted).toBe('75.0%');
+    expect(kpis.completionRateFormatted).toBe('75.0%');
     expect(kpis.ytdTrendDirection).toBe('up');
   });
 
@@ -141,7 +141,7 @@ describe('buildOwnerKpis', () => {
     (repo.countAgreementsByStatus as any).mockResolvedValue(0);
 
     const kpis = await buildOwnerKpis('user-1', new Date('2026-05-16T12:00:00Z'));
-    expect(kpis.maintenanceRoiFormatted).toBe('—');
+    expect(kpis.completionRateFormatted).toBe('—');
     expect(kpis.ytdTrendPct).toBeNull();
   });
 });
@@ -188,7 +188,7 @@ describe('buildRecentRequests', () => {
       status: 'IN_PROGRESS',
       statusVariant: 'progress',
       ageHuman: '2h ago',
-      hrefDetail: '/owner/work-orders/a1',
+      hrefDetail: '/owner/services/a1',
     });
   });
 });

@@ -134,12 +134,9 @@ const ACTIVE_ASSIGNMENT_STATUSES = [
   AssignmentStatus.COMPLETED,
 ] as const;
 
-/**
- * Assemble owner-facing KPIs. The `maintenanceRoiPct` field is a service
- * completion rate (completed / paid-eligible agreements), not financial
- * ROI — naming preserved for UI-label compatibility with the dashboard
- * mockup. Future spec may rename when revenue/cost data lands.
- */
+// Owner-facing KPIs. Spec §XIX limits owner analytics to service costs paid
+// to Oweru, utility expenses, and overall property costs. Until utility
+// data lands, completion rate stands in for the third tile.
 export async function buildOwnerKpis(
   ownerUserId: string,
   now: Date = new Date(),
@@ -151,19 +148,13 @@ export async function buildOwnerKpis(
     now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(),
   ));
 
-  const [currentPaid, priorPaid, activeWorkOrders, pendingAcceptance, completedAg, paidAg] =
+  const [currentPaid, priorPaid, activeServices, pendingAcceptance, completedAg, paidAg] =
     await Promise.all([
       findPaidInvoicesInRange(ownerUserId, yearStart, now),
       findPaidInvoicesInRange(ownerUserId, priorYearStart, priorYearSameDay),
       countAssignmentsByStatus(ownerUserId, [...ACTIVE_ASSIGNMENT_STATUSES]),
       countAssignmentsByStatus(ownerUserId, [AssignmentStatus.PENDING_ACCEPTANCE]),
       countAgreementsByStatus(ownerUserId, [AgreementStatus.COMPLETED]),
-      // Denominator for "completion rate" KPI surfaced as maintenanceRoiPct
-      // (true ROI requires cost data we don't track yet). "Paid-eligible
-      // agreements" approximated as those past the QUOTED stage and not yet
-      // CANCELLED, since those are the agreements we expect a PAID invoice
-      // for. Result can exceed 100% if more completed than currently
-      // active+suspended+completed — rare in practice but not impossible.
       countAgreementsByStatus(ownerUserId, [
         AgreementStatus.ACTIVE, AgreementStatus.COMPLETED, AgreementStatus.SUSPENDED,
       ]),
@@ -176,7 +167,7 @@ export async function buildOwnerKpis(
   const priorTotal = sum(priorPaid);
   const { pct: ytdTrendPct, direction: ytdTrendDirection } = computeTrend(totalSpentYtd, priorTotal);
 
-  const maintenanceRoiPct = paidAg === 0
+  const completionRatePct = paidAg === 0
     ? new Decimal(0)
     : new Decimal(completedAg).div(paidAg).mul(100);
 
@@ -185,10 +176,10 @@ export async function buildOwnerKpis(
     totalSpentYtdFormatted: formatTzs(totalSpentYtd),
     ytdTrendPct,
     ytdTrendDirection,
-    activeWorkOrders,
+    activeServices,
     pendingAcceptance,
-    maintenanceRoiPct,
-    maintenanceRoiFormatted: paidAg === 0 ? '—' : formatPct(maintenanceRoiPct),
+    completionRatePct,
+    completionRateFormatted: paidAg === 0 ? '—' : formatPct(completionRatePct),
     asOf: now,
   };
 }
@@ -243,7 +234,7 @@ export async function buildRecentRequests(
       status,
       statusVariant: statusVariant(status),
       ageHuman: formatAge(r.createdAt, now),
-      hrefDetail: `/owner/work-orders/${r.agreementId}`,
+      hrefDetail: `/owner/services/${r.agreementId}`,
     };
   });
 }
