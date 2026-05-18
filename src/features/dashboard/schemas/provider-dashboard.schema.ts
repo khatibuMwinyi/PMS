@@ -11,6 +11,7 @@ export interface ProviderDashboardData {
     rating: number;
     ratingCount: number;
     strikeCount: number;
+    suspendedUntil: string | null;
   };
   nextUpcoming: {
     assignmentId: string;
