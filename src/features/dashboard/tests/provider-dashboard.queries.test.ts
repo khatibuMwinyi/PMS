@@ -36,6 +36,7 @@ describe('getProviderDashboard', () => {
       strikeCount: 0,
       completedJobs: 12,
       totalJobs: 15,
+      suspendedUntil: null,
       wallet: {
         availableBalance: { toNumber: () => 120000 },
         pendingBalance: { toNumber: () => 30000 },
@@ -55,6 +56,7 @@ describe('getProviderDashboard', () => {
     expect(data.metrics.rating).toBeCloseTo(4.85, 2);
     expect(data.metrics.ratingCount).toBe(12);
     expect(data.metrics.strikeCount).toBe(0);
+    expect(data.metrics.suspendedUntil).toBeNull();
   });
 
   it('returns null nextUpcoming when no scheduled tasks in next 48h', async () => {
@@ -65,6 +67,7 @@ describe('getProviderDashboard', () => {
       strikeCount: 0,
       completedJobs: 0,
       totalJobs: 0,
+      suspendedUntil: null,
       wallet: null,
     });
     (prisma.walletTransaction.aggregate as any).mockResolvedValue({ _sum: { amount: null } });
@@ -83,6 +86,7 @@ describe('getProviderDashboard', () => {
       strikeCount: 0,
       completedJobs: 0,
       totalJobs: 0,
+      suspendedUntil: null,
       wallet: null,
     });
     (prisma.walletTransaction.aggregate as any).mockResolvedValue({ _sum: { amount: null } });
@@ -129,6 +133,7 @@ describe('getProviderDashboard', () => {
       strikeCount: 0,
       completedJobs: 0,
       totalJobs: 0,
+      suspendedUntil: null,
       wallet: null,
     });
     (prisma.walletTransaction.aggregate as any).mockResolvedValue({ _sum: { amount: null } });
@@ -156,5 +161,32 @@ describe('getProviderDashboard', () => {
     expect(data.nextUpcoming?.assignmentId).toBe('A-1');
     expect(data.nextUpcoming?.taskId).toBe('T-1');
     expect(data.nextUpcoming?.serviceTypeName).toBe('HVAC');
+  });
+
+  it('surfaces suspendedUntil as ISO string when set', async () => {
+    const futureDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+    (prisma.providerProfile.findUnique as any).mockResolvedValue({
+      id: PROVIDER_ID,
+      userId: USER_ID,
+      rating: 0,
+      strikeCount: 3,
+      completedJobs: 0,
+      totalJobs: 0,
+      suspendedUntil: futureDate,
+      wallet: null,
+    });
+    (prisma.walletTransaction.aggregate as any).mockResolvedValue({ _sum: { amount: null } });
+    (prisma.assignment.findMany as any).mockResolvedValue([]);
+    (prisma.assignment.count as any).mockResolvedValue(0);
+
+    const data = await getProviderDashboard(USER_ID);
+    expect(data.metrics.strikeCount).toBe(3);
+    expect(data.metrics.suspendedUntil).toBe(futureDate.toISOString());
+  });
+
+  it('returns null suspendedUntil when no provider profile', async () => {
+    (prisma.providerProfile.findUnique as any).mockResolvedValue(null);
+    const data = await getProviderDashboard(USER_ID);
+    expect(data.metrics.suspendedUntil).toBeNull();
   });
 });
