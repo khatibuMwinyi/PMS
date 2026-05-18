@@ -46,10 +46,11 @@ const NAV_ITEMS: Record<string, NavItem[]> = {
     { href: '/owner/reports',          label: 'Reports',         icon: FileText },
   ],
   PROVIDER: [
+    { href: '/provider',            label: 'Dashboard',   icon: LayoutDashboard },
     { href: '/provider/assignments', label: 'Assignments', icon: ClipboardList },
-    { href: '/provider/tasks', label: 'Tasks', icon: ClipboardList },
-    { href: '/provider/wallet', label: 'Wallet', icon: BarChart3 },
-    { href: '/provider/ratings', label: 'Ratings', icon: FileText },
+    { href: '/provider/tasks',       label: 'Tasks',       icon: Wrench },
+    { href: '/provider/wallet',      label: 'Wallet',      icon: BarChart3 },
+    { href: '/provider/settings',    label: 'Settings',    icon: Bolt },
   ],
 };
 
