@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import { auth } from '@/core/auth';
 import { redirect } from 'next/navigation';
-import { RoleGuard } from '@/components/RoleGuard';
+import RoleGuard from '@/components/RoleGuard';
 import { Table } from '@/components/ui/Table';
 import { StatusBadge } from '@/components/ui/Badge';
 import type { Column } from '@/components/ui/Table';
