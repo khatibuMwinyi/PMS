@@ -193,13 +193,28 @@ export async function checkInToTask(
   return { success: false, method: 'MANUAL_REVIEW', reason: verification.reason };
 }
 
+const MAX_EVIDENCE_BYTES = 2_000_000;
+const MAX_EVIDENCE_COUNT = 10;
+
 /**
  * Provider submits completion evidence (>=3 images).
  * Opens 24h dispute window. Next recurring task generated on verification.
  */
-export async function submitTaskEvidence(taskId: string, imageUrls: string[]): Promise<void> {
-  if (imageUrls.length < 3) {
+export async function submitTaskEvidence(taskId: string, imageDataUrls: string[]): Promise<void> {
+  if (imageDataUrls.length < 3) {
     throw new Error('At least 3 evidence photos are required.');
+  }
+  if (imageDataUrls.length > MAX_EVIDENCE_COUNT) {
+    throw new Error(`Maximum ${MAX_EVIDENCE_COUNT} photos allowed.`);
+  }
+  for (const url of imageDataUrls) {
+    if (!url.startsWith('data:image/')) {
+      throw new Error('Invalid image format — data URL required.');
+    }
+    // base64 length ~ bytes * 4/3
+    if (url.length > MAX_EVIDENCE_BYTES * 4 / 3 + 100) {
+      throw new Error(`Each photo must be under ${MAX_EVIDENCE_BYTES / 1_000_000}MB.`);
+    }
   }
 
   const task = await prisma.task.findUnique({
@@ -214,7 +229,7 @@ export async function submitTaskEvidence(taskId: string, imageUrls: string[]): P
       data: {
         status: 'COMPLETED',
         checkOutTime: new Date(),
-        evidenceImages: imageUrls,
+        evidenceImages: imageDataUrls,
       },
     });
 
