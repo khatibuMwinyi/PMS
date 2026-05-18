@@ -5,6 +5,7 @@ import RoleGuard from '@/components/RoleGuard';
 import { DashboardHeader } from '@/shared/components/dashboard/DashboardHeader';
 import { getProviderDashboard } from '@/features/dashboard/queries/provider';
 import { ProviderKpiBento } from '@/features/dashboard/components/provider/ProviderKpiBento';
+import { StrikeBanner } from '@/features/dashboard/components/provider/StrikeBanner';
 import { NextUpcomingAssignmentCard } from '@/features/dashboard/components/provider/NextUpcomingAssignmentCard';
 import { ActivePipelineTable } from '@/features/dashboard/components/provider/ActivePipelineTable';
 import { TodayProgressTimeline } from '@/features/dashboard/components/provider/TodayProgressTimeline';
@@ -49,6 +50,7 @@ async function DashboardContent() {
 
   return (
     <div className="flex flex-col gap-6">
+      <StrikeBanner metrics={data.metrics} />
       <ProviderKpiBento earnings={data.earnings} metrics={data.metrics} />
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 flex flex-col gap-6">
