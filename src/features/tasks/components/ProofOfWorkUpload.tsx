@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useTransition, useRef } from 'react';
+import { useState, useTransition, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Camera, Upload, X, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
@@ -83,12 +83,33 @@ export function ProofOfWorkUpload({ taskId, existing }: Props) {
         );
         await submitTaskEvidence(taskId, dataUrls);
         toast.success('Evidence submitted — awaiting owner review.');
+        // Release any blob previews now that the upload is committed.
+        for (const it of items) {
+          if (it.file && it.preview) {
+            try { URL.revokeObjectURL(it.preview); } catch {}
+          }
+        }
         router.refresh();
       } catch (e: any) {
         toast.error(e?.message ?? 'Submission failed');
       }
     });
   };
+
+  // Revoke any outstanding blob URLs when the component unmounts so we don't
+  // leak memory if the user navigates away before submitting. Tracked via ref
+  // to capture the latest items list, not the snapshot from mount.
+  const itemsRef = useRef(items);
+  itemsRef.current = items;
+  useEffect(() => {
+    return () => {
+      for (const it of itemsRef.current) {
+        if (it.file && it.preview) {
+          try { URL.revokeObjectURL(it.preview); } catch {}
+        }
+      }
+    };
+  }, []);
 
   return (
     <section className="bg-[var(--surface-card)] border border-[var(--border-subtle)] rounded-lg overflow-hidden">

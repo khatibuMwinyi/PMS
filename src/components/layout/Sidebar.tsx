@@ -78,7 +78,11 @@ export function Sidebar({ role, userName }: SidebarProps) {
       {/* Navigation */}
       <nav className="flex-1 flex flex-col gap-0.5 p-3">
         {items.map(({ href, label, icon: Icon }) => {
-          const active = pathname === href || pathname.startsWith(href + '/');
+          // Index routes (/provider, /admin, /owner) match only exactly; non-index match prefix.
+          const isIndexRoute = /^\/[a-z]+$/.test(href);
+          const active = isIndexRoute
+            ? pathname === href
+            : pathname === href || pathname.startsWith(href + '/');
           return (
             <Link
               key={href}
