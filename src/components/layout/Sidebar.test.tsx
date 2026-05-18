@@ -11,7 +11,7 @@ describe('Sidebar PROVIDER nav', () => {
 
   it('renders Dashboard, Assignments, Tasks, Wallet, Settings', () => {
     render(<Sidebar role="PROVIDER" />);
-    for (const label of ['Dashboard', 'Assignments', 'Tasks', 'Wallet', 'Settings']) {
+    for (const label of ['Dashboard', 'Assignments', 'Tasks', 'History', 'Wallet', 'Settings']) {
       expect(screen.getByText(label)).toBeInTheDocument();
     }
   });
@@ -45,5 +45,12 @@ describe('Sidebar PROVIDER nav', () => {
     render(<Sidebar role="PROVIDER" />);
     const wallet = screen.getByText('Wallet').closest('a')!;
     expect(wallet.className).toMatch(/border-l-2/);
+  });
+
+  it('History stays active on /provider/history', () => {
+    mockPathname = '/provider/history';
+    render(<Sidebar role="PROVIDER" />);
+    const history = screen.getByText('History').closest('a')!;
+    expect(history.className).toMatch(/border-l-2/);
   });
 });
