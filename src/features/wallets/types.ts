@@ -17,12 +17,15 @@ export interface WalletSummary {
   id: string;
   availableBalance: number;
   pendingBalance: number;
+  totalEarned: number;
   lastUpdated: Date | null;
-  transactions?: Array<{
+  transactions: Array<{
     id: string;
     type: string;
     amount: number;
+    reference: string;
     status: string;
+    runningBalance: number;
     createdAt: string;
   }>;
 }
