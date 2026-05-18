@@ -3,6 +3,7 @@ export type AssignmentStatus =
   | 'ACCEPTED'
   | 'IN_PROGRESS'
   | 'COMPLETED'
+  | 'VERIFIED'
   | 'EXPIRED'
   | 'CANCELLED_NO_SHOW'
   | 'AUTO_REASSIGNED'
