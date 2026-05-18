@@ -15,6 +15,8 @@ import { Prisma } from '@prisma/client';
 import { Decimal } from '@prisma/client/runtime/library';
 import { nanoid } from 'nanoid';
 import { prisma } from '@/core/database/client';
+import { auth } from '@/core/auth';
+import { MIN_WITHDRAWAL_TZS } from './schemas';
 
 /**
  * Process a successful invoice payment.
@@ -273,14 +275,18 @@ export async function settlePendingEarnings(): Promise<{ settled: number }> {
 
 /**
  * Provider withdrawal request — min 50,000 TZS, no disputed funds.
+ * Ownership enforced: walletId must belong to the calling provider's profile.
  */
-const MIN_WITHDRAWAL_TZS = 50000;
-
 export async function requestWithdrawal(
   walletId: string,
   amount: number | string,
   mobileNumber: string,
 ): Promise<{ withdrawalId: string }> {
+  const session = await auth();
+  if (!session?.user || session.user.role !== 'PROVIDER') {
+    throw new Error('Unauthorized');
+  }
+
   const amt = new Decimal(amount);
   if (amt.lt(MIN_WITHDRAWAL_TZS)) {
     throw new Error(`Minimum withdrawal is TZS ${MIN_WITHDRAWAL_TZS.toLocaleString()}`);
@@ -290,8 +296,12 @@ export async function requestWithdrawal(
     async (tx) => {
       const wallet = await tx.wallet.findUnique({
         where: { id: walletId },
+        include: { provider: { select: { userId: true } } },
       });
       if (!wallet) throw new Error('Wallet not found');
+      if (wallet.provider.userId !== session.user.id) {
+        throw new Error('Wallet does not belong to this provider');
+      }
       if (wallet.availableBalance.lt(amt)) {
         throw new Error('Insufficient available balance');
       }

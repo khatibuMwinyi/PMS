@@ -1,6 +1,7 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import { Toaster } from 'sonner';
 import { SessionProvider } from '@/components/providers/SessionProvider';
 import { ToastProvider } from '@/providers/ToastProvider';
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
@@ -36,6 +37,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </ToastProvider>
           </ErrorBoundary>
         </SessionProvider>
+        <Toaster position="bottom-right" richColors />
       </body>
     </html>
   );

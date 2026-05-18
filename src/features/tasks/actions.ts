@@ -2,10 +2,38 @@
 
 // Task Execution actions
 import { prisma } from '@/core/database/client';
+import { auth } from '@/core/auth';
 import { nanoid } from 'nanoid';
 import { addHours, addDays, addWeeks } from 'date-fns';
 import { Decimal } from '@prisma/client/runtime/library';
 import { processServicePayment } from '@/features/wallets/actions';
+
+/**
+ * Resolve the calling provider's profile id from the session, or throw if the
+ * caller is not a verified PROVIDER. Used by every provider-write action below
+ * so a logged-in provider cannot mutate another provider's task or wallet by
+ * passing a different id.
+ */
+async function requireProviderProfile(): Promise<{ providerId: string; userId: string }> {
+  const session = await auth();
+  if (!session?.user || session.user.role !== 'PROVIDER') {
+    throw new Error('Unauthorized');
+  }
+  const profile = await prisma.providerProfile.findUnique({
+    where: { userId: session.user.id },
+    select: { id: true },
+  });
+  if (!profile) throw new Error('Provider profile not found');
+  return { providerId: profile.id, userId: session.user.id };
+}
+
+async function assertTaskOwnedByProvider(taskId: string, providerId: string): Promise<void> {
+  const task = await prisma.task.findFirst({
+    where: { id: taskId, assignment: { providerId } },
+    select: { id: true },
+  });
+  if (!task) throw new Error('Task not found or not owned by this provider');
+}
 
 function redactPII(text: string): string {
   return text
@@ -103,13 +131,14 @@ export async function checkInToTask(
     forceManualReview?: boolean;
   } = {},
 ): Promise<{ success: boolean; method?: string; reason?: string }> {
+  const { providerId } = await requireProviderProfile();
   const { accuracy = null, hasPhotoFallback = false, forceManualReview = false } = options;
 
-  const task = await prisma.task.findUnique({
-    where: { id: taskId },
+  const task = await prisma.task.findFirst({
+    where: { id: taskId, assignment: { providerId } },
     include: { assignment: { include: { property: true } } },
   });
-  if (!task) throw new Error('Task not found');
+  if (!task) throw new Error('Task not found or not owned by this provider');
 
   if (forceManualReview) {
     await prisma.task.update({
@@ -193,13 +222,31 @@ export async function checkInToTask(
   return { success: false, method: 'MANUAL_REVIEW', reason: verification.reason };
 }
 
+const MAX_EVIDENCE_BYTES = 2_000_000;
+const MAX_EVIDENCE_COUNT = 10;
+
 /**
  * Provider submits completion evidence (>=3 images).
  * Opens 24h dispute window. Next recurring task generated on verification.
  */
-export async function submitTaskEvidence(taskId: string, imageUrls: string[]): Promise<void> {
-  if (imageUrls.length < 3) {
+export async function submitTaskEvidence(taskId: string, imageDataUrls: string[]): Promise<void> {
+  const { providerId } = await requireProviderProfile();
+  await assertTaskOwnedByProvider(taskId, providerId);
+
+  if (imageDataUrls.length < 3) {
     throw new Error('At least 3 evidence photos are required.');
+  }
+  if (imageDataUrls.length > MAX_EVIDENCE_COUNT) {
+    throw new Error(`Maximum ${MAX_EVIDENCE_COUNT} photos allowed.`);
+  }
+  for (const url of imageDataUrls) {
+    if (!url.startsWith('data:image/')) {
+      throw new Error('Invalid image format — data URL required.');
+    }
+    // base64 length ~ bytes * 4/3
+    if (url.length > MAX_EVIDENCE_BYTES * 4 / 3 + 100) {
+      throw new Error(`Each photo must be under ${MAX_EVIDENCE_BYTES / 1_000_000}MB.`);
+    }
   }
 
   const task = await prisma.task.findUnique({
@@ -214,7 +261,7 @@ export async function submitTaskEvidence(taskId: string, imageUrls: string[]): P
       data: {
         status: 'COMPLETED',
         checkOutTime: new Date(),
-        evidenceImages: imageUrls,
+        evidenceImages: imageDataUrls,
       },
     });
 

@@ -1,53 +1,65 @@
-import { auth } from '@/core/auth';
-import { redirect } from 'next/navigation';
-import { getProviderDashboardData } from '@/features/analytics/queries';
-import RoleGuard from '@/components/RoleGuard';
-import ProviderDashboardSkeleton from '@/components/dashboard/ProviderDashboardSkeleton';
 import { Suspense } from 'react';
-import { ErrorBoundaryWrapper } from '@/components/ui/ErrorBoundary';
+import { redirect } from 'next/navigation';
+import { auth } from '@/core/auth';
+import RoleGuard from '@/components/RoleGuard';
+import { DashboardHeader } from '@/shared/components/dashboard/DashboardHeader';
+import { getProviderDashboard } from '@/features/dashboard/queries/provider';
+import { ProviderKpiBento } from '@/features/dashboard/components/provider/ProviderKpiBento';
+import { NextUpcomingAssignmentCard } from '@/features/dashboard/components/provider/NextUpcomingAssignmentCard';
+import { ActivePipelineTable } from '@/features/dashboard/components/provider/ActivePipelineTable';
+import { TodayProgressTimeline } from '@/features/dashboard/components/provider/TodayProgressTimeline';
+import { QuickActionsPanel } from '@/features/dashboard/components/provider/QuickActionsPanel';
+import {
+  KpiBentoSkeleton,
+  PipelineSkeleton,
+  UpcomingSkeleton,
+} from '@/features/dashboard/components/provider/skeletons';
 
 export const dynamic = 'force-dynamic';
 
-export default function ProviderPage() {
+export default function ProviderDashboardPage() {
   return (
     <RoleGuard allowedRoles={['PROVIDER']}>
-      <Suspense fallback={<ProviderDashboardSkeleton />}>
-        <ErrorBoundaryWrapper>
-          <ProviderDashboardContent />
-        </ErrorBoundaryWrapper>
+      <DashboardHeader
+        title="Overview"
+        subtitle="Today's operational metrics and active assignments."
+        asOf={new Date()}
+      />
+      <Suspense
+        fallback={
+          <>
+            <KpiBentoSkeleton />
+            <UpcomingSkeleton />
+            <PipelineSkeleton />
+          </>
+        }
+      >
+        <DashboardContent />
       </Suspense>
     </RoleGuard>
   );
 }
 
-async function ProviderDashboardContent() {
+async function DashboardContent() {
   const session = await auth();
   if (!session?.user) redirect('/login');
   if (session.user.role !== 'PROVIDER') redirect('/login');
 
-  const data = await getProviderDashboardData(session.user.id);
+  const data = await getProviderDashboard(session.user.id);
 
   return (
-    <>
-      <h2 className="text-xl font-semibold mb-4">Provider Dashboard</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-        <div className="p-4 bg-[var(--surface-card)] rounded-[var(--radius-md)]">
-          <p className="text-sm text-[var(--text-muted)]">Available Balance</p>
-          <p className="text-2xl font-bold">${data.availableBalance.toFixed(2)}</p>
+    <div className="flex flex-col gap-6">
+      <ProviderKpiBento earnings={data.earnings} metrics={data.metrics} />
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2 flex flex-col gap-6">
+          <NextUpcomingAssignmentCard next={data.nextUpcoming} />
+          <ActivePipelineTable pipeline={data.pipeline} />
         </div>
-        <div className="p-4 bg-[var(--surface-card)] rounded-[var(--radius-md)]">
-          <p className="text-sm text-[var(--text-muted)]">Pending Balance</p>
-          <p className="text-2xl font-bold">${data.pendingBalance.toFixed(2)}</p>
-        </div>
-        <div className="p-4 bg-[var(--surface-card)] rounded-[var(--radius-md)]">
-          <p className="text-sm text-[var(--text-muted)]">Active Assignments</p>
-          <p className="text-2xl font-bold">{data.activeAssignments}</p>
-        </div>
-        <div className="p-4 bg-[var(--surface-card)] rounded-[var(--radius-md)]">
-          <p className="text-sm text-[var(--text-muted)]">Rating</p>
-          <p className="text-2xl font-bold">{data.rating.toFixed(1)} ★</p>
+        <div className="flex flex-col gap-6">
+          <TodayProgressTimeline steps={data.todayProgress} />
+          <QuickActionsPanel />
         </div>
       </div>
-    </>
+    </div>
   );
 }
