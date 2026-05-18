@@ -80,6 +80,7 @@ export async function getProviderDashboard(providerUserId: string): Promise<Prov
       rating: parseFloat(provider.rating.toFixed(2)),
       ratingCount: provider.completedJobs,
       strikeCount: provider.strikeCount,
+      suspendedUntil: provider.suspendedUntil ? provider.suspendedUntil.toISOString() : null,
     },
     nextUpcoming: upcoming
       ? {
@@ -106,7 +107,7 @@ export async function getProviderDashboard(providerUserId: string): Promise<Prov
 function emptyDashboard(): ProviderDashboardData {
   return {
     earnings: { todayTZS: 0, pendingTZS: 0, availableTZS: 0 },
-    metrics: { activeTaskCount: 0, acceptanceRate: 0, acceptanceRateDeltaPct: 0, rating: 0, ratingCount: 0, strikeCount: 0 },
+    metrics: { activeTaskCount: 0, acceptanceRate: 0, acceptanceRateDeltaPct: 0, rating: 0, ratingCount: 0, strikeCount: 0, suspendedUntil: null },
     nextUpcoming: null,
     pipeline: [],
     todayProgress: [],
