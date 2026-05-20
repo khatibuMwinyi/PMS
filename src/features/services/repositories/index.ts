@@ -11,11 +11,14 @@ export class ServiceRepository {
   /**
    * Spec §XI scoring + capacity gate.
    * Score = rating 40% + completion 30% + acceptance 20% + responsiveness 10% − distance penalty.
+   *
+   * When scheduledDate is provided, providers with a matching blocked_date are excluded.
    */
   static async findBestProvider(
     propertyId: string,
     _serviceTypeId: string,
     radiusKm: number = 10,
+    scheduledDate?: Date,
   ): Promise<ProviderWithScore | null> {
     const property = await prisma.property.findUnique({
       where: { id: propertyId },
@@ -23,26 +26,52 @@ export class ServiceRepository {
     });
     if (!property) throw new Error('Property not found');
 
-    const providers = await prisma.$queryRaw<any[]>`
-      SELECT
-        pp.id, pp.rating, pp.completed_jobs, pp.total_jobs,
-        pp.acceptance_rate, pp.responsiveness, pp.current_load, pp.max_concurrent,
-        ST_DistanceSphere(
-          ST_SetSRID(ST_MakePoint(pp.longitude, pp.latitude), 4326),
-          ST_SetSRID(ST_MakePoint(${property.longitude}, ${property.latitude}), 4326)
-        ) / 1000 as distance_km
-      FROM provider_profiles pp
-      JOIN users u ON pp.user_id = u.id
-      WHERE u.status = 'ACTIVE'
-        AND pp.verification = 'VERIFIED'
-        AND (pp.suspended_until IS NULL OR pp.suspended_until < NOW())
-        AND pp.current_load < pp.max_concurrent
-        AND ST_DWithin(
-          ST_SetSRID(ST_MakePoint(pp.longitude, pp.latitude), 4326),
-          ST_SetSRID(ST_MakePoint(${property.longitude}, ${property.latitude}), 4326),
-          ${radiusKm * 1000}
-        )
-    `;
+    const providers = scheduledDate
+      ? await prisma.$queryRaw<any[]>`
+          SELECT
+            pp.id, pp.rating, pp.completed_jobs, pp.total_jobs,
+            pp.acceptance_rate, pp.responsiveness, pp.current_load, pp.max_concurrent,
+            ST_DistanceSphere(
+              ST_SetSRID(ST_MakePoint(pp.longitude, pp.latitude), 4326),
+              ST_SetSRID(ST_MakePoint(${property.longitude}, ${property.latitude}), 4326)
+            ) / 1000 as distance_km
+          FROM provider_profiles pp
+          JOIN users u ON pp.user_id = u.id
+          WHERE u.status = 'ACTIVE'
+            AND pp.verification = 'VERIFIED'
+            AND (pp.suspended_until IS NULL OR pp.suspended_until < NOW())
+            AND pp.current_load < pp.max_concurrent
+            AND ST_DWithin(
+              ST_SetSRID(ST_MakePoint(pp.longitude, pp.latitude), 4326),
+              ST_SetSRID(ST_MakePoint(${property.longitude}, ${property.latitude}), 4326),
+              ${radiusKm * 1000}
+            )
+            AND NOT EXISTS (
+              SELECT 1 FROM provider_blocked_dates pbd
+              WHERE pbd.provider_id = pp.id
+                AND pbd.blocked_date = ${scheduledDate}::date
+            )
+        `
+      : await prisma.$queryRaw<any[]>`
+          SELECT
+            pp.id, pp.rating, pp.completed_jobs, pp.total_jobs,
+            pp.acceptance_rate, pp.responsiveness, pp.current_load, pp.max_concurrent,
+            ST_DistanceSphere(
+              ST_SetSRID(ST_MakePoint(pp.longitude, pp.latitude), 4326),
+              ST_SetSRID(ST_MakePoint(${property.longitude}, ${property.latitude}), 4326)
+            ) / 1000 as distance_km
+          FROM provider_profiles pp
+          JOIN users u ON pp.user_id = u.id
+          WHERE u.status = 'ACTIVE'
+            AND pp.verification = 'VERIFIED'
+            AND (pp.suspended_until IS NULL OR pp.suspended_until < NOW())
+            AND pp.current_load < pp.max_concurrent
+            AND ST_DWithin(
+              ST_SetSRID(ST_MakePoint(pp.longitude, pp.latitude), 4326),
+              ST_SetSRID(ST_MakePoint(${property.longitude}, ${property.latitude}), 4326),
+              ${radiusKm * 1000}
+            )
+        `;
 
     if (providers.length === 0) return null;
 

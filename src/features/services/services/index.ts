@@ -6,9 +6,9 @@ export class ServiceService {
     propertyId: string,
     serviceTypeId: string,
     radiusKm: number = 10,
-    minScoreThreshold: number = 0
+    minScoreThreshold: number = 0,
+    scheduledDate?: Date,
   ): Promise<ProviderWithScore | null> {
-    // Verify property and service type exist
     const property = await prisma.property.findUnique({
       where: { id: propertyId },
       select: { latitude: true, longitude: true }
@@ -21,7 +21,12 @@ export class ServiceService {
     });
     if (!serviceType) throw new Error("Service type not found");
 
-    const result = await serviceRepository.findBestProvider(propertyId, serviceTypeId, radiusKm);
+    const result = await serviceRepository.findBestProvider(
+      propertyId,
+      serviceTypeId,
+      radiusKm,
+      scheduledDate,
+    );
     if (result && result.score >= minScoreThreshold) {
       return result;
     }
