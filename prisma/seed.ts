@@ -1,4 +1,13 @@
 import { PrismaClient } from '@prisma/client'
+import type {
+  PropertyType,
+  UnitType,
+  UtilityType,
+  QuoteStatus,
+  AgreementStatus,
+  AssignmentStatus,
+  TaskStatus,
+} from '@prisma/client'
 import bcrypt from 'bcryptjs'
 
 const prisma = new PrismaClient()
@@ -783,6 +792,586 @@ async function main() {
     });
   }
   console.log('✓ 8 utility bills created')
+
+  // ============================================================
+  // HEAVY EXTENSION — owner-facing bulk dummy data (12mo history)
+  // Skips re-run when bulk data already present.
+  // ============================================================
+  const propertyCount = await prisma.property.count();
+  if (propertyCount >= 30) {
+    console.log('⏩ Heavy seed already applied (>=30 properties), skipping bulk block');
+  } else {
+    console.log('🚀 Heavy seed: bulk owner-facing data...');
+
+    type ZoneSpec = { zone: string; lat: number; lng: number };
+    const zonesByOwner: ZoneSpec[][] = [
+      // Juma — Dar es Salaam metro
+      [
+        { zone: 'Kinondoni', lat: -6.7295, lng: 39.275 },
+        { zone: 'Ilala', lat: -6.7955, lng: 39.215 },
+        { zone: 'Temeke', lat: -6.85, lng: 39.2667 },
+        { zone: 'Ubungo', lat: -6.8, lng: 39.21 },
+        { zone: 'Kigamboni', lat: -6.85, lng: 39.3 },
+        { zone: 'Kibaha', lat: -6.77, lng: 38.97 },
+        { zone: 'Kinondoni', lat: -6.73, lng: 39.24 },
+        { zone: 'Ilala', lat: -6.82, lng: 39.29 },
+      ],
+      // Amira — Zanzibar archipelago
+      [
+        { zone: 'Zanzibar Central', lat: -6.1659, lng: 39.2026 },
+        { zone: 'Zanzibar North', lat: -5.97, lng: 39.2996 },
+        { zone: 'Zanzibar South', lat: -6.45, lng: 39.45 },
+        { zone: 'Pemba', lat: -5.0, lng: 39.78 },
+        { zone: 'Zanzibar Central', lat: -6.17, lng: 39.19 },
+        { zone: 'Zanzibar North', lat: -5.95, lng: 39.31 },
+        { zone: 'Zanzibar South', lat: -6.4, lng: 39.4 },
+        { zone: 'Zanzibar Central', lat: -6.16, lng: 39.21 },
+      ],
+      // Moses — upcountry corridors
+      [
+        { zone: 'Tanga', lat: -5.09, lng: 39.1067 },
+        { zone: 'Arusha', lat: -3.3667, lng: 36.6833 },
+        { zone: 'Mwanza', lat: -2.5167, lng: 32.9 },
+        { zone: 'Moshi', lat: -3.35, lng: 37.3333 },
+        { zone: 'Mbeya', lat: -8.9, lng: 33.45 },
+        { zone: 'Dodoma', lat: -6.173, lng: 35.7479 },
+        { zone: 'Morogoro', lat: -6.8221, lng: 37.6612 },
+        { zone: 'Iringa', lat: -7.77, lng: 35.69 },
+      ],
+    ];
+
+    const propertyNameSuffixes = [
+      'Heights', 'Court', 'Residences', 'Plaza', 'Towers', 'Villa', 'Estate',
+      'Gardens', 'View', 'Lodge', 'Apartments', 'Mansion', 'Complex', 'Manor',
+    ];
+
+    const propertyTypeOptions: PropertyType[] = [
+      'APARTMENT_BUILDING', 'SINGLE_FAMILY', 'TOWNHOUSE', 'COMMERCIAL',
+    ];
+
+    const stockImagePool = [
+      'https://images.unsplash.com/photo-1545324418-cc1a3fa393d8?w=800',
+      'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800',
+      'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800',
+      'https://images.unsplash.com/photo-1600596542415-9a4d133d2ef5?w=800',
+      'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800',
+      'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=800',
+      'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800',
+      'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800',
+      'https://images.unsplash.com/photo-1578683010233-8a7cbd55ae8a?w=800',
+      'https://images.unsplash.com/photo-1573052907238-4883a0c91d7e?w=800',
+      'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800',
+      'https://images.unsplash.com/photo-1566073771259-6a850609a7f5?w=800',
+    ];
+
+    const pickImages = (seed: number) => [
+      stockImagePool[seed % stockImagePool.length],
+      stockImagePool[(seed + 4) % stockImagePool.length],
+      stockImagePool[(seed + 8) % stockImagePool.length],
+    ];
+
+    // ─── Properties + Units ──────────────────────────────────────
+    const bulkProperties: Awaited<ReturnType<typeof prisma.property.create>>[] = [];
+    for (let oIdx = 0; oIdx < ownerProfiles.length; oIdx++) {
+      const ownerProfile = ownerProfiles[oIdx];
+      const zones = zonesByOwner[oIdx];
+      for (let i = 0; i < zones.length; i++) {
+        const zSpec = zones[i];
+        const suffix = propertyNameSuffixes[(oIdx * 7 + i) % propertyNameSuffixes.length];
+        const type: PropertyType = propertyTypeOptions[(oIdx + i) % propertyTypeOptions.length];
+        const unitCount =
+          type === 'APARTMENT_BUILDING' ? 6 + (i % 4) :
+          type === 'COMMERCIAL' ? 2 + (i % 3) :
+          type === 'TOWNHOUSE' ? 3 + (i % 3) :
+          1;
+
+        const prop = await prisma.property.create({
+          data: {
+            name: `${zSpec.zone} ${suffix}`,
+            ownerId: ownerProfile.id,
+            type,
+            status: 'ACTIVE',
+            encryptedAddress: `Plot ${100 + i * 7}, ${zSpec.zone} Road, ${zSpec.zone}`,
+            zone: zSpec.zone,
+            latitude: zSpec.lat + i * 0.003,
+            longitude: zSpec.lng + i * 0.002,
+            unitCount,
+            imageUrls: pickImages(oIdx * 11 + i * 3),
+          },
+        });
+        bulkProperties.push(prop);
+
+        const unitTypeFor = (t: PropertyType): UnitType =>
+          t === 'COMMERCIAL' ? 'COMMERCIAL' :
+          t === 'SINGLE_FAMILY' ? 'HOUSE' : 'APARTMENT';
+        const ut = unitTypeFor(type);
+        for (let u = 0; u < unitCount; u++) {
+          await prisma.unit.create({
+            data: {
+              propertyId: prop.id,
+              unitName:
+                ut === 'APARTMENT' ? `Unit ${100 + u}` :
+                ut === 'COMMERCIAL' ? `Suite ${String.fromCharCode(65 + u)}` :
+                'Main',
+              unitType: ut,
+              squareFootage:
+                ut === 'COMMERCIAL' ? 200 + u * 25 :
+                ut === 'HOUSE' ? 150 + u * 30 :
+                60 + u * 15,
+              occupantCount: u % 3 === 0 ? 0 : 1 + (u % 4),
+            },
+          });
+        }
+      }
+    }
+    console.log(`✓ ${bulkProperties.length} bulk properties + units`);
+
+    // ─── 12-month historical agreements (VERIFIED + PAID) ───────
+    type HistoryCfg = {
+      ownerIdx: number;
+      property: typeof bulkProperties[number];
+      svcIdx: number;
+      providerIdx: number;
+      monthsAgo: number;
+      price: number;
+    };
+    const histCfgs: HistoryCfg[] = [];
+    for (let oIdx = 0; oIdx < ownerProfiles.length; oIdx++) {
+      const ownerProps = bulkProperties.filter((p) => p.ownerId === ownerProfiles[oIdx].id);
+      for (let m = 1; m <= 12; m++) {
+        const propIdx = (oIdx * 5 + m * 3) % ownerProps.length;
+        const svcIdx = (oIdx + m) % serviceTypes.length;
+        const providerIdx = (oIdx + m) % providerProfiles.length;
+        const basePrice = Number(serviceTypes[svcIdx].basePrice);
+        histCfgs.push({
+          ownerIdx: oIdx,
+          property: ownerProps[propIdx],
+          svcIdx,
+          providerIdx,
+          monthsAgo: m,
+          price: basePrice + (m % 4) * 25000,
+        });
+      }
+    }
+
+    for (const h of histCfgs) {
+      const ownerUserId = owners[h.ownerIdx].id;
+      const paidAt = new Date();
+      paidAt.setMonth(paidAt.getMonth() - h.monthsAgo);
+      paidAt.setDate(15);
+      const createdAt = new Date(paidAt);
+      createdAt.setDate(1);
+      const dueAt = new Date(paidAt);
+      dueAt.setDate(dueAt.getDate() + 30);
+
+      const q = await prisma.quote.create({
+        data: {
+          ownerId: ownerUserId,
+          propertyId: h.property.id,
+          serviceTypeId: serviceTypes[h.svcIdx].id,
+          quotedPrice: h.price,
+          priceLockedUntil: new Date(createdAt.getTime() + 24 * 60 * 60 * 1000),
+          frequency: 'ONE_TIME',
+          status: 'ACCEPTED',
+          createdAt,
+        },
+      });
+
+      const a = await prisma.agreement.create({
+        data: {
+          quoteId: q.id,
+          ownerId: ownerUserId,
+          propertyId: h.property.id,
+          serviceTypeId: serviceTypes[h.svcIdx].id,
+          quotedPrice: h.price,
+          frequency: 'ONE_TIME',
+          status: 'COMPLETED',
+          createdAt,
+        },
+      });
+
+      const total = h.price;
+      const providerPayout = Math.round(total * 0.8);
+      const platformFee = total - providerPayout;
+
+      const assignment = await prisma.assignment.create({
+        data: {
+          agreementId: a.id,
+          propertyId: h.property.id,
+          serviceTypeId: serviceTypes[h.svcIdx].id,
+          providerId: providerProfiles[h.providerIdx].id,
+          status: 'VERIFIED',
+          totalAmount: total,
+          providerPayout,
+          platformFee,
+          acceptedAt: new Date(createdAt.getTime() + 2 * 60 * 60 * 1000),
+          completedAt: new Date(paidAt.getTime() - 24 * 60 * 60 * 1000),
+          verifiedAt: new Date(paidAt.getTime() - 12 * 60 * 60 * 1000),
+          expiresAt: new Date(createdAt.getTime() + 48 * 60 * 60 * 1000),
+          createdAt,
+        },
+      });
+
+      await prisma.task.create({
+        data: {
+          assignmentId: assignment.id,
+          scheduledFor: new Date(paidAt.getTime() - 36 * 60 * 60 * 1000),
+          status: 'VERIFIED',
+          checkInTime: new Date(paidAt.getTime() - 35 * 60 * 60 * 1000),
+          checkOutTime: new Date(paidAt.getTime() - 30 * 60 * 60 * 1000),
+          evidenceImages: ['https://images.unsplash.com/photo-1581578731548-cdea95ad99ae?w=800'],
+          verifiedAt: new Date(paidAt.getTime() - 12 * 60 * 60 * 1000),
+        },
+      });
+
+      await prisma.invoice.create({
+        data: {
+          agreementId: a.id,
+          amount: total,
+          status: 'PAID',
+          dueAt,
+          paidAt,
+          createdAt,
+        },
+      });
+    }
+    console.log(`✓ ${histCfgs.length} historical agreements (12mo PAID history)`);
+
+    // ─── Current-state agreements (pending / scheduled / active) ─
+    type CurrentCfg = {
+      ownerIdx: number;
+      property: typeof bulkProperties[number];
+      svcIdx: number;
+      providerIdx: number;
+      agreementStatus: AgreementStatus;
+      assignmentStatus: AssignmentStatus;
+      price: number;
+      hoursOffset: number;
+    };
+    const variants: Array<{ ag: AgreementStatus; as: AssignmentStatus; hours: number }> = [
+      { ag: 'PENDING_ASSIGNMENT', as: 'PENDING_ACCEPTANCE', hours: -1 },
+      { ag: 'PENDING_ASSIGNMENT', as: 'ACCEPTED', hours: -6 },
+      { ag: 'ACTIVE', as: 'SCHEDULED', hours: 24 },
+      { ag: 'ACTIVE', as: 'IN_PROGRESS', hours: -1 },
+      { ag: 'ACTIVE', as: 'COMPLETED', hours: -12 },
+    ];
+
+    const currentCfgs: CurrentCfg[] = [];
+    for (let oIdx = 0; oIdx < ownerProfiles.length; oIdx++) {
+      const ownerProps = bulkProperties.filter((p) => p.ownerId === ownerProfiles[oIdx].id);
+      for (let i = 0; i < 10; i++) {
+        const v = variants[i % variants.length];
+        const propIdx = (oIdx * 3 + i) % ownerProps.length;
+        const svcIdx = (oIdx + i) % serviceTypes.length;
+        const providerIdx = (oIdx + i) % providerProfiles.length;
+        const basePrice = Number(serviceTypes[svcIdx].basePrice);
+        currentCfgs.push({
+          ownerIdx: oIdx,
+          property: ownerProps[propIdx],
+          svcIdx,
+          providerIdx,
+          agreementStatus: v.ag,
+          assignmentStatus: v.as,
+          price: basePrice + (i % 3) * 30000,
+          hoursOffset: v.hours,
+        });
+      }
+    }
+
+    for (const c of currentCfgs) {
+      const ownerUserId = owners[c.ownerIdx].id;
+      const total = c.price;
+      const providerPayout = Math.round(total * 0.8);
+      const platformFee = total - providerPayout;
+      const now = Date.now();
+      const scheduledFor = new Date(now + c.hoursOffset * 60 * 60 * 1000);
+
+      const q = await prisma.quote.create({
+        data: {
+          ownerId: ownerUserId,
+          propertyId: c.property.id,
+          serviceTypeId: serviceTypes[c.svcIdx].id,
+          quotedPrice: total,
+          priceLockedUntil: new Date(now + 24 * 60 * 60 * 1000),
+          frequency: 'ONE_TIME',
+          status: 'ACCEPTED',
+        },
+      });
+
+      const a = await prisma.agreement.create({
+        data: {
+          quoteId: q.id,
+          ownerId: ownerUserId,
+          propertyId: c.property.id,
+          serviceTypeId: serviceTypes[c.svcIdx].id,
+          quotedPrice: total,
+          frequency: 'ONE_TIME',
+          status: c.agreementStatus,
+        },
+      });
+
+      const assignment = await prisma.assignment.create({
+        data: {
+          agreementId: a.id,
+          propertyId: c.property.id,
+          serviceTypeId: serviceTypes[c.svcIdx].id,
+          providerId: providerProfiles[c.providerIdx].id,
+          status: c.assignmentStatus,
+          totalAmount: total,
+          providerPayout,
+          platformFee,
+          acceptedAt: c.assignmentStatus !== 'PENDING_ACCEPTANCE' ? new Date(now - 4 * 60 * 60 * 1000) : undefined,
+          scheduledDate: c.assignmentStatus === 'SCHEDULED' ? scheduledFor : undefined,
+          completedAt: c.assignmentStatus === 'COMPLETED' ? new Date(now + c.hoursOffset * 60 * 60 * 1000) : undefined,
+          expiresAt: new Date(now + 48 * 60 * 60 * 1000),
+        },
+      });
+
+      const taskStatus: TaskStatus =
+        c.assignmentStatus === 'IN_PROGRESS' ? 'IN_PROGRESS' :
+        c.assignmentStatus === 'SCHEDULED' ? 'SCHEDULED' :
+        c.assignmentStatus === 'COMPLETED' ? 'COMPLETED' :
+        'SCHEDULED';
+
+      await prisma.task.create({
+        data: {
+          assignmentId: assignment.id,
+          scheduledFor,
+          status: taskStatus,
+          checkInTime:
+            c.assignmentStatus === 'IN_PROGRESS' || c.assignmentStatus === 'COMPLETED'
+              ? new Date(now - 1 * 60 * 60 * 1000)
+              : undefined,
+          checkOutTime: c.assignmentStatus === 'COMPLETED' ? new Date(now) : undefined,
+          evidenceImages:
+            c.assignmentStatus === 'COMPLETED'
+              ? ['https://images.unsplash.com/photo-1581578731548-cdea95ad99ae?w=800']
+              : [],
+        },
+      });
+
+      await prisma.invoice.create({
+        data: {
+          agreementId: a.id,
+          amount: total,
+          status: c.assignmentStatus === 'COMPLETED' ? 'PAID' : 'PENDING',
+          dueAt: new Date(now + 7 * 24 * 60 * 60 * 1000),
+          paidAt: c.assignmentStatus === 'COMPLETED' ? new Date(now - 24 * 60 * 60 * 1000) : null,
+        },
+      });
+    }
+    console.log(`✓ ${currentCfgs.length} current-state agreements`);
+
+    // ─── Standalone quotes (DRAFT/QUOTED/EXPIRED mix) ───────────
+    let standaloneCount = 0;
+    for (let oIdx = 0; oIdx < ownerProfiles.length; oIdx++) {
+      const ownerProps = bulkProperties.filter((p) => p.ownerId === ownerProfiles[oIdx].id);
+      for (let i = 0; i < 12; i++) {
+        const propIdx = (oIdx + i * 2) % ownerProps.length;
+        const svcIdx = (oIdx + i) % serviceTypes.length;
+        const status: QuoteStatus = i % 5 === 0 ? 'EXPIRED' : i % 7 === 0 ? 'DRAFT' : 'QUOTED';
+        const basePrice = Number(serviceTypes[svcIdx].basePrice);
+        const daysAgo = (i * 5) % 60;
+        const createdAt = new Date(Date.now() - daysAgo * 24 * 60 * 60 * 1000);
+        await prisma.quote.create({
+          data: {
+            ownerId: owners[oIdx].id,
+            propertyId: ownerProps[propIdx].id,
+            serviceTypeId: serviceTypes[svcIdx].id,
+            quotedPrice: basePrice + (i % 3) * 20000,
+            priceLockedUntil:
+              status === 'EXPIRED'
+                ? new Date(Date.now() - 48 * 60 * 60 * 1000)
+                : new Date(Date.now() + 24 * 60 * 60 * 1000),
+            frequency: i % 3 === 0 ? 'MONTHLY' : 'ONE_TIME',
+            unitCount: 1,
+            status,
+            createdAt,
+          },
+        });
+        standaloneCount++;
+      }
+    }
+    console.log(`✓ ${standaloneCount} standalone quotes`);
+
+    // ─── Notifications (30 per owner) ──────────────────────────
+    const notifEvents = [
+      { event: 'QUOTE_GENERATED', channel: 'IN_APP' },
+      { event: 'AGREEMENT_ACTIVATED', channel: 'EMAIL' },
+      { event: 'INVOICE_DUE', channel: 'SMS' },
+      { event: 'INVOICE_PAID', channel: 'IN_APP' },
+      { event: 'ASSIGNMENT_SCHEDULED', channel: 'PUSH' },
+      { event: 'TASK_COMPLETED', channel: 'IN_APP' },
+      { event: 'TASK_VERIFIED', channel: 'EMAIL' },
+      { event: 'UTILITY_BILL_POSTED', channel: 'IN_APP' },
+    ];
+    let notifCount = 0;
+    for (let oIdx = 0; oIdx < ownerProfiles.length; oIdx++) {
+      for (let i = 0; i < 30; i++) {
+        const n = notifEvents[i % notifEvents.length];
+        const hoursAgo = i * 4;
+        const createdAt = new Date(Date.now() - hoursAgo * 60 * 60 * 1000);
+        await prisma.notification.create({
+          data: {
+            recipientId: owners[oIdx].id,
+            channel: n.channel,
+            event: n.event,
+            payload: { message: `${n.event.replace(/_/g, ' ').toLowerCase()} — sample #${i + 1}` },
+            isRead: i > 5,
+            sentAt: createdAt,
+            createdAt,
+          },
+        });
+        notifCount++;
+      }
+    }
+    console.log(`✓ ${notifCount} notifications`);
+
+    // ─── Utility bills + allocations (6 months × multi-unit props) ─
+    const utilTypes: UtilityType[] = ['WATER', 'ELECTRICITY', 'WASTE'];
+    let utilBillCount = 0;
+    let utilAllocCount = 0;
+    const multiUnitProps = bulkProperties.filter((p) => p.unitCount > 1);
+    for (const prop of multiUnitProps) {
+      const propUnits = await prisma.unit.findMany({
+        where: { propertyId: prop.id },
+        select: { id: true },
+      });
+      if (propUnits.length === 0) continue;
+      for (let m = 0; m < 6; m++) {
+        for (const ut of utilTypes) {
+          const baseAmt = ut === 'ELECTRICITY' ? 800000 : ut === 'WATER' ? 400000 : 120000;
+          const amount = baseAmt + m * 25000;
+          const billDate = new Date();
+          billDate.setMonth(billDate.getMonth() - m);
+          const monthLabel = billDate.toLocaleString('en-US', { month: 'long', year: 'numeric' });
+
+          const bill = await prisma.utilityBill.create({
+            data: {
+              propertyId: prop.id,
+              type: ut,
+              amount,
+              billingPeriod: monthLabel,
+              allocationMethod: 'PER_UNIT',
+              createdAt: billDate,
+            },
+          });
+          utilBillCount++;
+
+          const perUnitAmount = Math.round(amount / propUnits.length);
+          for (const u of propUnits) {
+            await prisma.utilityAllocation.create({
+              data: {
+                utilityBillId: bill.id,
+                unitId: u.id,
+                amount: perUnitAmount,
+                createdAt: billDate,
+              },
+            });
+            utilAllocCount++;
+          }
+        }
+      }
+    }
+    console.log(`✓ ${utilBillCount} utility bills + ${utilAllocCount} allocations`);
+
+    // ─── Audit events for agreements ────────────────────────────
+    let auditCount = 0;
+    const ownerAgreements = await prisma.agreement.findMany({
+      where: { ownerId: { in: owners.map((o) => o.id) } },
+      select: { id: true, ownerId: true, status: true, createdAt: true },
+      orderBy: { createdAt: 'desc' },
+      take: 100,
+    });
+    for (const ag of ownerAgreements) {
+      await prisma.auditEvent.create({
+        data: {
+          actorId: ag.ownerId,
+          entityType: 'Agreement',
+          entityId: ag.id,
+          action: 'CREATE',
+          newValue: { status: ag.status },
+          timestamp: ag.createdAt,
+        },
+      });
+      auditCount++;
+      if (ag.status === 'COMPLETED' || ag.status === 'ACTIVE') {
+        await prisma.auditEvent.create({
+          data: {
+            actorId: ag.ownerId,
+            entityType: 'Agreement',
+            entityId: ag.id,
+            action: 'STATUS_CHANGE',
+            oldValue: { status: 'PENDING_ASSIGNMENT' },
+            newValue: { status: ag.status },
+            timestamp: new Date(ag.createdAt.getTime() + 24 * 60 * 60 * 1000),
+          },
+        });
+        auditCount++;
+      }
+    }
+    console.log(`✓ ${auditCount} audit events`);
+
+    // ─── Provider wallets + stats reflect history ───────────────
+    for (let pIdx = 0; pIdx < providerProfiles.length; pIdx++) {
+      const verifiedAssignments = await prisma.assignment.findMany({
+        where: { providerId: providerProfiles[pIdx].id, status: 'VERIFIED' },
+        select: { id: true, providerPayout: true, completedAt: true },
+      });
+      let runningBalance = 0;
+      for (const va of verifiedAssignments) {
+        const amount = Number(va.providerPayout);
+        runningBalance += amount;
+        await prisma.walletTransaction.create({
+          data: {
+            walletId: wallets[pIdx].id,
+            type: 'EARNING',
+            amount,
+            reference: va.id,
+            status: 'SETTLED',
+            runningBalance,
+            createdAt: va.completedAt ?? new Date(),
+          },
+        });
+      }
+      await prisma.wallet.update({
+        where: { id: wallets[pIdx].id },
+        data: {
+          availableBalance: Math.round(runningBalance * 0.9),
+          pendingBalance: Math.round(runningBalance * 0.1),
+          totalEarned: runningBalance,
+        },
+      });
+      const completedJobs = verifiedAssignments.length;
+      await prisma.providerProfile.update({
+        where: { id: providerProfiles[pIdx].id },
+        data: {
+          completedJobs,
+          totalJobs: completedJobs + 2,
+          acceptanceRate: 0.9,
+          responsiveness: 0.85,
+          baseScore: 75 + pIdx * 3,
+          rating: 4.2 + (pIdx % 3) * 0.2,
+          verification: 'VERIFIED',
+        },
+      });
+    }
+    console.log('✓ Provider wallets + stats updated from history');
+
+    // ─── Demo provider strike (verifies StrikeBanner UI) ────────
+    await prisma.providerStrike.create({
+      data: {
+        providerId: providerProfiles[3].id,
+        reason: 'Late arrival to scheduled job (>30 min)',
+        metadata: { assignmentRef: 'historical', severity: 'MINOR' },
+      },
+    });
+    await prisma.providerProfile.update({
+      where: { id: providerProfiles[3].id },
+      data: { strikeCount: 1 },
+    });
+    console.log('✓ Demo strike for Mwanza Property Care');
+  }
 
   console.log('\n✅ Database seeded successfully!')
   console.log('\n📋 Login credentials:')
