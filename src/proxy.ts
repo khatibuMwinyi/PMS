@@ -8,7 +8,10 @@ import { getToken } from 'next-auth/jwt';
  * unauthenticated users or users with insufficient roles to the login page.
  */
 export default async function proxy(request: NextRequest) {
-  const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET });
+  const token = await getToken({
+    req: request,
+    secret: process.env.NEXTAUTH_SECRET ?? process.env.AUTH_SECRET,
+  });
   const { pathname } = request.nextUrl;
 
   // Publicly accessible paths – no redirect

@@ -8,6 +8,7 @@ import type { DefaultSession } from 'next-auth';
 import { jwtCallback, sessionCallback } from './callbacks';
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  secret: process.env.NEXTAUTH_SECRET ?? process.env.AUTH_SECRET,
   session: { strategy: 'jwt', maxAge: 30 * 24 * 60 * 60 },
   providers: [ // Providers (e.g., Credentials) to be added in Phase 1 Step 2
     Credentials({
