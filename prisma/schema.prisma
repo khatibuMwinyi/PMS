@@ -323,10 +323,12 @@ model ProviderProfile {
   responsiveness    Float               @default(0)
   strikeCount       Int                 @default(0) @map("strike_count")
   suspendedUntil    DateTime?           @map("suspended_until")
+  mobileMoneyNumber String?             @map("mobile_money_number")
 
   assignments  Assignment[]
   wallet       Wallet?
   strikes      ProviderStrike[]
+  blockedDates ProviderBlockedDate[]
 
   @@index([latitude, longitude])
   @@index([verification, baseScore])
@@ -726,4 +728,17 @@ model UtilityAllocation {
 
   @@unique([utilityBillId, unitId])
   @@map("utility_allocations")
+}
+
+model ProviderBlockedDate {
+  id          String   @id @default(uuid())
+  providerId  String   @map("provider_id")
+  blockedDate DateTime @map("blocked_date") @db.Date
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  provider    ProviderProfile @relation(fields: [providerId], references: [id], onDelete: Cascade)
+
+  @@unique([providerId, blockedDate])
+  @@index([blockedDate])
+  @@map("provider_blocked_dates")
 }
