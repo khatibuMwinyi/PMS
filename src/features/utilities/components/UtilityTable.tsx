@@ -1,4 +1,5 @@
-import { getOwnerUtilities } from '../services';
+import { Pagination } from '@/shared/components/ui/Pagination';
+import type { UtilityBillRow } from '../services';
 
 const TYPE_LABEL: Record<string, string> = {
   WATER: 'Water',
@@ -13,9 +14,14 @@ const ALLOCATION_LABEL: Record<string, string> = {
   PER_SQM: 'Per sqm',
 };
 
-export async function UtilityTable({ ownerUserId }: { ownerUserId: string }) {
-  const rows = await getOwnerUtilities(ownerUserId);
+interface Props {
+  rows: UtilityBillRow[];
+  currentPage: number;
+  totalPages: number;
+  basePath: string;
+}
 
+export async function UtilityTable({ rows, currentPage, totalPages, basePath }: Props) {
   if (rows.length === 0) {
     return (
       <div className="rounded-md border border-dashed border-outline-variant bg-[var(--surface-container-lowest)] p-8 text-center">
@@ -57,6 +63,12 @@ export async function UtilityTable({ ownerUserId }: { ownerUserId: string }) {
           </tbody>
         </table>
       </div>
+      <Pagination
+        basePath={basePath}
+        currentPage={currentPage}
+        totalPages={totalPages}
+        otherParams={{}}
+      />
     </div>
   );
 }

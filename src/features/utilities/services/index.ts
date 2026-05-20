@@ -2,6 +2,11 @@ import 'server-only';
 import Decimal from 'decimal.js';
 import { prisma } from '@/core/database/client';
 
+export interface UtilityBillListResult {
+  rows: UtilityBillRow[];
+  total: number;
+}
+
 export interface UtilityBillRow {
   id: string;
   propertyName: string;
@@ -16,29 +21,41 @@ function formatTzs(amount: Decimal): string {
   return `TZS ${amount.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
 }
 
-export async function getOwnerUtilities(ownerUserId: string): Promise<UtilityBillRow[]> {
+export async function getOwnerUtilities(
+  ownerUserId: string,
+  page: number = 1,
+  pageSize: number = 20,
+): Promise<UtilityBillListResult> {
   const profile = await prisma.ownerProfile.findUnique({
     where: { userId: ownerUserId },
     select: { id: true },
   });
-  if (!profile) return [];
+  if (!profile) return { rows: [], total: 0 };
 
-  const rows = await prisma.utilityBill.findMany({
-    where: { property: { ownerId: profile.id } },
-    select: {
-      id: true,
-      type: true,
-      amount: true,
-      billingPeriod: true,
-      allocationMethod: true,
-      createdAt: true,
-      property: { select: { name: true } },
-    },
-    orderBy: { createdAt: 'desc' },
-    take: 50,
-  });
+  const requestedPage = Math.max(1, page);
+  const skip = (requestedPage - 1) * pageSize;
+  const where = { property: { ownerId: profile.id } };
 
-  return rows.map((r) => ({
+  const [dbRows, total] = await Promise.all([
+    prisma.utilityBill.findMany({
+      where,
+      select: {
+        id: true,
+        type: true,
+        amount: true,
+        billingPeriod: true,
+        allocationMethod: true,
+        createdAt: true,
+        property: { select: { name: true } },
+      },
+      orderBy: { createdAt: 'desc' },
+      skip,
+      take: pageSize,
+    }),
+    prisma.utilityBill.count({ where }),
+  ]);
+
+  const rows = dbRows.map((r) => ({
     id: r.id,
     propertyName: r.property.name,
     type: r.type,
@@ -50,6 +67,8 @@ export async function getOwnerUtilities(ownerUserId: string): Promise<UtilityBil
       timeZone: 'Africa/Dar_es_Salaam',
     }),
   }));
+
+  return { rows, total };
 }
 
 export async function getOwnerPropertiesForUtility(ownerUserId: string) {
