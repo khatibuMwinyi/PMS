@@ -19,10 +19,10 @@ function getDashboardHref(role: string): string {
 
 export function DashboardShell({ children, role, userName, pageTitle }: DashboardShellProps) {
   return (
-    <div className="min-h-screen bg-[var(--surface-page)]">
+    <div className="h-screen overflow-hidden flex flex-col bg-[var(--surface-page)]">
 
       {/* Topbar — page title + user menu only. Primary nav lives in the sidebar. */}
-      <header className="sticky top-0 z-50 h-16 flex items-center gap-3 px-4 sm:px-6 bg-[var(--surface-card)] border-b border-[var(--border-subtle)] shadow-sm">
+      <header className="flex-none z-50 h-16 flex items-center gap-3 px-4 sm:px-6 bg-[var(--surface-card)] border-b border-[var(--border-subtle)] shadow-sm">
         <div className="md:hidden">
           <MobileNav role={role} />
         </div>
@@ -41,12 +41,12 @@ export function DashboardShell({ children, role, userName, pageTitle }: Dashboar
         </div>
       </header>
 
-      <div className="flex">
+      <div className="flex flex-1 overflow-hidden">
         <div className="hidden md:block shrink-0">
           <Sidebar role={role} userName={userName || undefined} />
         </div>
 
-        <main className="flex-1 min-w-0 p-6 animate-fade-up">
+        <main className="flex-1 min-w-0 overflow-y-auto p-6 animate-fade-up">
           {children}
         </main>
       </div>

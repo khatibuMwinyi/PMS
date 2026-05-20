@@ -67,7 +67,7 @@ export function Sidebar({ role, userName }: SidebarProps) {
 
   return (
     <aside
-      className="w-[240px] shrink-0 border-r border-[var(--border-subtle)] bg-[var(--surface-page)] flex flex-col min-h-screen"
+      className="w-[240px] shrink-0 border-r border-[var(--border-subtle)] bg-[var(--surface-page)] flex flex-col h-full overflow-y-auto"
     >
       {/* Header */}
       <div className="p-4 border-b border-[var(--border-subtle)]">
