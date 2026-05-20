@@ -1,6 +1,7 @@
 // src/features/dashboard/components/owner/OwnerActivePropertiesPanel.tsx
 import Image from 'next/image';
 import Link from 'next/link';
+import { MapPin, Home } from 'lucide-react';
 import { getOwnerActiveProperties } from '@/features/dashboard/queries/owner';
 import type { OwnerPropertyCard } from '@/features/dashboard/schemas/owner-dashboard.schema';
 
@@ -9,37 +10,81 @@ interface Props {
   limit?: number;
 }
 
-function PropertyTile({ p }: { p: OwnerPropertyCard }) {
+function PropertyTile({ p, isLcp }: { p: OwnerPropertyCard; isLcp: boolean }) {
   return (
     <Link
       href={p.hrefDetail}
-      className="block rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-card)] overflow-hidden hover:border-[var(--brand-gold)] transition-colors"
+      className="group block rounded-[var(--radius-xl)] overflow-hidden border border-[var(--border-subtle)] bg-[var(--surface-card)] shadow-[var(--shadow-card)] transition-all duration-300 hover:shadow-[var(--shadow-bold)] hover:-translate-y-0.5"
     >
-      <div className="relative h-32 w-full bg-[var(--border-subtle)] overflow-hidden">
+      {/* Image */}
+      <div className="relative overflow-hidden" style={{ aspectRatio: '16/9' }}>
         {p.imageUrl ? (
-          <Image src={p.imageUrl} alt={p.name} fill className="object-cover" />
+          <Image
+            src={p.imageUrl}
+            alt={p.name}
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            loading={isLcp ? 'eager' : 'lazy'}
+            priority={isLcp}
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+          />
         ) : (
-          <div className="flex h-full items-center justify-center text-[var(--text-muted)]">
-            No image
+          <div
+            className="w-full h-full flex items-center justify-center"
+            style={{ background: 'linear-gradient(145deg, var(--brand-primary) 0%, #1e3a5f 100%)' }}
+          >
+            <Home size={28} strokeWidth={1} style={{ color: 'rgba(255,255,255,0.18)' }} />
           </div>
         )}
+
+        {/* Gradient overlay */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{ background: 'linear-gradient(to top, rgba(13,18,38,0.75) 0%, transparent 60%)' }}
+        />
+
+        {/* Active badge */}
         {p.isActive && (
-          <span className="absolute top-2 right-2 bg-[var(--state-success)]/10 text-[var(--state-success)] text-[10px] font-medium uppercase px-2 py-1 rounded">
+          <span
+            className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-[var(--radius-pill)] text-[9px] font-bold uppercase tracking-wider"
+            style={{ background: 'rgba(16,185,129,0.92)', color: '#fff', backdropFilter: 'blur(8px)' }}
+          >
             Active
           </span>
         )}
+
+        {/* Name overlay */}
+        <div className="absolute bottom-0 left-0 right-0 px-3.5 pb-3">
+          <h4
+            className="text-[14px] font-semibold text-white leading-snug line-clamp-1"
+            style={{ fontFamily: 'var(--font-serif)' }}
+          >
+            {p.name}
+          </h4>
+        </div>
       </div>
-      <div className="p-4">
-        <h4 className="text-[16px] font-semibold text-[var(--text-primary)] mb-1">{p.name}</h4>
-        <p className="text-body-sm text-[var(--text-secondary)] mb-3">{p.addressLine}</p>
-        <div className="grid grid-cols-2 gap-2 border-t border-[var(--border-subtle)] pt-3">
-          <div>
-            <span className="block text-[10px] uppercase text-[var(--text-muted)]">Occupancy</span>
-            <span className="text-body-sm font-semibold text-[var(--text-primary)]">{p.occupancyPct}%</span>
+
+      {/* Bottom strip */}
+      <div className="flex items-center justify-between px-3.5 py-2.5 border-t border-[var(--border-subtle)]">
+        <div className="flex items-center gap-1.5 min-w-0">
+          <MapPin size={10} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
+          <span className="text-[11px] line-clamp-1" style={{ color: 'var(--text-secondary)' }}>
+            {p.addressLine}
+          </span>
+        </div>
+        <div className="flex items-center gap-3 shrink-0 ml-3">
+          <div className="text-right">
+            <span className="text-[12px] font-bold block" style={{ color: 'var(--text-primary)', fontVariantNumeric: 'tabular-nums' }}>
+              {p.occupancyPct}%
+            </span>
+            <span className="text-[9px] uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>Occup.</span>
           </div>
-          <div>
-            <span className="block text-[10px] uppercase text-[var(--text-muted)]">Units</span>
-            <span className="text-body-sm font-semibold text-[var(--text-primary)]">{p.unitCount} Total</span>
+          <div className="w-px h-5" style={{ background: 'var(--border-subtle)' }} />
+          <div className="text-right">
+            <span className="text-[12px] font-bold block" style={{ color: 'var(--text-primary)', fontVariantNumeric: 'tabular-nums' }}>
+              {p.unitCount}
+            </span>
+            <span className="text-[9px] uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>Units</span>
           </div>
         </div>
       </div>
@@ -49,11 +94,15 @@ function PropertyTile({ p }: { p: OwnerPropertyCard }) {
 
 export function ActivePropertiesEmptyState() {
   return (
-    <div className="rounded-lg border border-dashed border-[var(--border-subtle)] bg-[var(--surface-card)] p-8 text-center">
-      <p className="text-body-sm text-[var(--text-muted)] mb-3">No active properties yet.</p>
+    <div
+      className="rounded-[var(--radius-xl)] border border-dashed border-[var(--border-default)] p-10 text-center"
+      style={{ background: 'var(--surface-overlay)' }}
+    >
+      <p className="text-[13px] mb-3" style={{ color: 'var(--text-muted)' }}>No active properties yet.</p>
       <a
         href="/owner/properties/new"
-        className="inline-block rounded bg-[var(--brand-gold)] px-4 py-2 text-sm font-medium text-[var(--brand-primary)]"
+        className="inline-block rounded-[var(--radius-md)] px-4 py-2 text-[13px] font-semibold transition-opacity hover:opacity-90"
+        style={{ background: 'var(--brand-gold)', color: 'var(--brand-primary)' }}
       >
         Add your first property
       </a>
@@ -67,16 +116,28 @@ export async function OwnerActivePropertiesPanel({ ownerUserId, limit = 4 }: Pro
   return (
     <section>
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-h2 font-semibold text-[var(--text-primary)]">Active Properties</h3>
-        <Link href="/owner/properties" className="text-label text-[var(--brand-gold)] hover:underline">
-          View All
+        <h3
+          className="text-[17px] font-semibold"
+          style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-serif)' }}
+        >
+          Active Properties
+        </h3>
+        <Link
+          href="/owner/properties"
+          className="text-[11px] font-bold uppercase tracking-wider transition-colors hover:text-[var(--brand-gold-dark)]"
+          style={{ color: 'var(--brand-gold)' }}
+        >
+          View All →
         </Link>
       </div>
+
       {properties.length === 0 ? (
         <ActivePropertiesEmptyState />
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {properties.map((p) => <PropertyTile key={p.id} p={p} />)}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {properties.map((p, index) => (
+            <PropertyTile key={p.id} p={p} isLcp={index === 0} />
+          ))}
         </div>
       )}
     </section>

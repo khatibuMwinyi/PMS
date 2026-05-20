@@ -18,11 +18,11 @@ export function KpiCard({ label, value, icon: Icon, trend, subtext }: KpiCardPro
   return (
     <div className="rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4 flex flex-col">
       <div className="flex items-center justify-between mb-2">
-        <span className="text-label uppercase tracking-wider text-[var(--text-muted)]">{label}</span>
+        <span className="text-caption uppercase text-[var(--text-muted)]">{label}</span>
         <Icon size={18} className="text-[var(--text-muted)]" aria-hidden />
       </div>
       <div className="mt-auto">
-        <span className="text-h1 font-semibold tabular-nums text-[var(--text-primary)]">{value}</span>
+        <span className="text-h2 tabular-nums text-[var(--text-primary)]">{value}</span>
         {trend && (
           <div
             className={cn(
