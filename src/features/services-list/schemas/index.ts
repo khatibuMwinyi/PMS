@@ -20,6 +20,11 @@ export interface OwnerServiceKpis {
   disputedCount: number;
 }
 
+export interface OwnerServiceListResult {
+  rows: OwnerServiceRow[];
+  total: number;
+}
+
 export interface OwnerServiceRow {
   agreementId: string;
   shortRef: string;

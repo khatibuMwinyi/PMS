@@ -6,6 +6,7 @@ import {
 } from '../repositories';
 import type {
   OwnerServiceRow,
+  OwnerServiceListResult,
   OwnerServiceKpis,
   OwnerServiceStatus,
 } from '../schemas';
@@ -48,9 +49,11 @@ function mapToOwnerStatus(
 
 export async function getOwnerServiceList(
   ownerUserId: string,
-): Promise<OwnerServiceRow[]> {
-  const rows = await findOwnerServices(ownerUserId);
-  return rows.map((r) => ({
+  page: number = 1,
+  pageSize: number = 20,
+): Promise<OwnerServiceListResult> {
+  const { rows: raw, total } = await findOwnerServices(ownerUserId, page, pageSize);
+  const rows = raw.map((r) => ({
     agreementId: r.agreementId,
     shortRef: `SRV-${r.agreementId.slice(-6).toUpperCase()}`,
     propertyName: r.propertyName,
@@ -63,6 +66,7 @@ export async function getOwnerServiceList(
     }),
     hrefDetail: `/owner/services/${r.agreementId}`,
   }));
+  return { rows, total };
 }
 
 export async function getOwnerServiceKpis(

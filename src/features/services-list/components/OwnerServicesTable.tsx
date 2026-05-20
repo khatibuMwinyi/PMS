@@ -1,10 +1,13 @@
 import Link from 'next/link';
 import { MoreVertical } from 'lucide-react';
-import { getOwnerServiceList } from '../services';
-import type { OwnerServiceStatus } from '../schemas';
+import { Pagination } from '@/shared/components/ui/Pagination';
+import type { OwnerServiceRow, OwnerServiceStatus } from '../schemas';
 
 interface Props {
-  ownerUserId: string;
+  rows: OwnerServiceRow[];
+  currentPage: number;
+  totalPages: number;
+  basePath: string;
 }
 
 const STATUS_BADGE: Record<OwnerServiceStatus, { label: string; bg: string; fg: string }> = {
@@ -52,9 +55,7 @@ function StatusBadge({ status }: { status: OwnerServiceStatus }) {
   );
 }
 
-export async function OwnerServicesTable({ ownerUserId }: Props) {
-  const rows = await getOwnerServiceList(ownerUserId);
-
+export async function OwnerServicesTable({ rows, currentPage, totalPages, basePath }: Props) {
   if (rows.length === 0) {
     return (
       <div className="rounded-md border border-dashed border-outline-variant bg-[var(--surface-container-lowest)] p-12 text-center">
@@ -112,6 +113,12 @@ export async function OwnerServicesTable({ ownerUserId }: Props) {
           </tbody>
         </table>
       </div>
+      <Pagination
+        basePath={basePath}
+        currentPage={currentPage}
+        totalPages={totalPages}
+        otherParams={{}}
+      />
     </div>
   );
 }

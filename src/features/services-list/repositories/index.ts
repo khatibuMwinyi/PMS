@@ -5,23 +5,33 @@ import type { RawServiceRow } from '../schemas';
 
 export async function findOwnerServices(
   ownerUserId: string,
-  limit: number = 100,
-): Promise<RawServiceRow[]> {
-  const rows = await prisma.agreement.findMany({
-    where: { ownerId: ownerUserId },
-    select: {
-      id: true,
-      status: true,
-      createdAt: true,
-      serviceType: { select: { name: true } },
-      property: { select: { name: true } },
-      assignment: { select: { status: true } },
-    },
-    orderBy: { createdAt: 'desc' },
-    take: limit,
-  });
+  page: number = 1,
+  pageSize: number = 20,
+): Promise<{ rows: RawServiceRow[]; total: number }> {
+  const requestedPage = Math.max(1, page);
+  const skip = (requestedPage - 1) * pageSize;
 
-  return rows.map((r) => ({
+  const where = { ownerId: ownerUserId };
+
+  const [dbRows, total] = await Promise.all([
+    prisma.agreement.findMany({
+      where,
+      select: {
+        id: true,
+        status: true,
+        createdAt: true,
+        serviceType: { select: { name: true } },
+        property: { select: { name: true } },
+        assignment: { select: { status: true } },
+      },
+      orderBy: { createdAt: 'desc' },
+      skip,
+      take: pageSize,
+    }),
+    prisma.agreement.count({ where }),
+  ]);
+
+  const rows = dbRows.map((r) => ({
     agreementId: r.id,
     propertyName: r.property.name,
     serviceTypeName: r.serviceType.name,
@@ -29,6 +39,8 @@ export async function findOwnerServices(
     assignmentStatus: r.assignment?.status ?? null,
     createdAt: r.createdAt,
   }));
+
+  return { rows, total };
 }
 
 const ACTIVE_ASSIGNMENT_STATUSES = [

@@ -7,6 +7,7 @@ import RoleGuard from '@/components/RoleGuard';
 import { DashboardHeader } from '@/shared/components/dashboard/DashboardHeader';
 import { OwnerServicesKpis } from '@/features/services-list/components/OwnerServicesKpis';
 import { OwnerServicesTable } from '@/features/services-list/components/OwnerServicesTable';
+import { getOwnerServiceList } from '@/features/services-list/services';
 import {
   ServicesKpisSkeleton,
   ServicesTableSkeleton,
@@ -14,13 +15,27 @@ import {
 
 export const dynamic = 'force-dynamic';
 
-export default async function OwnerServicesPage() {
-  const session = await auth();
-  if (!session?.user) redirect('/login');
-  if (session.user.role !== 'OWNER') redirect('/login');
+const PAGE_SIZE = 20;
 
-  const ownerUserId = session.user.id;
+function ServicesContentSkeleton() {
+  return (
+    <>
+      <ServicesKpisSkeleton />
+      <ServicesTableSkeleton />
+    </>
+  );
+}
 
+function parsePage(raw: string | undefined): number {
+  const n = Number(raw);
+  return Number.isFinite(n) && n >= 1 ? Math.floor(n) : 1;
+}
+
+export default function OwnerServicesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
   return (
     <RoleGuard allowedRoles={['OWNER']}>
       <div className="flex items-end justify-between mb-6 flex-wrap gap-3">
@@ -44,13 +59,38 @@ export default async function OwnerServicesPage() {
         </div>
       </div>
 
-      <Suspense fallback={<ServicesKpisSkeleton />}>
-        <OwnerServicesKpis ownerUserId={ownerUserId} />
-      </Suspense>
-
-      <Suspense fallback={<ServicesTableSkeleton />}>
-        <OwnerServicesTable ownerUserId={ownerUserId} />
+      <Suspense fallback={<ServicesContentSkeleton />}>
+        <ServicesContent searchParams={searchParams} />
       </Suspense>
     </RoleGuard>
+  );
+}
+
+async function ServicesContent({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
+  const session = await auth();
+  if (!session?.user) redirect('/login');
+  if (session.user.role !== 'OWNER') redirect('/login');
+
+  const params = await searchParams;
+  const page = parsePage(params.page);
+  const ownerUserId = session.user.id;
+
+  const { rows, total } = await getOwnerServiceList(ownerUserId, page, PAGE_SIZE);
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+
+  return (
+    <div className="flex flex-col gap-6">
+      <OwnerServicesKpis ownerUserId={ownerUserId} />
+      <OwnerServicesTable
+        rows={rows}
+        currentPage={page}
+        totalPages={totalPages}
+        basePath="/owner/services"
+      />
+    </div>
   );
 }
