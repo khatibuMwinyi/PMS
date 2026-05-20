@@ -27,15 +27,6 @@
   --surface-dark:      #131b2e;
   --surface-dark-card: rgba(19, 27, 46, 0.95);
 
-  /* M3-style surface tier — used by dense ops pages (tables, bento KPIs).
-     Tonal layering instead of shadows for clarity at high density. */
-  --surface-container-lowest: #FFFFFF;
-  --surface-container-low:    #f6f3f5;
-  --surface-container:        #f0edef;
-  --surface-container-high:   #eae7e9;
-  --surface-container-highest:#e4e2e4;
-  --outline-variant:          #c6c6cd;
-
   /* ─── Text ─────────────────────────────────── */
   --text-primary:     #131b2e;
   --text-secondary:   #2D3A58;
@@ -190,44 +181,15 @@ html, body {
 }
 
 .font-data-tabular {
-  font-size: 13px;
-  line-height: 18px;
+  font-size: 14px;
+  line-height: 20px;
   font-variant-numeric: tabular-nums;
 }
 
 .font-label {
-  font-size: 12px;
-  line-height: 16px;
+  font-size: 14px;
+  line-height: 20px;
   font-weight: 500;
-}
-
-/* Dense ops table — sticky header, condensed padding, hover row, zebra. */
-.ops-table { width: 100%; border-collapse: collapse; }
-.ops-table thead th {
-  position: sticky; top: 0; z-index: 1;
-  background: var(--surface-container-low);
-  border-bottom: 1px solid var(--outline-variant);
-  padding: 8px 12px;
-  text-align: left;
-  font-size: 12px; line-height: 16px; font-weight: 600;
-  letter-spacing: 0.05em; text-transform: uppercase;
-  color: var(--text-muted);
-}
-.ops-table tbody td {
-  padding: 8px 12px;
-  border-bottom: 1px solid var(--outline-variant);
-  font-size: 13px; line-height: 18px;
-  font-variant-numeric: tabular-nums;
-}
-.ops-table tbody tr:nth-child(even) { background: rgba(0,0,0,0.015); }
-.ops-table tbody tr:hover { background: var(--surface-container-low); }
-
-/* Subtle-background status badge — 10% color bg + bold colored text. */
-.badge-status {
-  display: inline-flex; align-items: center;
-  padding: 2px 8px; border-radius: 4px;
-  font-size: 10px; font-weight: 700; line-height: 14px;
-  letter-spacing: 0.05em; text-transform: uppercase;
 }
 
 /* ─── Utility Classes ──────────────────────── */
