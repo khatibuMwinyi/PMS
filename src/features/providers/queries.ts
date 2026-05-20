@@ -107,3 +107,57 @@ export async function getProvidersWithinRadius(
     },
   });
 }
+
+export interface ProviderSettingsSnapshot {
+  profile: {
+    id: string;
+    businessName: string;
+    mobileMoneyNumber: string | null;
+    serviceCategories: string[];
+    serviceRadiusKm: number;
+  };
+  blockedDates: Array<{ id: string; date: string }>;
+  serviceCatalog: Array<{ id: string; name: string }>;
+}
+
+function toIsoDate(d: Date): string {
+  return d.toISOString().slice(0, 10);
+}
+
+export async function getProviderSettings(
+  userId: string,
+): Promise<ProviderSettingsSnapshot | null> {
+  const [profile, catalog] = await Promise.all([
+    prisma.providerProfile.findUnique({
+      where: { userId },
+      include: {
+        blockedDates: {
+          select: { id: true, blockedDate: true },
+        },
+      },
+    }),
+    prisma.serviceType.findMany({
+      where: { isActive: true },
+      select: { id: true, name: true },
+      orderBy: { name: 'asc' },
+    }),
+  ]);
+
+  if (!profile) return null;
+
+  const blockedDates = profile.blockedDates
+    .map((b) => ({ id: b.id, date: toIsoDate(b.blockedDate) }))
+    .sort((a, b) => a.date.localeCompare(b.date));
+
+  return {
+    profile: {
+      id: profile.id,
+      businessName: profile.businessName,
+      mobileMoneyNumber: profile.mobileMoneyNumber,
+      serviceCategories: profile.serviceCategories,
+      serviceRadiusKm: profile.serviceRadiusKm,
+    },
+    blockedDates,
+    serviceCatalog: catalog.map((c) => ({ id: c.id, name: c.name })),
+  };
+}
