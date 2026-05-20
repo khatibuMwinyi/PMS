@@ -94,7 +94,7 @@ export async function reassignAssignment(assignmentId: string): Promise<void> {
 
   const assignment = await prisma.assignment.findUnique({
     where:  { id: assignmentId },
-    select: { id: true, propertyId: true, serviceTypeId: true },
+    select: { id: true, propertyId: true, serviceTypeId: true, scheduledDate: true },
   });
   if (!assignment) return;
 
@@ -110,6 +110,7 @@ export async function reassignAssignment(assignmentId: string): Promise<void> {
       assignment.serviceTypeId,
       tier.radius,
       tier.threshold,
+      assignment.scheduledDate ?? undefined,
     );
 
     if (best) {

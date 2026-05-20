@@ -146,6 +146,7 @@ export async function submitAgreement(agreementId: string): Promise<{ assignment
     agreement.serviceTypeId,
     10,
     0,
+    undefined, // no scheduledDate at submitAgreement time
   );
 
   const totalAmount = new Decimal(agreement.quotedPrice);
