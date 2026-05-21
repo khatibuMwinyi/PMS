@@ -75,7 +75,7 @@ Label style: `text-caption font-semibold uppercase tracking-widest text-text-mut
 
 **Table header bar** (above `<table>`):
 - Left: "Invoices & Payment History" in `text-h4 font-semibold`
-- Right: filter pills — All / Pending / Overdue / Paid — as `<button>` elements. Active pill: `bg-primary text-white`. Inactive: `border border-border-default text-text-muted`. Note: pills are client-side filter only (no server round-trip). Wrap `OwnerInvoicesTable` in a `'use client'` wrapper that receives the pre-fetched rows as a prop and handles local filter state.
+- Right: filter pills — **All / Pending / Overdue / Failed / Paid** — as `<button>` elements. Active pill: `bg-primary text-white`. Inactive: `border border-border-default text-text-muted`. FAILED is included because it is actionable (user can retry payment). CANCELLED is terminal/non-actionable — surfaces under "All" only. Note: pills are client-side filter only (no server round-trip). Wrap `OwnerInvoicesTable` in a `'use client'` wrapper that receives the pre-fetched rows as a prop and handles local filter state.
 
 **Table columns:**
 
@@ -98,7 +98,7 @@ Label style: `text-caption font-semibold uppercase tracking-widest text-text-mut
 
 **Row hover:** `hover:bg-surface-overlay transition-colors`
 
-**Pay button:** `px-3 py-1 bg-accent text-accent-foreground rounded text-caption font-semibold hover:bg-accent-dark transition-colors`
+**Pay button:** label "Pay via Selcom". `px-3 py-1 bg-accent text-accent-foreground rounded text-caption font-semibold hover:bg-accent-dark transition-colors`
 
 **Receipt link:** `inline-flex items-center gap-1 text-caption text-text-muted hover:text-text-primary transition-colors` + `<Download size={14} />`
 
@@ -117,7 +117,21 @@ Label style: `text-caption font-semibold uppercase tracking-widest text-text-mut
 
 ### Page layout — `page.tsx`
 
-Header stays flex row (title left, Export button right). Export button keeps its existing gold style.
+`DashboardHeader` is removed. Replace with:
+
+```tsx
+<div className="mb-8">
+  <div className="flex items-center justify-between">
+    <h1 className="font-serif text-h2 text-text-primary tracking-tight">Reports</h1>
+    {/* Export button — existing gold style */}
+  </div>
+  <p className="text-body-sm text-text-secondary mt-1">
+    Spending paid to Oweru, utility expenses, and per-property cost breakdown.
+  </p>
+</div>
+```
+
+Subtitle is preserved, rendered below the title+export flex row.
 
 ### Monthly Spend chart — `MonthlySpendChart.tsx`
 
