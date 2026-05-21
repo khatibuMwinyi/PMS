@@ -113,15 +113,14 @@ export function PropertyDetail({ property, isOwner }: PropertyDetailProps) {
             <div className="flex items-center gap-1.5">
               <Icon size={13} className={iconClass} />
               <span
-                className="text-[10px] font-semibold uppercase tracking-wider"
-                style={{ color: 'var(--text-muted)' }}
+                className="text-[10px] font-semibold uppercase tracking-wider text-text-muted"
               >
                 {label}
               </span>
             </div>
             <span
-              className="text-[22px] font-bold leading-none"
-              style={{ color: 'var(--text-primary)', fontVariantNumeric: 'tabular-nums' }}
+              className="text-[22px] font-bold leading-none text-text-primary"
+              style={{ fontVariantNumeric: 'tabular-nums' }}
             >
               {value}
             </span>
@@ -134,8 +133,8 @@ export function PropertyDetail({ property, isOwner }: PropertyDetailProps) {
         className="flex items-center justify-between gap-4 flex-wrap px-4 py-3 rounded-[var(--radius-md)] border border-[var(--border-subtle)]"
         style={{ background: 'var(--surface-overlay)' }}
       >
-        <div className="flex items-center gap-2 text-[12px]" style={{ color: 'var(--text-secondary)' }}>
-          <Calendar size={12} style={{ color: 'var(--text-muted)' }} />
+        <div className="flex items-center gap-2 text-[12px] text-text-secondary">
+          <Calendar size={12} className="text-text-muted" />
           <span>
             Added{' '}
             {new Date(property.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
@@ -193,12 +192,11 @@ export function PropertyDetail({ property, isOwner }: PropertyDetailProps) {
                   <Home size={15} className="text-primary" />
                 </div>
                 <div>
-                  <p className="text-[13px] font-semibold" style={{ color: 'var(--text-primary)' }}>
+                  <p className="text-[13px] font-semibold text-text-primary">
                     {unit.unitName}
                   </p>
                   <p
-                    className="text-[10px] font-semibold uppercase tracking-wider mt-0.5"
-                    style={{ color: 'var(--text-muted)' }}
+                    className="text-[10px] font-semibold uppercase tracking-wider mt-0.5 text-text-muted"
                   >
                     {unit.unitType}
                   </p>
