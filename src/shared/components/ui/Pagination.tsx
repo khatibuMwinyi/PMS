@@ -37,13 +37,13 @@ export function Pagination({ basePath, currentPage, totalPages, otherParams }: P
       aria-label="Pagination"
       className="flex items-center justify-between gap-4 px-4 py-3 border-t border-border-subtle"
     >
-      <Link href={prevHref} aria-disabled={prevDisabled} className={linkCls(prevDisabled)} aria-label="Previous page">
+      <Link href={prevHref} aria-disabled={prevDisabled} className={linkCls(prevDisabled)} aria-label="Previous page" tabIndex={prevDisabled ? -1 : undefined}>
         <ChevronLeft size={14} /> Previous
       </Link>
       <span className="text-caption text-text-muted tabular-nums">
         Page {currentPage} of {totalPages}
       </span>
-      <Link href={nextHref} aria-disabled={nextDisabled} className={linkCls(nextDisabled)} aria-label="Next page">
+      <Link href={nextHref} aria-disabled={nextDisabled} className={linkCls(nextDisabled)} aria-label="Next page" tabIndex={nextDisabled ? -1 : undefined}>
         Next <ChevronRight size={14} />
       </Link>
     </nav>
