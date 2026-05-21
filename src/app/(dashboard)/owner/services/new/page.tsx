@@ -46,22 +46,23 @@ async function NewServiceContent() {
 
   return (
     <>
-      <Link
-        href="/owner/services"
-        className="inline-flex items-center gap-1 text-sm text-[var(--text-muted)] hover:text-[var(--text-primary)] mb-3"
-      >
-        <ArrowLeft size={14} /> Back to Services
-      </Link>
-
-      <div className="mb-6">
-        <h1 className="text-2xl font-semibold text-[var(--text-primary)]">Request a Service</h1>
-        <p className="text-sm text-[var(--text-muted)]">
+      <div className="mb-8">
+        <Link
+          href="/owner/services"
+          className="inline-flex items-center gap-1 text-caption text-text-muted hover:text-text-primary mb-4 transition-colors"
+        >
+          <ArrowLeft size={14} /> Back to Services
+        </Link>
+        <h1 className="font-serif text-h2 text-text-primary tracking-tight">
+          Request a Service
+        </h1>
+        <p className="text-body-sm text-text-secondary mt-1">
           Pricing is locked for 24 hours once quoted. You contract with Oweru only.
         </p>
       </div>
 
       {properties.length === 0 ? (
-        <div className="rounded-md border border-dashed border-outline-variant bg-[var(--surface-container-lowest)] p-12 text-center">
+        <div className="rounded-md border border-dashed border-border-subtle bg-surface-card p-12 text-center">
           <p className="text-sm text-[var(--text-muted)] mb-3">
             Add a property first before requesting a service.
           </p>
