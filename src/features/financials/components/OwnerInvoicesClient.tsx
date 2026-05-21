@@ -70,18 +70,23 @@ export function OwnerInvoicesClient({ rows }: Props) {
           <table className="w-full border-collapse text-body-sm">
             <thead>
               <tr className="bg-surface-page">
-                {['Reference', 'Property · Service', 'Date', 'Amount', 'Status', 'Action'].map(
-                  (col, i) => (
-                    <th
-                      key={col}
-                      className={`px-4 py-2.5 text-caption font-semibold uppercase tracking-widest text-text-muted border-b border-border-subtle ${
-                        i >= 3 ? 'text-right' : 'text-left'
-                      } ${i === 4 ? 'text-left' : ''}`}
-                    >
-                      {col}
-                    </th>
-                  ),
-                )}
+                {(
+                  [
+                    ['Reference',         'text-left' ],
+                    ['Property · Service','text-left' ],
+                    ['Date',              'text-left' ],
+                    ['Amount',            'text-right'],
+                    ['Status',            'text-left' ],
+                    ['Action',            'text-right'],
+                  ] as const
+                ).map(([col, align]) => (
+                  <th
+                    key={col}
+                    className={`px-4 py-2.5 ${align} text-caption font-semibold uppercase tracking-widest text-text-muted border-b border-border-subtle`}
+                  >
+                    {col}
+                  </th>
+                ))}
               </tr>
             </thead>
             <tbody>
