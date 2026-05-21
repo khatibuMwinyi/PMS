@@ -1,12 +1,6 @@
 import Link from 'next/link';
 import {
-  Brush,
-  Wrench,
-  Zap,
-  Shield,
-  Trees,
-  Hammer,
-  Box,
+  Brush, Wrench, Zap, Shield, Trees, Hammer, Box,
   type LucideIcon,
 } from 'lucide-react';
 import { getActiveCatalog } from '../services';
@@ -27,8 +21,8 @@ export async function ServiceCatalogGrid() {
 
   if (catalog.length === 0) {
     return (
-      <div className="rounded-md border border-dashed border-outline-variant bg-[var(--surface-container-lowest)] p-12 text-center">
-        <p className="text-sm text-[var(--text-muted)]">Catalog is empty. Check back soon.</p>
+      <div className="rounded-lg border border-dashed border-border-subtle bg-surface-card p-12 text-center">
+        <p className="text-body-sm text-text-muted">Catalog is empty. Check back soon.</p>
       </div>
     );
   }
@@ -40,37 +34,38 @@ export async function ServiceCatalogGrid() {
         return (
           <div
             key={entry.id}
-            className="bg-[var(--surface-container-lowest)] border border-outline-variant rounded-md p-5 flex flex-col gap-3 hover:border-[var(--brand-gold)] transition-colors"
+            className="bg-surface-card border border-border-subtle rounded-lg p-5 flex flex-col gap-3 hover:border-accent transition-colors shadow-card"
           >
             <div className="flex items-start justify-between">
-              <div className="p-2 rounded bg-[var(--surface-container-low)] text-[var(--brand-primary)]">
-                <Icon size={20} />
+              <div className="w-10 h-10 rounded-lg bg-primary/8 flex items-center justify-center">
+                <Icon size={20} className="text-text-primary" />
               </div>
-              <span className="badge-status bg-[var(--state-success-bg)] text-[var(--state-success)]">
+              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-caption font-semibold bg-state-success-bg text-state-success">
+                <span className="w-1.5 h-1.5 rounded-full bg-current opacity-70" />
                 Available
               </span>
             </div>
+
             <div>
-              <h3 className="text-base font-semibold text-[var(--text-primary)] mb-1">
-                {entry.name}
-              </h3>
-              <p className="text-sm text-[var(--text-secondary)] leading-snug">
+              <h3 className="text-h4 font-semibold text-text-primary mb-1">{entry.name}</h3>
+              <p className="text-body-sm text-text-secondary line-clamp-2 leading-snug">
                 {entry.description}
               </p>
             </div>
-            <div className="mt-auto pt-3 border-t border-outline-variant flex items-end justify-between">
+
+            <div className="mt-auto pt-3 border-t border-border-subtle flex items-end justify-between">
               <div>
-                <p className="text-[10px] uppercase tracking-wider text-[var(--text-muted)] font-medium">
+                <p className="text-[10px] font-semibold uppercase tracking-widest text-text-muted">
                   From
                 </p>
-                <p className="text-base font-semibold tabular-nums text-[var(--text-primary)]">
+                <p className="text-body font-semibold tabular-nums text-text-primary">
                   {entry.basePriceFormatted}
                 </p>
-                <p className="text-[11px] text-[var(--text-muted)]">{entry.priceUnitLabel}</p>
+                <p className="text-caption text-text-muted">{entry.priceUnitLabel}</p>
               </div>
               <Link
                 href={`/owner/services/new?serviceTypeId=${entry.id}`}
-                className="px-3 py-1.5 bg-[var(--brand-primary)] text-[var(--text-on-brand)] rounded text-xs font-semibold hover:bg-[var(--brand-primary-light)] transition-colors"
+                className="px-3 py-1.5 bg-primary text-white rounded text-caption font-semibold hover:bg-primary-light transition-colors"
               >
                 Get Quote
               </Link>

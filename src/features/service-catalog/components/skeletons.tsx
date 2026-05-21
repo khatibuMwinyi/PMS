@@ -4,7 +4,7 @@ export function ServiceCatalogSkeleton() {
       {Array.from({ length: 6 }).map((_, i) => (
         <div
           key={i}
-          className="bg-[var(--surface-container-lowest)] border border-outline-variant rounded-md p-5 h-44 animate-pulse"
+          className="bg-surface-card border border-border-subtle rounded-lg p-5 h-44 animate-pulse shadow-card"
         />
       ))}
     </div>
