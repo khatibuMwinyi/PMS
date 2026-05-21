@@ -27,6 +27,7 @@ export default function OwnerUtilitiesPage({
   return (
     <RoleGuard allowedRoles={['OWNER']}>
       <DashboardHeader
+        serif
         title="Utilities"
         subtitle="Track water, electricity, gas, and waste bills separately from Oweru services."
       />
@@ -34,8 +35,8 @@ export default function OwnerUtilitiesPage({
       <Suspense
         fallback={
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            <div className="lg:col-span-1 bg-[var(--surface-container-lowest)] border border-outline-variant rounded-md h-80 animate-pulse" />
-            <div className="lg:col-span-2 bg-[var(--surface-container-lowest)] border border-outline-variant rounded-md h-64 animate-pulse" />
+            <div className="lg:col-span-1 bg-surface-card border border-border-subtle rounded-lg h-80 animate-pulse shadow-card" />
+            <div className="lg:col-span-2 bg-surface-card border border-border-subtle rounded-lg h-64 animate-pulse shadow-card" />
           </div>
         }
       >
