@@ -1,21 +1,25 @@
+// src/features/owner-reports/components/skeletons.tsx
 export function MonthlySpendSkeleton() {
   return (
-    <div className="bg-[var(--surface-container-lowest)] border border-outline-variant rounded-md p-5 h-72 animate-pulse" />
+    <div className="bg-surface-card border border-border-subtle rounded-lg shadow-card p-5 h-72 animate-pulse" />
   );
 }
 
 export function ServiceMixSkeleton() {
   return (
-    <div className="bg-[var(--surface-container-lowest)] border border-outline-variant rounded-md p-5 h-72 animate-pulse" />
+    <div className="bg-surface-card border border-border-subtle rounded-lg shadow-card p-5 h-72 animate-pulse" />
   );
 }
 
 export function PropertyCostSkeleton() {
   return (
-    <div className="bg-[var(--surface-container-lowest)] border border-outline-variant rounded-md overflow-hidden">
-      <div className="h-14 bg-[var(--surface-container-low)] border-b border-outline-variant" />
+    <div className="bg-surface-card border border-border-subtle rounded-lg shadow-card overflow-hidden">
+      <div className="h-12 border-b border-border-subtle bg-surface-overlay animate-pulse" />
       {Array.from({ length: 4 }).map((_, i) => (
-        <div key={i} className="h-12 border-b border-outline-variant animate-pulse" />
+        <div
+          key={i}
+          className="h-12 border-b border-border-subtle last:border-b-0 animate-pulse bg-surface-overlay/50"
+        />
       ))}
     </div>
   );

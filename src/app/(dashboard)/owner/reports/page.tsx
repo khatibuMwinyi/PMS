@@ -1,9 +1,9 @@
+// src/app/(dashboard)/owner/reports/page.tsx
 import { Suspense } from 'react';
 import { redirect } from 'next/navigation';
 import { Download } from 'lucide-react';
 import { auth } from '@/core/auth';
 import RoleGuard from '@/components/RoleGuard';
-import { DashboardHeader } from '@/shared/components/dashboard/DashboardHeader';
 import { MonthlySpendChart } from '@/features/owner-reports/components/MonthlySpendChart';
 import { ServiceMixChart } from '@/features/owner-reports/components/ServiceMixChart';
 import { PropertyCostTable } from '@/features/owner-reports/components/PropertyCostTable';
@@ -24,17 +24,19 @@ export default async function OwnerReportsPage() {
 
   return (
     <RoleGuard allowedRoles={['OWNER']}>
-      <div className="flex items-end justify-between mb-6 flex-wrap gap-3">
-        <DashboardHeader
-          title="Reports"
-          subtitle="Spending paid to Oweru, utility expenses, and per-property cost breakdown."
-        />
-        <button
-          type="button"
-          className="flex items-center gap-1.5 px-4 py-2 bg-[var(--brand-gold)] text-[var(--brand-primary)] rounded-md text-sm font-semibold hover:bg-[var(--brand-gold-dark)] transition-colors"
-        >
-          <Download size={16} /> Export Report
-        </button>
+      <div className="mb-8">
+        <div className="flex items-center justify-between">
+          <h1 className="font-serif text-h2 text-text-primary tracking-tight">Reports</h1>
+          <button
+            type="button"
+            className="flex items-center gap-1.5 px-4 py-2 bg-accent text-accent-foreground rounded-md text-body-sm font-semibold hover:bg-accent-dark transition-colors"
+          >
+            <Download size={16} /> Export Report
+          </button>
+        </div>
+        <p className="text-body-sm text-text-secondary mt-1">
+          Spending paid to Oweru, utility expenses, and per-property cost breakdown.
+        </p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
