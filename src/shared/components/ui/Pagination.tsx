@@ -1,3 +1,4 @@
+// src/shared/components/ui/Pagination.tsx
 import Link from 'next/link';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/cn';
@@ -23,21 +24,26 @@ export function Pagination({ basePath, currentPage, totalPages, otherParams }: P
   const prevHref = prevDisabled ? '#' : buildHref(basePath, otherParams, currentPage - 1);
   const nextHref = nextDisabled ? '#' : buildHref(basePath, otherParams, currentPage + 1);
 
-  const linkClasses = (disabled: boolean) =>
+  const linkCls = (disabled: boolean) =>
     cn(
-      'inline-flex items-center gap-1 px-3 py-1.5 rounded border text-label transition-colors',
+      'inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-caption font-semibold border transition-colors',
       disabled
-        ? 'border-[var(--border-subtle)] text-[var(--text-muted)] pointer-events-none opacity-50'
-        : 'border-[var(--border-subtle)] text-[var(--text-primary)] hover:bg-[var(--surface-overlay)]',
+        ? 'border-border-subtle text-text-muted pointer-events-none opacity-50'
+        : 'border-border-subtle text-text-primary hover:bg-surface-overlay',
     );
 
   return (
-    <nav aria-label="Pagination" className="flex items-center justify-between gap-4 px-1 py-3">
-      <Link href={prevHref} aria-disabled={prevDisabled} className={linkClasses(prevDisabled)} aria-label="Previous page">
+    <nav
+      aria-label="Pagination"
+      className="flex items-center justify-between gap-4 px-4 py-3 border-t border-border-subtle"
+    >
+      <Link href={prevHref} aria-disabled={prevDisabled} className={linkCls(prevDisabled)} aria-label="Previous page">
         <ChevronLeft size={14} /> Previous
       </Link>
-      <span className="text-body-sm text-[var(--text-muted)] tabular-nums">Page {currentPage} of {totalPages}</span>
-      <Link href={nextHref} aria-disabled={nextDisabled} className={linkClasses(nextDisabled)} aria-label="Next page">
+      <span className="text-caption text-text-muted tabular-nums">
+        Page {currentPage} of {totalPages}
+      </span>
+      <Link href={nextHref} aria-disabled={nextDisabled} className={linkCls(nextDisabled)} aria-label="Next page">
         Next <ChevronRight size={14} />
       </Link>
     </nav>
