@@ -32,7 +32,7 @@ export function PropertyDetail({ property, isOwner }: PropertyDetailProps) {
 
       {/* ── Hero image ──────────────────────────────────────────── */}
       <div
-        className="relative w-full overflow-hidden rounded-[var(--radius-xl)]"
+        className="relative w-full overflow-hidden rounded-xl"
         style={{ aspectRatio: '16/7' }}
       >
         {firstImage ? (
@@ -67,7 +67,7 @@ export function PropertyDetail({ property, isOwner }: PropertyDetailProps) {
           <div>
             {property.type && (
               <span
-                className="inline-block mb-2 px-2.5 py-0.5 rounded-[var(--radius-pill)] text-[9px] font-bold uppercase tracking-wider"
+                className="inline-block mb-2 px-2.5 py-0.5 rounded-pill text-[9px] font-bold uppercase tracking-wider"
                 style={{ background: 'rgba(240,165,0,0.92)', color: '#131b2e' }}
               >
                 {property.type}
@@ -86,7 +86,7 @@ export function PropertyDetail({ property, isOwner }: PropertyDetailProps) {
             </div>
           </div>
           <span
-            className="px-3 py-1.5 rounded-[var(--radius-pill)] text-[10px] font-bold uppercase tracking-wider shrink-0"
+            className="px-3 py-1.5 rounded-pill text-[10px] font-bold uppercase tracking-wider shrink-0"
             style={{
               background: isActive ? 'rgba(16,185,129,0.92)' : 'rgba(100,116,139,0.85)',
               color: '#fff',
@@ -108,7 +108,7 @@ export function PropertyDetail({ property, isOwner }: PropertyDetailProps) {
         ].map(({ icon: Icon, label, value, iconClass }) => (
           <div
             key={label}
-            className="flex flex-col gap-2 p-4 rounded-[var(--radius-lg)] border border-[var(--border-subtle)] bg-[var(--surface-card)]"
+            className="flex flex-col gap-2 p-4 rounded-lg border border-border-subtle bg-surface-card"
           >
             <div className="flex items-center gap-1.5">
               <Icon size={13} className={iconClass} />
@@ -130,7 +130,7 @@ export function PropertyDetail({ property, isOwner }: PropertyDetailProps) {
 
       {/* ── Meta bar ────────────────────────────────────────────── */}
       <div
-        className="flex items-center justify-between gap-4 flex-wrap px-4 py-3 rounded-[var(--radius-md)] border border-[var(--border-subtle)]"
+        className="flex items-center justify-between gap-4 flex-wrap px-4 py-3 rounded-md border border-border-subtle"
         style={{ background: 'var(--surface-overlay)' }}
       >
         <div className="flex items-center gap-2 text-[12px] text-text-secondary">
@@ -183,10 +183,10 @@ export function PropertyDetail({ property, isOwner }: PropertyDetailProps) {
             {property.units.map((unit) => (
               <div
                 key={unit.id}
-                className="flex items-center gap-3 p-4 rounded-[var(--radius-lg)] border border-[var(--border-subtle)] bg-[var(--surface-card)] hover:border-accent transition-colors"
+                className="flex items-center gap-3 p-4 rounded-lg border border-border-subtle bg-surface-card hover:border-accent transition-colors"
               >
                 <div
-                  className="w-9 h-9 rounded-[var(--radius-md)] flex items-center justify-center shrink-0"
+                  className="w-9 h-9 rounded-md flex items-center justify-center shrink-0"
                   style={{ background: 'var(--surface-overlay)' }}
                 >
                   <Home size={15} className="text-primary" />
