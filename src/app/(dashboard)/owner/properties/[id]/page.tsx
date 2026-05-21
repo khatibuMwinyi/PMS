@@ -11,12 +11,29 @@ interface PropertyDetailPageProps {
   }>;
 }
 
+function PropertyDetailSkeleton() {
+  return (
+    <div className="flex flex-col gap-5 max-w-5xl animate-pulse">
+      <div
+        className="w-full rounded-[var(--radius-xl)] bg-surface-card border border-border-subtle"
+        style={{ aspectRatio: '16/7' }}
+      />
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div key={i} className="h-20 rounded-[var(--radius-lg)] bg-surface-card border border-border-subtle" />
+        ))}
+      </div>
+      <div className="h-12 rounded-[var(--radius-md)] bg-surface-card border border-border-subtle" />
+    </div>
+  );
+}
+
 export default async function PropertyDetailPage({ params }: PropertyDetailPageProps) {
   const { id } = await params;
 
   return (
     <RoleGuard allowedRoles={['OWNER']}>
-      <Suspense fallback={<div>Loading property details...</div>}>
+      <Suspense fallback={<PropertyDetailSkeleton />}>
         <PropertyDetailContent propertyId={id} />
       </Suspense>
     </RoleGuard>

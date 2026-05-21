@@ -74,9 +74,8 @@ export function PropertyDetail({ property, isOwner }: PropertyDetailProps) {
               </span>
             )}
             <h1
-              className="text-[26px] md:text-[34px] font-semibold text-white leading-tight"
-              style={{ fontFamily: 'var(--font-serif)' }}
-            >
+              className="font-serif text-[26px] md:text-[34px] font-semibold text-white leading-tight"
+              >
               {property.name}
             </h1>
             <div className="flex items-center gap-2 mt-2">
@@ -102,17 +101,17 @@ export function PropertyDetail({ property, isOwner }: PropertyDetailProps) {
       {/* ── Stats bento ─────────────────────────────────────────── */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         {[
-          { icon: Home,     label: 'Units',      value: unitCount,                       color: 'var(--brand-primary)' },
-          { icon: Wrench,   label: 'Quotes',     value: property._count?.quotes ?? 0,    color: 'var(--state-info)' },
-          { icon: Activity, label: 'Agreements', value: property._count?.agreements ?? 0, color: 'var(--state-success)' },
-          { icon: Tag,      label: 'Zone',       value: property.zone,                   color: 'var(--brand-gold)' },
-        ].map(({ icon: Icon, label, value, color }) => (
+          { icon: Home,     label: 'Units',      value: unitCount,                        iconClass: 'text-primary' },
+          { icon: Wrench,   label: 'Quotes',     value: property._count?.quotes ?? 0,     iconClass: 'text-info' },
+          { icon: Activity, label: 'Agreements', value: property._count?.agreements ?? 0, iconClass: 'text-success' },
+          { icon: Tag,      label: 'Zone',       value: property.zone,                    iconClass: 'text-gold' },
+        ].map(({ icon: Icon, label, value, iconClass }) => (
           <div
             key={label}
             className="flex flex-col gap-2 p-4 rounded-[var(--radius-lg)] border border-[var(--border-subtle)] bg-[var(--surface-card)]"
           >
             <div className="flex items-center gap-1.5">
-              <Icon size={13} style={{ color }} />
+              <Icon size={13} className={iconClass} />
               <span
                 className="text-[10px] font-semibold uppercase tracking-wider"
                 style={{ color: 'var(--text-muted)' }}
@@ -173,24 +172,25 @@ export function PropertyDetail({ property, isOwner }: PropertyDetailProps) {
       {/* ── Units ───────────────────────────────────────────────── */}
       {unitCount > 0 && (
         <div>
-          <h2
-            className="text-[16px] font-semibold mb-3"
-            style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-serif)' }}
-          >
-            Units{' '}
-            <span className="font-normal" style={{ color: 'var(--text-muted)' }}>({unitCount})</span>
-          </h2>
+          {/* Section divider */}
+          <div className="flex items-center gap-3 mb-4">
+            <span className="font-serif text-[16px] font-semibold text-text-primary">
+              Units{' '}
+              <span className="font-sans text-caption font-normal text-text-muted">({unitCount})</span>
+            </span>
+            <hr className="flex-1 border-border-subtle" />
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {property.units.map((unit) => (
               <div
                 key={unit.id}
-                className="flex items-center gap-3 p-4 rounded-[var(--radius-lg)] border border-[var(--border-subtle)] bg-[var(--surface-card)]"
+                className="flex items-center gap-3 p-4 rounded-[var(--radius-lg)] border border-[var(--border-subtle)] bg-[var(--surface-card)] hover:border-accent transition-colors"
               >
                 <div
                   className="w-9 h-9 rounded-[var(--radius-md)] flex items-center justify-center shrink-0"
                   style={{ background: 'var(--surface-overlay)' }}
                 >
-                  <Home size={15} style={{ color: 'var(--brand-primary)' }} />
+                  <Home size={15} className="text-primary" />
                 </div>
                 <div>
                   <p className="text-[13px] font-semibold" style={{ color: 'var(--text-primary)' }}>
