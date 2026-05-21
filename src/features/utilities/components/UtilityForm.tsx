@@ -23,6 +23,9 @@ const ALLOCATION_METHODS = [
   { value: 'PER_SQM', label: 'Per square metre' },
 ];
 
+const inputCls =
+  'w-full px-3 py-2 border border-border-subtle rounded-md text-body-sm bg-surface-card text-text-primary focus:outline-none focus:ring-2 focus:ring-accent/40 transition-colors';
+
 export function UtilityForm({ properties }: { properties: PropertyOption[] }) {
   const router = useRouter();
   const [pending, start] = useTransition();
@@ -35,7 +38,9 @@ export function UtilityForm({ properties }: { properties: PropertyOption[] }) {
     const d = new Date();
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
   });
-  const [allocationMethod, setAllocationMethod] = useState<'PER_UNIT' | 'PER_PERSON' | 'PER_SQM'>('PER_UNIT');
+  const [allocationMethod, setAllocationMethod] = useState<
+    'PER_UNIT' | 'PER_PERSON' | 'PER_SQM'
+  >('PER_UNIT');
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -68,8 +73,10 @@ export function UtilityForm({ properties }: { properties: PropertyOption[] }) {
 
   if (properties.length === 0) {
     return (
-      <div className="rounded-md border border-dashed border-outline-variant bg-[var(--surface-container-lowest)] p-8 text-center">
-        <p className="text-sm text-[var(--text-muted)]">Add a property before recording utility bills.</p>
+      <div className="rounded-lg border border-dashed border-border-subtle bg-surface-card p-8 text-center">
+        <p className="text-body-sm text-text-muted">
+          Add a property before recording utility bills.
+        </p>
       </div>
     );
   }
@@ -77,35 +84,31 @@ export function UtilityForm({ properties }: { properties: PropertyOption[] }) {
   return (
     <form
       onSubmit={submit}
-      className="bg-[var(--surface-container-lowest)] border border-outline-variant rounded-md p-5 space-y-3"
+      className="bg-surface-card border border-border-subtle rounded-lg p-5 space-y-3 shadow-card"
     >
-      <h2 className="text-base font-semibold text-[var(--text-primary)] mb-1">Record a utility bill</h2>
+      <h2 className="text-h4 font-semibold text-text-primary mb-1">Record a Utility Bill</h2>
 
       <Field label="Property">
         <select
           value={propertyId}
           onChange={(e) => setPropertyId(e.target.value)}
-          className="w-full px-3 py-2 border border-outline-variant rounded-md text-sm bg-[var(--surface-container-lowest)]"
+          className={inputCls}
         >
           {properties.map((p) => (
-            <option key={p.id} value={p.id}>
-              {p.name}
-            </option>
+            <option key={p.id} value={p.id}>{p.name}</option>
           ))}
         </select>
       </Field>
 
       <div className="grid grid-cols-2 gap-3">
-        <Field label="Utility">
+        <Field label="Utility type">
           <select
             value={type}
             onChange={(e) => setType(e.target.value as typeof type)}
-            className="w-full px-3 py-2 border border-outline-variant rounded-md text-sm bg-[var(--surface-container-lowest)]"
+            className={inputCls}
           >
             {UTILITY_TYPES.map((u) => (
-              <option key={u.value} value={u.value}>
-                {u.label}
-              </option>
+              <option key={u.value} value={u.value}>{u.label}</option>
             ))}
           </select>
         </Field>
@@ -115,7 +118,7 @@ export function UtilityForm({ properties }: { properties: PropertyOption[] }) {
             type="month"
             value={billingPeriod}
             onChange={(e) => setBillingPeriod(e.target.value)}
-            className="w-full px-3 py-2 border border-outline-variant rounded-md text-sm bg-[var(--surface-container-lowest)]"
+            className={inputCls}
           />
         </Field>
       </div>
@@ -129,7 +132,7 @@ export function UtilityForm({ properties }: { properties: PropertyOption[] }) {
             min={0}
             step={100}
             placeholder="0"
-            className="w-full px-3 py-2 border border-outline-variant rounded-md text-sm bg-[var(--surface-container-lowest)] tabular-nums"
+            className={`${inputCls} tabular-nums`}
           />
         </Field>
 
@@ -137,36 +140,28 @@ export function UtilityForm({ properties }: { properties: PropertyOption[] }) {
           <select
             value={allocationMethod}
             onChange={(e) => setAllocationMethod(e.target.value as typeof allocationMethod)}
-            className="w-full px-3 py-2 border border-outline-variant rounded-md text-sm bg-[var(--surface-container-lowest)]"
+            className={inputCls}
           >
             {ALLOCATION_METHODS.map((m) => (
-              <option key={m.value} value={m.value}>
-                {m.label}
-              </option>
+              <option key={m.value} value={m.value}>{m.label}</option>
             ))}
           </select>
         </Field>
       </div>
 
       {error && (
-        <p className="text-sm text-[var(--state-error)] bg-[var(--state-error-bg)] rounded p-2">
-          {error}
-        </p>
+        <p className="text-body-sm text-state-error bg-state-error-bg rounded p-2">{error}</p>
       )}
 
       <button
         type="submit"
         disabled={pending}
-        className="w-full px-4 py-2.5 bg-[var(--brand-gold)] text-[var(--brand-primary)] rounded-md text-sm font-semibold disabled:opacity-40 flex items-center justify-center gap-1.5"
+        className="w-full px-4 py-2.5 bg-accent text-accent-foreground rounded-md text-body-sm font-semibold disabled:opacity-40 flex items-center justify-center gap-1.5 hover:bg-accent-dark transition-colors"
       >
         {pending ? (
-          <>
-            <Loader2 size={16} className="animate-spin" /> Saving…
-          </>
+          <><Loader2 size={16} className="animate-spin" /> Saving…</>
         ) : (
-          <>
-            <Plus size={16} /> Record bill
-          </>
+          <><Plus size={16} /> Record bill</>
         )}
       </button>
     </form>
@@ -176,7 +171,7 @@ export function UtilityForm({ properties }: { properties: PropertyOption[] }) {
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="block">
-      <span className="block text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider mb-1">
+      <span className="block text-caption font-semibold uppercase tracking-widest text-text-muted mb-1">
         {label}
       </span>
       {children}
