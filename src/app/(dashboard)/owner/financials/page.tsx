@@ -22,6 +22,7 @@ export default async function OwnerFinancialsPage() {
   return (
     <RoleGuard allowedRoles={['OWNER']}>
       <DashboardHeader
+        serif
         title="Financials"
         subtitle="Invoices, payments to Oweru, and utility expenses across your portfolio."
       />
