@@ -90,4 +90,10 @@ describe('OwnerInvoicesClient', () => {
     render(<OwnerInvoicesClient rows={[makeRow({ status: 'FAILED', attempts: 2 })]} />);
     expect(screen.getByText('2/3')).toBeInTheDocument();
   });
+
+  it('shows no action for CANCELLED rows', () => {
+    render(<OwnerInvoicesClient rows={[makeRow({ id: '1', status: 'CANCELLED' })]} />);
+    expect(screen.queryByRole('button', { name: 'Pay via Selcom' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: /receipt/i })).not.toBeInTheDocument();
+  });
 });

@@ -126,7 +126,7 @@ export function OwnerInvoicesClient({ rows }: Props) {
                         >
                           Pay via Selcom
                         </button>
-                      ) : (
+                      ) : r.status === 'PAID' ? (
                         <a
                           href={`/api/invoices/${r.id}/receipt`}
                           aria-label="Download receipt"
@@ -135,7 +135,7 @@ export function OwnerInvoicesClient({ rows }: Props) {
                           <Download size={14} />
                           Receipt
                         </a>
-                      )}
+                      ) : null}
                     </td>
                   </tr>
                 );
