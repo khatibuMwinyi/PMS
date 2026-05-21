@@ -63,12 +63,12 @@ async function NewServiceContent() {
 
       {properties.length === 0 ? (
         <div className="rounded-md border border-dashed border-border-subtle bg-surface-card p-12 text-center">
-          <p className="text-sm text-[var(--text-muted)] mb-3">
+          <p className="text-sm text-text-muted mb-3">
             Add a property first before requesting a service.
           </p>
           <Link
             href="/owner/properties/new"
-            className="text-sm font-medium text-[var(--brand-gold)] hover:underline"
+            className="text-sm font-medium text-accent hover:underline"
           >
             Add a property →
           </Link>
