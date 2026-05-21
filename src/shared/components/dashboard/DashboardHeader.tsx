@@ -1,8 +1,10 @@
-// src/shared/components/dashboard/DashboardHeader.tsx
+import { cn } from '@/lib/cn';
+
 interface DashboardHeaderProps {
   title: string;
   subtitle?: string;
   asOf?: Date;
+  serif?: boolean;
 }
 
 function formatAsOf(d: Date): string {
@@ -12,11 +14,13 @@ function formatAsOf(d: Date): string {
   });
 }
 
-export function DashboardHeader({ title, subtitle, asOf }: DashboardHeaderProps) {
+export function DashboardHeader({ title, subtitle, asOf, serif }: DashboardHeaderProps) {
   return (
     <div className="mb-8 flex justify-between items-end">
       <div>
-        <h1 className="text-h1 font-semibold text-[var(--text-primary)]">{title}</h1>
+        <h1 className={cn('text-h1 font-semibold text-[var(--text-primary)]', serif && 'font-serif')}>
+          {title}
+        </h1>
         {subtitle && (
           <p className="text-body-sm text-[var(--text-secondary)] mt-1">{subtitle}</p>
         )}
