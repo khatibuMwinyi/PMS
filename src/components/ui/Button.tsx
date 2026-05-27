@@ -58,8 +58,8 @@ export const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPr
     'inline-flex items-center justify-center rounded-md font-medium transition-all duration-base',
     'focus-visible:outline-none focus-visible:shadow-focus',
     'disabled:opacity-50 disabled:pointer-events-none',
-    VARIANT_CLASSES[variant],
     SIZE_CLASSES[size],
+    VARIANT_CLASSES[variant],
     fullWidth && 'w-full',
     className,
   );

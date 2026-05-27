@@ -6,18 +6,38 @@ import { cn } from '@/lib/cn';
 
 const PILL_ICONS = { Lock, ShieldCheck, Smartphone } as const;
 
+const STATS = [
+  { value: '200+', label: 'Verified providers' },
+  { value: '48h',  label: 'Dispute resolution' },
+  { value: '500+', label: 'Properties managed'  },
+  { value: '24h',  label: 'Price lock guarantee'},
+] as const;
+
 export function HeroEditorial() {
   return (
-    <section data-nav-theme="dark" className="relative overflow-hidden bg-primary pt-24 pb-20 md:pt-32 md:pb-28">
-      {/* Subtle grid texture */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage: 'linear-gradient(var(--text-on-dark) 1px, transparent 1px), linear-gradient(90deg, var(--text-on-dark) 1px, transparent 1px)',
-          backgroundSize: '40px 40px',
-        }}
-      />
+    <section data-nav-theme="dark" className="relative overflow-hidden pt-24 pb-20 md:pt-32 md:pb-28">
+      {/* Full-section background image */}
+      <div className="absolute inset-0">
+        <Image
+          src={HERO.imageSrc}
+          alt={HERO.imageAlt}
+          fill
+          className="object-cover object-center"
+          priority
+          sizes="100vw"
+        />
+        {/* Blue gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-950/92 via-blue-900/82 to-slate-900/88" />
+        {/* Subtle grid texture */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-[0.04]"
+          style={{
+            backgroundImage: 'linear-gradient(white 1px, transparent 1px), linear-gradient(90deg, white 1px, transparent 1px)',
+            backgroundSize: '40px 40px',
+          }}
+        />
+      </div>
 
       <div className="relative mx-auto max-w-editorial px-6">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -82,18 +102,30 @@ export function HeroEditorial() {
             </div>
           </div>
 
-          {/* Right: hero image */}
-          <div className="relative hidden lg:block">
-            <div className="relative rounded-xl overflow-hidden aspect-[4/3] shadow-bold">
-              <Image
-                src={HERO.imageSrc}
-                alt={HERO.imageAlt}
-                fill
-                className="object-cover"
-                priority
-                sizes="(max-width: 1280px) 50vw, 600px"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-primary/40 to-transparent" />
+          {/* Right: frosted glass stats card */}
+          <div className="relative hidden lg:flex flex-col gap-4">
+            <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md p-8 shadow-2xl">
+              <p className="text-white/50 text-xs uppercase tracking-widest mb-6">
+                Why owners choose Oweru
+              </p>
+              <div className="grid grid-cols-2 gap-6">
+                {STATS.map((stat) => (
+                  <div key={stat.label}>
+                    <p className="text-4xl font-bold text-accent mb-1">{stat.value}</p>
+                    <p className="text-white/60 text-sm">{stat.label}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="rounded-xl border border-white/10 bg-white/5 backdrop-blur-md px-6 py-4 shadow-lg flex items-center gap-4">
+              <div className="h-10 w-10 rounded-full bg-accent/20 flex items-center justify-center flex-shrink-0">
+                <ShieldCheck size={20} className="text-accent" />
+              </div>
+              <div>
+                <p className="text-white text-sm font-medium">Trusted platform</p>
+                <p className="text-white/50 text-xs">Your properties managed with care</p>
+              </div>
             </div>
           </div>
         </div>

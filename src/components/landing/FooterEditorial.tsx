@@ -63,7 +63,7 @@ export function FooterEditorial() {
         {/* Bottom: legal */}
         <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-body-sm text-text-muted-on-dark">
-              © {year} Oweru. Reg: {FOOTER.contact.businessRegistration}
+              © {year} Oweru.
             </p>
           <nav aria-label="Legal links">
             <ul className="flex flex-wrap gap-4">

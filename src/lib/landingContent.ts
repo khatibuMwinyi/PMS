@@ -17,8 +17,8 @@ export const HERO = {
     { label: 'Verified providers only', icon: 'ShieldCheck' as const },
     { label: 'Pay via mobile money',   icon: 'Smartphone'   as const },
   ],
-  imageSrc: '/oweru.jpeg',
-  imageAlt: 'Tanzanian residential property exterior',
+  imageSrc: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1920&q=85',
+  imageAlt: 'Luxury residential apartment complex — professional property management',
 };
 
 export const STEPS = [
@@ -37,7 +37,7 @@ export const STEPS = [
   {
     number: '03',
     title: 'Service delivered. One invoice from Oweru.',
-    body: 'Pay Oweru via mobile money. We pay the provider 80% of the fee on completion.',
+    body: 'Pay Oweru via mobile money. Service is complete before payment is released.',
     icon: 'CircleCheck' as const,
   },
 ];
@@ -53,17 +53,17 @@ export const SERVICE_CATEGORIES = [
 
 export const TRUST_STATS = [
   { label: 'Verified providers',     value: '200+',   caption: 'Background-checked, ID-verified' },
-  { label: 'Data security',          value: 'AES-256', caption: 'PII encrypted at rest' },
-  { label: 'Payment processing',     value: 'Selcom', caption: 'Mobile money + cards' },
+  { label: 'Properties managed',     value: '500+',   caption: 'Across Dar es Salaam' },
+  { label: 'Services completed',     value: '5,000+', caption: 'And counting' },
   { label: 'Dispute resolution SLA', value: '48h',    caption: 'Average response time' },
 ];
 
 export const PROVIDER_BAND = {
   eyebrow:   'For service providers',
-  headline:  'Earn 80% per job. Keep your schedule yours.',
+  headline:  'Work on your terms. Keep your schedule yours.',
   body:      'Oweru sends you verified work orders. You accept the ones that fit. We handle billing, disputes, and owner communication.',
   cta:       { label: 'Apply to join', href: '/register?role=provider' },
-  highlight: { number: '80%', caption: 'of every service fee, paid to providers.' },
+  highlight: { number: '200+', caption: 'active providers trust Oweru.' },
 };
 
 export const FAQ = [
