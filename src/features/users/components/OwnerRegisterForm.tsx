@@ -150,7 +150,7 @@ export function OwnerRegisterForm({ onSuccess, selectedPlan }: OwnerRegisterForm
               />
             </div>
 
-            <Button type="button" variant="primary" size="lg" fullWidth onClick={goNext}>
+            <Button type="button" variant="primary" size="md" fullWidth onClick={goNext}>
               Next
             </Button>
           </>
@@ -194,10 +194,10 @@ export function OwnerRegisterForm({ onSuccess, selectedPlan }: OwnerRegisterForm
             </div>
 
             <div className="flex gap-3">
-              <Button type="button" variant="secondary" size="lg" className="flex-1" onClick={goBack}>
+              <Button type="button" variant="secondary" size="md" className="flex-1" onClick={goBack}>
                 Back
               </Button>
-              <Button type="submit" loading={isSubmitting} variant="primary" size="lg" className="flex-1">
+              <Button type="submit" loading={isSubmitting} variant="primary" size="md" className="flex-1">
                 Create Account
               </Button>
             </div>
