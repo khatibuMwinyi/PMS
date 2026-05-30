@@ -4,37 +4,29 @@ interface Props {
   ownerUserId: string;
 }
 
-interface CardProps {
+interface KpiCellProps {
   label: string;
   value: number;
-  hint?: string;
-  accent?: 'default' | 'danger';
+  borderColor: string;   // CSS value, e.g. 'var(--brand-gold)'
+  numberColor: string;   // CSS value, e.g. 'var(--brand-gold)'
+  bgColor?: string;      // CSS value, e.g. 'var(--state-error-bg)' — defaults to white
 }
 
-function KpiCell({ label, value, hint, accent = 'default' }: CardProps) {
+function KpiCell({ label, value, borderColor, numberColor, bgColor = '#ffffff' }: KpiCellProps) {
   return (
     <div
-      className={[
-        'bg-[var(--surface-container-lowest)] border border-outline-variant rounded-md p-4 flex flex-col gap-1',
-        accent === 'danger' ? 'border-l-4 border-l-[var(--state-error)]' : '',
-      ].join(' ')}
+      className="border border-[var(--outline-variant)] rounded-md p-4 flex flex-col gap-1"
+      style={{ borderLeftWidth: '3px', borderLeftColor: borderColor, backgroundColor: bgColor }}
     >
-      <span className="text-body font-medium text-[var(--text-muted)] uppercase tracking-wider">
+      <span className="text-[10px] font-medium uppercase tracking-[.05em] text-[#94A3B8]">
         {label}
       </span>
-      <div className="flex justify-between items-end">
-        <span
-          className={[
-            'text-[28px] leading-8 font-semibold tabular-nums',
-            accent === 'danger' ? 'text-[var(--state-error)]' : 'text-[var(--text-primary)]',
-          ].join(' ')}
-        >
-          {value}
-        </span>
-        {hint && (
-          <span className="text-caption font-medium text-[var(--text-muted)]">{hint}</span>
-        )}
-      </div>
+      <span
+        className="text-[26px] font-bold tabular-nums leading-tight"
+        style={{ color: numberColor }}
+      >
+        {value}
+      </span>
     </div>
   );
 }
@@ -43,10 +35,31 @@ export async function OwnerServicesKpis({ ownerUserId }: Props) {
   const k = await getOwnerServiceKpis(ownerUserId);
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-      <KpiCell label="Total Active" value={k.activeCount} />
-      <KpiCell label="Scheduled" value={k.scheduledCount} hint="Upcoming" />
-      <KpiCell label="In Progress" value={k.inProgressCount} hint="On track" />
-      <KpiCell label="Disputed" value={k.disputedCount} accent="danger" hint="Action required" />
+      <KpiCell
+        label="Total Active"
+        value={k.activeCount}
+        borderColor="var(--brand-gold)"
+        numberColor="var(--brand-gold)"
+      />
+      <KpiCell
+        label="Scheduled"
+        value={k.scheduledCount}
+        borderColor="var(--status-scheduled)"
+        numberColor="var(--text-primary)"
+      />
+      <KpiCell
+        label="In Progress"
+        value={k.inProgressCount}
+        borderColor="var(--state-warning)"
+        numberColor="var(--text-primary)"
+      />
+      <KpiCell
+        label="Disputed"
+        value={k.disputedCount}
+        borderColor="var(--state-error)"
+        numberColor="var(--state-error)"
+        bgColor="var(--state-error-bg)"
+      />
     </div>
   );
 }
