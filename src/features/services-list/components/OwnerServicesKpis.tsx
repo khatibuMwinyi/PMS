@@ -4,29 +4,23 @@ interface Props {
   ownerUserId: string;
 }
 
-interface KpiCellProps {
+interface KpiTileProps {
   label: string;
   value: number;
-  borderColor: string;   // CSS value, e.g. 'var(--brand-gold)'
-  numberColor: string;   // CSS value, e.g. 'var(--brand-gold)'
-  bgColor?: string;      // CSS value, e.g. 'var(--state-error-bg)' — defaults to white
+  topBorderClass: string;
+  numberColorClass: string;
+  bgClass?: string;
 }
 
-function KpiCell({ label, value, borderColor, numberColor, bgColor = '#ffffff' }: KpiCellProps) {
+function KpiTile({ label, value, topBorderClass, numberColorClass, bgClass = '' }: KpiTileProps) {
   return (
-    <div
-      className="border border-[var(--outline-variant)] rounded-md p-4 flex flex-col gap-1"
-      style={{ borderLeftWidth: '3px', borderLeftColor: borderColor, backgroundColor: bgColor }}
-    >
-      <span className="text-[10px] font-medium uppercase tracking-[.05em] text-[#94A3B8]">
+    <div className={`border-t-[3px] p-5 ${topBorderClass} ${bgClass}`}>
+      <p className="text-caption font-semibold uppercase tracking-widest text-text-muted mb-3">
         {label}
-      </span>
-      <span
-        className="text-[26px] font-bold tabular-nums leading-tight"
-        style={{ color: numberColor }}
-      >
+      </p>
+      <p className={`text-[28px] font-serif leading-none tabular-nums ${numberColorClass}`}>
         {value}
-      </span>
+      </p>
     </div>
   );
 }
@@ -34,31 +28,31 @@ function KpiCell({ label, value, borderColor, numberColor, bgColor = '#ffffff' }
 export async function OwnerServicesKpis({ ownerUserId }: Props) {
   const k = await getOwnerServiceKpis(ownerUserId);
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-      <KpiCell
+    <div className="border border-border-subtle rounded-lg overflow-hidden bg-surface-card shadow-card grid grid-cols-2 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-border-subtle">
+      <KpiTile
         label="Total Active"
         value={k.activeCount}
-        borderColor="var(--brand-gold)"
-        numberColor="var(--brand-gold)"
+        topBorderClass="border-t-accent"
+        numberColorClass="text-accent"
       />
-      <KpiCell
+      <KpiTile
         label="Scheduled"
         value={k.scheduledCount}
-        borderColor="var(--status-scheduled)"
-        numberColor="var(--text-primary)"
+        topBorderClass="border-t-[var(--status-scheduled)]"
+        numberColorClass="text-text-primary"
       />
-      <KpiCell
+      <KpiTile
         label="In Progress"
         value={k.inProgressCount}
-        borderColor="var(--state-warning)"
-        numberColor="var(--text-primary)"
+        topBorderClass="border-t-state-warning"
+        numberColorClass="text-text-primary"
       />
-      <KpiCell
+      <KpiTile
         label="Disputed"
         value={k.disputedCount}
-        borderColor="var(--state-error)"
-        numberColor="var(--state-error)"
-        bgColor="var(--state-error-bg)"
+        topBorderClass="border-t-state-error"
+        numberColorClass="text-state-error"
+        bgClass="bg-state-error-bg"
       />
     </div>
   );
