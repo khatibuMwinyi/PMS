@@ -38,10 +38,10 @@ export default async function NewQuotePage() {
           <ArrowLeft size={20} className="text-[var(--text-muted)]" />
         </Link>
         <div>
-          <h1 className="text-[20px] font-semibold text-[var(--text-primary)] leading-tight">
+          <h1 className="text-h2 font-semibold text-[var(--text-primary)] leading-tight">
             Request a New Quote
           </h1>
-          <p className="text-[14px] mt-0.5" style={{ color: 'var(--text-secondary)' }}>
+          <p className="text-body-sm mt-0.5 text-[var(--text-secondary)]">
             Select your property and service type to get a quoted price
           </p>
         </div>

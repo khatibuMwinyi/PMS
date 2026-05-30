@@ -65,7 +65,7 @@ export function SlideOver({ open, onClose, title, children, width = 520 }: Slide
           className="flex items-center justify-between px-6 h-16 shrink-0 border-b"
           style={{ borderColor: 'var(--border-subtle)', background: 'var(--surface-card)' }}
         >
-          <h2 className="text-[16px] font-semibold text-[var(--text-primary)]">{title}</h2>
+          <h2 className="text-h4 font-semibold text-[var(--text-primary)]">{title}</h2>
           <button
             onClick={onClose}
             className="flex items-center justify-center w-8 h-8 rounded-[var(--radius-md)] text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-overlay)] transition-colors duration-120"

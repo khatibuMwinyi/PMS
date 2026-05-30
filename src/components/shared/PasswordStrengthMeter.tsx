@@ -42,7 +42,7 @@ export function PasswordStrengthMeter({ password }: PasswordStrengthMeterProps) 
         ))}
       </div>
       {strength > 0 && (
-        <p className="text-[12px] text-[var(--text-muted)]">
+        <p className="text-caption text-[var(--text-muted)]">
           Password strength: <span className="font-medium">{LABELS[strength]}</span>
         </p>
       )}

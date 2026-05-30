@@ -68,7 +68,7 @@ export function OwnerServiceActions(props: Props) {
         Cancel Service
       </button>
 
-      <p className="text-[11px] text-[var(--text-muted)] leading-snug pt-1">
+      <p className="text-caption text-[var(--text-muted)] leading-snug pt-1">
         After provider acceptance, cancellation incurs a 20% penalty
         (15% provider compensation + 5% Oweru). Disputes are reviewed by Oweru staff within 48h.
       </p>

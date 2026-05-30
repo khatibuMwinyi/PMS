@@ -239,7 +239,7 @@ function QuoteSummary({
         )}
       </button>
 
-      <p className="text-[11px] text-text-muted leading-snug">
+      <p className="text-caption text-text-muted leading-snug">
         Submitting locks this price and starts provider assignment. Cancellation is free until a
         provider accepts.
       </p>

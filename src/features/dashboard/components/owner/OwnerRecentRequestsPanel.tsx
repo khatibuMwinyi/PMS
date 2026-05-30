@@ -38,7 +38,7 @@ function RequestItem({ r }: { r: OwnerRecentRequest }) {
           <span className="text-sm font-medium text-[var(--text-primary)]">{r.serviceTypeName}</span>
           <span
             className={cn(
-              'text-[10px] font-bold uppercase px-2 py-1 rounded',
+              'text-caption font-bold uppercase px-2 py-1 rounded',
               STATUS_BADGE_CLASS[r.statusVariant],
             )}
           >
@@ -46,7 +46,7 @@ function RequestItem({ r }: { r: OwnerRecentRequest }) {
           </span>
         </div>
         <p className="text-body-sm text-[var(--text-secondary)] mb-2">{r.propertyName}</p>
-        <div className="flex items-center gap-2 text-[12px] text-[var(--text-muted)] tabular-nums">
+        <div className="flex items-center gap-2 text-caption text-[var(--text-muted)] tabular-nums">
           <Clock size={12} />
           <span>{r.ageHuman}</span>
         </div>

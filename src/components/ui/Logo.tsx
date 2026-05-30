@@ -12,7 +12,7 @@ export function Logo({ width = 120, height = 40, className = '', href = '/' }: L
   return (
     <Link href={href} className={`flex items-center gap-2 ${className}`}>
       <Image
-        src="/oweru.jpeg"
+        src="/images/logo.webp"
         alt="Oweru Logo"
         width={width}
         height={height}
@@ -26,7 +26,7 @@ export function Logo({ width = 120, height = 40, className = '', href = '/' }: L
 export function LogoIcon({ size = 32, className = '' }: { size?: number; className?: string }) {
   return (
     <Image
-      src="/oweru.jpeg"
+      src="/images/logo.webp"
       alt="Oweru"
       width={size}
       height={size}

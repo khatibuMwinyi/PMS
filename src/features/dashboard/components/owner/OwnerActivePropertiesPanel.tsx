@@ -56,7 +56,7 @@ function PropertyTile({ p, isLcp }: { p: OwnerPropertyCard; isLcp: boolean }) {
         {/* Name overlay */}
         <div className="absolute bottom-0 left-0 right-0 px-3.5 pb-3">
           <h4
-            className="text-[14px] font-semibold text-white leading-snug line-clamp-1"
+            className="text-body-sm font-semibold text-white leading-snug line-clamp-1"
             style={{ fontFamily: 'var(--font-serif)' }}
           >
             {p.name}
@@ -68,20 +68,20 @@ function PropertyTile({ p, isLcp }: { p: OwnerPropertyCard; isLcp: boolean }) {
       <div className="flex items-center justify-between px-3.5 py-2.5 border-t border-[var(--border-subtle)]">
         <div className="flex items-center gap-1.5 min-w-0">
           <MapPin size={10} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
-          <span className="text-[11px] line-clamp-1" style={{ color: 'var(--text-secondary)' }}>
+          <span className="text-caption line-clamp-1" style={{ color: 'var(--text-secondary)' }}>
             {p.addressLine}
           </span>
         </div>
         <div className="flex items-center gap-3 shrink-0 ml-3">
           <div className="text-right">
-            <span className="text-[12px] font-bold block" style={{ color: 'var(--text-primary)', fontVariantNumeric: 'tabular-nums' }}>
+            <span className="text-caption font-bold block" style={{ color: 'var(--text-primary)', fontVariantNumeric: 'tabular-nums' }}>
               {p.occupancyPct}%
             </span>
             <span className="text-[9px] uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>Occup.</span>
           </div>
           <div className="w-px h-5" style={{ background: 'var(--border-subtle)' }} />
           <div className="text-right">
-            <span className="text-[12px] font-bold block" style={{ color: 'var(--text-primary)', fontVariantNumeric: 'tabular-nums' }}>
+            <span className="text-caption font-bold block" style={{ color: 'var(--text-primary)', fontVariantNumeric: 'tabular-nums' }}>
               {p.unitCount}
             </span>
             <span className="text-[9px] uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>Units</span>
@@ -98,10 +98,10 @@ export function ActivePropertiesEmptyState() {
       className="rounded-[var(--radius-xl)] border border-dashed border-[var(--border-default)] p-10 text-center"
       style={{ background: 'var(--surface-overlay)' }}
     >
-      <p className="text-[13px] mb-3" style={{ color: 'var(--text-muted)' }}>No active properties yet.</p>
+      <p className="text-body-sm mb-3" style={{ color: 'var(--text-muted)' }}>No active properties yet.</p>
       <a
         href="/owner/properties/new"
-        className="inline-block rounded-[var(--radius-md)] px-4 py-2 text-[13px] font-semibold transition-opacity hover:opacity-90"
+        className="inline-block rounded-[var(--radius-md)] px-4 py-2 text-body-sm font-semibold transition-opacity hover:opacity-90"
         style={{ background: 'var(--brand-gold)', color: 'var(--brand-primary)' }}
       >
         Add your first property
@@ -117,14 +117,14 @@ export async function OwnerActivePropertiesPanel({ ownerUserId, limit = 4 }: Pro
     <section>
       <div className="flex justify-between items-center mb-4">
         <h3
-          className="text-[17px] font-semibold"
+          className="text-h3 font-semibold"
           style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-serif)' }}
         >
           Active Properties
         </h3>
         <Link
           href="/owner/properties"
-          className="text-[11px] font-bold uppercase tracking-wider transition-colors hover:text-[var(--brand-gold-dark)]"
+          className="text-caption font-bold uppercase tracking-wider transition-colors hover:text-[var(--brand-gold-dark)]"
           style={{ color: 'var(--brand-gold)' }}
         >
           View All →

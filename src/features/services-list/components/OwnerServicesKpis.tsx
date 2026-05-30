@@ -32,7 +32,7 @@ function KpiCell({ label, value, hint, accent = 'default' }: CardProps) {
           {value}
         </span>
         {hint && (
-          <span className="text-[11px] font-medium text-[var(--text-muted)]">{hint}</span>
+          <span className="text-caption font-medium text-[var(--text-muted)]">{hint}</span>
         )}
       </div>
     </div>

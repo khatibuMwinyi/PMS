@@ -71,8 +71,7 @@ export function Sidebar({ role, userName }: SidebarProps) {
     >
       {/* Header */}
       <div className="p-4 border-b border-[var(--border-subtle)]">
-        <h2 className="text-sm font-semibold text-[var(--text-primary)]">Oweru</h2>
-        <p className="text-xs text-[var(--text-muted)] mt-0.5">
+        <p className="text-xs text-[var(--text-muted)]">
           {userName ?? 'Property Owner'}
         </p>
       </div>
@@ -91,7 +90,7 @@ export function Sidebar({ role, userName }: SidebarProps) {
               href={href}
               className={cn(
                 'flex items-center gap-3 px-3 py-2 rounded-[var(--radius-md)]',
-                'text-[14px] transition-all duration-120',
+                'text-body-sm transition-all duration-120',
                 active
                   ? 'bg-[var(--surface-overlay)] text-[var(--text-secondary)] font-medium border-l-2 border-[var(--brand-gold)] pl-[10px]'
                   : 'text-[var(--text-secondary)] hover:bg-[var(--surface-overlay)] hover:text-[var(--text-primary)]',
@@ -124,14 +123,14 @@ export function Sidebar({ role, userName }: SidebarProps) {
       <div className="p-3 border-t border-[var(--border-subtle)] space-y-1">
         <Link
           href="/support"
-          className="flex items-center gap-3 px-3 py-2 rounded-[var(--radius-md)] text-[14px] text-[var(--text-muted)] hover:bg-[var(--surface-overlay)] transition-colors duration-120"
+          className="flex items-center gap-3 px-3 py-2 rounded-[var(--radius-md)] text-body-sm text-[var(--text-muted)] hover:bg-[var(--surface-overlay)] transition-colors duration-120"
         >
           <LifeBuoy size={16} />
           Support
         </Link>
         <Link
           href="/documentation"
-          className="flex items-center gap-3 px-3 py-2 rounded-[var(--radius-md)] text-[14px] text-[var(--text-muted)] hover:bg-[var(--surface-overlay)] transition-colors duration-120"
+          className="flex items-center gap-3 px-3 py-2 rounded-[var(--radius-md)] text-body-sm text-[var(--text-muted)] hover:bg-[var(--surface-overlay)] transition-colors duration-120"
         >
           <BookOpen size={16} />
           Documentation

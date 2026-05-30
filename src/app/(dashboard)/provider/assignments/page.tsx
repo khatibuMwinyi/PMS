@@ -23,17 +23,17 @@ export default async function ProviderAssignmentsPage({ searchParams }: { search
       {/* ── Page header ──────────────────────────────────────── */}
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h1 className="text-[20px] font-semibold text-[var(--text-primary)] leading-tight">
+          <h1 className="text-h2 font-semibold text-[var(--text-primary)] leading-tight">
             Pending Assignments
           </h1>
-          <p className="text-[14px] mt-0.5" style={{ color: 'var(--text-secondary)' }}>
+          <p className="text-body-sm mt-0.5 text-[var(--text-secondary)]">
             Work offers waiting for your acceptance — accept before the 6-hour window closes
           </p>
         </div>
       </div>
 
       {/* ── Isolation principle notice ───────────────────────── */}
-      <div className="flex items-start gap-3 px-4 py-3 rounded-[var(--radius-md)] text-[13px] leading-relaxed" style={{ background: 'var(--surface-overlay)', color: 'var(--text-secondary)' }}>
+      <div className="flex items-start gap-3 px-4 py-3 rounded-[var(--radius-md)] text-body-sm leading-relaxed" style={{ background: 'var(--surface-overlay)', color: 'var(--text-secondary)' }}>
         <span className="shrink-0 text-[16px]">🔒</span>
         <p>
           <span className="font-medium" style={{ color: 'var(--text-primary)' }}>

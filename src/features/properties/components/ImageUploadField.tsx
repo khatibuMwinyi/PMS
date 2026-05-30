@@ -68,7 +68,7 @@ export function ImageUploadField({
   return (
     <div className="flex flex-col gap-2">
       {label && (
-        <p className="text-[13px] font-medium text-[var(--text-secondary)]">{label}</p>
+        <p className="text-body-sm font-medium text-[var(--text-secondary)]">{label}</p>
       )}
 
       {/* Thumbnails grid */}
@@ -105,7 +105,7 @@ export function ImageUploadField({
               style={{ aspectRatio: '4/3', borderColor: 'var(--border-default)' }}
             >
               <Upload size={16} />
-              <span className="text-[11px] mt-1">Add</span>
+              <span className="text-caption mt-1">Add</span>
             </button>
           )}
         </div>
@@ -127,11 +127,11 @@ export function ImageUploadField({
             <ImageIcon size={18} style={{ color: 'var(--text-muted)' }} />
           </div>
           <div className="text-center">
-            <p className="text-[13px] font-medium text-[var(--text-primary)]">
+            <p className="text-body-sm font-medium text-[var(--text-primary)]">
               Drop images here, or{' '}
               <span style={{ color: 'var(--brand-primary)' }}>browse</span>
             </p>
-            <p className="text-[12px] text-[var(--text-muted)] mt-0.5">
+            <p className="text-caption text-[var(--text-muted)] mt-0.5">
               Up to {maxFiles} photos · JPG, PNG, WebP
             </p>
           </div>
@@ -150,7 +150,7 @@ export function ImageUploadField({
       />
 
       {error && (
-        <p className="text-[13px] text-[var(--state-error)]">{error}</p>
+        <p className="text-body-sm text-[var(--state-error)]">{error}</p>
       )}
     </div>
   );

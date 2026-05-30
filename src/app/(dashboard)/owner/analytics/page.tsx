@@ -12,8 +12,8 @@ export default async function OwnerAnalyticsPage() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h1 className="text-[20px] font-semibold text-[var(--text-primary)]">Analytics</h1>
-        <p className="text-[14px] mt-0.5" style={{ color: 'var(--text-secondary)' }}>
+        <h1 className="text-h2 font-semibold text-[var(--text-primary)]">Analytics</h1>
+        <p className="text-body-sm mt-0.5 text-[var(--text-secondary)]">
           Summary of your properties and services
         </p>
       </div>

@@ -15,11 +15,11 @@ export function FooterEditorial() {
             <div className="flex items-center gap-2.5 mb-3">
               <div className="relative w-8 h-8 rounded-lg overflow-hidden shrink-0">
                 <Image
-                  src="/images/logo.jpeg"
+                  src="/images/logo.webp"
                   alt="Oweru"
                   fill
                   sizes="32px"
-                  className="object-cover"
+                  className="object-contain"
                 />
               </div>
               <span className="font-serif text-h3 text-accent">Oweru</span>

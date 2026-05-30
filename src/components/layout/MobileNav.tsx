@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
+import Image from 'next/image';
 import { Sidebar } from './Sidebar';
 
 interface MobileNavProps {
@@ -39,7 +40,10 @@ export function MobileNav({ role }: MobileNavProps) {
         ].join(' ')}
       >
         <div className="flex items-center justify-between h-16 px-4 border-b border-[var(--border-subtle)]">
-          <span className="font-display text-[18px] text-[var(--brand-primary)]">Oweru</span>
+          <div className="flex items-center gap-2">
+            <Image src="/images/logo.webp" alt="Oweru" width={28} height={28} className="object-contain" priority />
+            <span className="font-display text-[18px] text-[var(--brand-primary)]">Oweru</span>
+          </div>
           <button
             onClick={() => setOpen(false)}
             className="p-2 text-[var(--text-muted)] hover:text-[var(--text-primary)]"

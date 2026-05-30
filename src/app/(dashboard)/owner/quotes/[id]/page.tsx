@@ -168,10 +168,10 @@ export default function QuoteDetailPage({ params }: QuoteDetailPageProps) {
           <ArrowLeft size={20} className="text-[var(--text-muted)]" />
         </Link>
         <div>
-          <h1 className="text-[20px] font-semibold text-[var(--text-primary)] leading-tight">
+          <h1 className="text-h2 font-semibold text-[var(--text-primary)] leading-tight">
             Quote Details
           </h1>
-          <p className="text-[14px] mt-0.5" style={{ color: 'var(--text-secondary)' }}>
+          <p className="text-body-sm mt-0.5 text-[var(--text-secondary)]">
             View quote details and price breakdown
           </p>
         </div>

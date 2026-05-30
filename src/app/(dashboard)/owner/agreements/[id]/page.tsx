@@ -161,10 +161,10 @@ export default function AgreementDetailPage({ params }: AgreementDetailPageProps
           <ArrowLeft size={20} className="text-[var(--text-muted)]" />
         </Link>
         <div>
-          <h1 className="text-[20px] font-semibold text-[var(--text-primary)] leading-tight">
+          <h1 className="text-h2 font-semibold text-[var(--text-primary)] leading-tight">
             Agreement Details
           </h1>
-          <p className="text-[14px] mt-0.5" style={{ color: 'var(--text-secondary)' }}>
+          <p className="text-body-sm mt-0.5 text-[var(--text-secondary)]">
             View agreement details with immutable quoted price
           </p>
         </div>

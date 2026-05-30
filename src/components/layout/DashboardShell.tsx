@@ -29,10 +29,10 @@ export function DashboardShell({ children, role, userName, pageTitle }: Dashboar
         </div>
 
         <Link href={getDashboardHref(role)} className="flex items-center gap-2 shrink-0">
-          <div className="relative w-8 h-8 rounded-md overflow-hidden shrink-0">
-            <Image src="/images/logo.jpeg" alt="Oweru" fill sizes="32px" className="object-cover" priority />
+          <div className="relative w-8 h-8 shrink-0 hidden md:block">
+            <Image src="/images/logo.webp" alt="Oweru" fill sizes="32px" className="object-contain" priority />
           </div>
-          <span className="hidden sm:block text-h4 font-serif font-semibold text-[var(--text-primary)]">
+          <span className="text-h4 font-serif font-semibold text-[var(--text-primary)]">
             Oweru
           </span>
         </Link>
@@ -40,7 +40,7 @@ export function DashboardShell({ children, role, userName, pageTitle }: Dashboar
         {pageTitle && (
           <div className="hidden sm:flex items-center gap-3 ml-4">
             <span className="text-[var(--border-default)] text-lg leading-none">·</span>
-            <span className="text-[15px] font-medium text-[var(--text-primary)]">{pageTitle}</span>
+            <span className="text-body font-medium text-[var(--text-primary)]">{pageTitle}</span>
           </div>
         )}
 

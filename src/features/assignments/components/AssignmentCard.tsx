@@ -58,10 +58,10 @@ export function AssignmentCard({ assignment }: AssignmentCardProps) {
         }}
       >
         <CheckCircle2 size={28} style={{ color: 'var(--state-success)' }} />
-        <p className="text-[15px] font-semibold" style={{ color: 'var(--brand-primary-dim)' }}>
+        <p className="text-body font-semibold" style={{ color: 'var(--brand-primary-dim)' }}>
           Assignment accepted!
         </p>
-        <p className="text-[13px]" style={{ color: 'var(--text-secondary)' }}>
+        <p className="text-body-sm" style={{ color: 'var(--text-secondary)' }}>
           You'll receive the job details shortly.
         </p>
       </div>
@@ -86,7 +86,7 @@ export function AssignmentCard({ assignment }: AssignmentCardProps) {
       >
         <div className="flex items-center gap-2 min-w-0">
           <Briefcase size={15} style={{ color: 'var(--brand-primary)', flexShrink: 0 }} />
-          <span className="text-[14px] font-semibold text-[var(--text-primary)] truncate">
+          <span className="text-body-sm font-semibold text-[var(--text-primary)] truncate">
             {assignment.serviceType.name}
           </span>
         </div>
@@ -107,17 +107,17 @@ export function AssignmentCard({ assignment }: AssignmentCardProps) {
         <div className="flex items-start gap-2">
           <MapPin size={14} className="mt-0.5 shrink-0" style={{ color: 'var(--text-muted)' }} />
           <div>
-            <p className="text-[11px] font-medium uppercase tracking-wide mb-0.5" style={{ color: 'var(--text-muted)' }}>
+            <p className="text-caption font-medium uppercase tracking-wide mb-0.5" style={{ color: 'var(--text-muted)' }}>
               Service Area
             </p>
-            <p className="text-[14px] font-medium text-[var(--text-primary)]">
+            <p className="text-body-sm font-medium text-[var(--text-primary)]">
               {assignment.property.zone}
             </p>
           </div>
         </div>
 
         {/* Privacy notice */}
-        <p className="text-[12px] leading-snug" style={{ color: 'var(--text-muted)' }}>
+        <p className="text-caption leading-snug" style={{ color: 'var(--text-muted)' }}>
           Exact address is shared only after you accept this assignment.
         </p>
 
@@ -128,7 +128,7 @@ export function AssignmentCard({ assignment }: AssignmentCardProps) {
             style={{ background: 'var(--state-warning-bg)' }}
           >
             <AlertCircle size={14} className="mt-0.5 shrink-0" style={{ color: 'var(--state-warning)' }} />
-            <p className="text-[13px]" style={{ color: 'var(--state-warning)' }}>
+            <p className="text-body-sm" style={{ color: 'var(--state-warning)' }}>
               This assignment was just taken by another provider.
             </p>
           </div>
@@ -140,7 +140,7 @@ export function AssignmentCard({ assignment }: AssignmentCardProps) {
             style={{ background: 'var(--state-error-bg)' }}
           >
             <AlertCircle size={14} className="mt-0.5 shrink-0" style={{ color: 'var(--state-error)' }} />
-            <p className="text-[13px]" style={{ color: 'var(--state-error)' }}>
+            <p className="text-body-sm" style={{ color: 'var(--state-error)' }}>
               {state.message}
             </p>
           </div>
@@ -152,7 +152,7 @@ export function AssignmentCard({ assignment }: AssignmentCardProps) {
             style={{ background: 'var(--state-warning-bg)' }}
           >
             <AlertCircle size={14} className="mt-0.5 shrink-0" style={{ color: 'var(--state-warning)' }} />
-            <p className="text-[13px]" style={{ color: 'var(--state-warning)' }}>
+            <p className="text-body-sm" style={{ color: 'var(--state-warning)' }}>
               This assignment has expired and been reassigned to another provider.
             </p>
           </div>
@@ -163,7 +163,7 @@ export function AssignmentCard({ assignment }: AssignmentCardProps) {
       <div className="px-5 pb-5">
         {isExpired ? (
           <div
-            className="flex items-center justify-center h-10 rounded-[var(--radius-md)] text-[13px] font-medium"
+            className="flex items-center justify-center h-10 rounded-[var(--radius-md)] text-body-sm font-medium"
             style={{ background: 'var(--surface-overlay)', color: 'var(--text-muted)' }}
           >
             Offer expired

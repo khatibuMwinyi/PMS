@@ -12,8 +12,8 @@ export default async function OwnerInvoicesPage() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h1 className="text-[20px] font-semibold text-[var(--text-primary)]">Invoices</h1>
-        <p className="text-[14px] mt-0.5" style={{ color: 'var(--text-secondary)' }}>
+        <h1 className="text-h2 font-semibold text-[var(--text-primary)]">Invoices</h1>
+        <p className="text-body-sm mt-0.5 text-[var(--text-secondary)]">
           Recent completed services (treated as invoices)
         </p>
       </div>

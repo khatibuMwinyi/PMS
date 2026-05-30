@@ -21,7 +21,7 @@ export function RegistrationSuccessBanner() {
         className="mt-0.5 shrink-0"
         style={{ color: 'var(--state-success)' }}
       />
-      <p className="text-[13px]" style={{ color: 'var(--text-secondary)' }}>
+      <p className="text-body-sm" style={{ color: 'var(--text-secondary)' }}>
         Account created successfully! Please sign in to continue.
       </p>
     </div>

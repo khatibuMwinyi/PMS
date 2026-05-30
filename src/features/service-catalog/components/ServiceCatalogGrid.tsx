@@ -55,7 +55,7 @@ export async function ServiceCatalogGrid() {
 
             <div className="mt-auto pt-3 border-t border-border-subtle flex items-end justify-between">
               <div>
-                <p className="text-[10px] font-semibold uppercase tracking-widest text-text-muted">
+                <p className="text-caption font-semibold uppercase tracking-widest text-text-muted">
                   From
                 </p>
                 <p className="text-body font-semibold tabular-nums text-text-primary">

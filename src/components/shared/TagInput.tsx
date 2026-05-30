@@ -37,7 +37,7 @@ export function TagInput({
     return (
       <div className="flex flex-col gap-1.5">
         {label && (
-          <label className="text-[13px] font-medium text-[var(--text-secondary)] leading-none">
+          <label className="text-body-sm font-medium text-[var(--text-secondary)] leading-none">
             {label}
           </label>
         )}
@@ -94,7 +94,7 @@ export function TagInput({
   return (
     <div className="flex flex-col gap-1.5">
       {label && (
-        <label className="text-[13px] font-medium text-[var(--text-secondary)] leading-none">
+        <label className="text-body-sm font-medium text-[var(--text-secondary)] leading-none">
           {label}
         </label>
       )}
@@ -114,7 +114,7 @@ export function TagInput({
         {tags.map((tag) => (
           <span
             key={tag}
-            className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-pill bg-[var(--surface-overlay)] border border-[var(--border-default)] text-[13px] text-[var(--text-primary)]"
+            className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-pill bg-[var(--surface-overlay)] border border-[var(--border-default)] text-body-sm text-[var(--text-primary)]"
           >
             {tag}
             <button
@@ -134,7 +134,7 @@ export function TagInput({
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder={tags.length === 0 ? placeholder : ''}
-          className="flex-1 min-w-[100px] outline-none bg-transparent text-[13px] text-[var(--text-primary)] placeholder:text-[var(--text-muted)]"
+          className="flex-1 min-w-[100px] outline-none bg-transparent text-body-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)]"
         />
       </div>
 

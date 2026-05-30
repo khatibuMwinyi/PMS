@@ -91,7 +91,7 @@ export function ServiceForm({ initialData, onSuccess, isEditing = false }: Servi
 
         {serverError && (
           <div
-            className="px-4 py-3 rounded-[var(--radius-md)] text-[13px]"
+            className="px-4 py-3 rounded-[var(--radius-md)] text-body-sm"
             style={{ background: 'var(--state-error-bg)', color: 'var(--state-error)' }}
           >
             {serverError}
@@ -145,7 +145,7 @@ export function ServiceForm({ initialData, onSuccess, isEditing = false }: Servi
               <option value="PER_BEDROOM">Per Bedroom</option>
             </select>
             {errors.priceUnit && (
-              <p className="text-[var(--color-danger)] text-[11px]">{errors.priceUnit.message}</p>
+              <p className="text-[var(--color-danger)] text-caption">{errors.priceUnit.message}</p>
             )}
           </div>
         </div>

@@ -48,11 +48,11 @@ export async function MonthlySpendChart({ ownerUserId }: Props) {
           {/* Y-axis labels */}
           <div className="w-10 shrink-0 flex flex-col justify-between pb-5 text-right">
             {GRID_LEVELS.map((lvl) => (
-              <span key={lvl} className="text-[10px] text-text-muted tabular-nums">
+              <span key={lvl} className="text-caption text-text-muted tabular-nums">
                 {abbreviate(max.mul(lvl))}
               </span>
             ))}
-            <span className="text-[10px] text-text-muted tabular-nums">0</span>
+            <span className="text-caption text-text-muted tabular-nums">0</span>
           </div>
 
           {/* Chart area */}
@@ -72,7 +72,7 @@ export async function MonthlySpendChart({ ownerUserId }: Props) {
                 const isCurrent = i === data.length - 1;
                 return (
                   <div key={i} className="flex-1 flex flex-col items-center gap-1 group">
-                    <span className="opacity-0 group-hover:opacity-100 transition-opacity text-[10px] font-medium text-text-primary tabular-nums">
+                    <span className="opacity-0 group-hover:opacity-100 transition-opacity text-caption font-medium text-text-primary tabular-nums">
                       {d.amountFormatted}
                     </span>
                     <div
@@ -93,7 +93,7 @@ export async function MonthlySpendChart({ ownerUserId }: Props) {
               {data.map((d, i) => (
                 <span
                   key={i}
-                  className="flex-1 text-center text-[10px] font-medium text-text-muted uppercase tracking-wider"
+                  className="flex-1 text-center text-caption font-medium text-text-muted uppercase tracking-wider"
                 >
                   {d.monthLabel}
                 </span>

@@ -120,7 +120,7 @@ export function OwnerInvoicesClient({ rows }: Props) {
                         {badge.label}
                       </span>
                       {r.attempts > 0 && r.status !== 'PAID' && (
-                        <span className="ml-2 text-[10px] text-text-muted">{r.attempts}/3</span>
+                        <span className="ml-2 text-caption text-text-muted">{r.attempts}/3</span>
                       )}
                     </td>
                     <td className="px-4 py-3 text-right">

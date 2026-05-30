@@ -34,7 +34,7 @@ export function EmptyProperties() {
         No properties yet
       </h2>
       <p
-        className="text-[14px] mb-8 max-w-xs leading-relaxed"
+        className="text-body-sm mb-8 max-w-xs leading-relaxed"
         style={{ color: 'var(--text-secondary)' }}
       >
         Add your first property to start booking professional services through Oweru.

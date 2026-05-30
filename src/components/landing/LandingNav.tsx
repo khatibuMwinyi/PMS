@@ -59,11 +59,11 @@ export function LandingNav() {
         <Link href="/" className="flex items-center gap-2.5">
           <div className="relative w-7 h-7 rounded-md overflow-hidden shrink-0">
             <Image
-              src="/images/logo.jpeg"
+              src="/images/logo.webp"
               alt="Oweru"
               fill
               sizes="28px"
-              className="object-cover"
+              className="object-contain"
             />
           </div>
           <span className={cn(

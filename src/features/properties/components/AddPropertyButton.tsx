@@ -25,7 +25,7 @@ export function AddPropertyButton({ label = 'Add Property' }: AddPropertyButtonP
     <>
       <button
         onClick={() => setOpen(true)}
-        className="inline-flex items-center gap-2 h-10 px-4 rounded-[var(--radius-md)] text-[14px] font-medium shrink-0 transition-all duration-200 hover:brightness-110 active:scale-[0.98]"
+        className="inline-flex items-center gap-2 h-10 px-4 rounded-[var(--radius-md)] text-body-sm font-medium shrink-0 transition-all duration-200 hover:brightness-110 active:scale-[0.98]"
         style={{ background: 'var(--brand-primary)', color: 'white' }}
       >
         <Plus size={16} />

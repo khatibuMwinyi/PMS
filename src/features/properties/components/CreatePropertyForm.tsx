@@ -70,7 +70,7 @@ export function CreatePropertyForm({ redirectTo, onSuccess }: CreatePropertyForm
         {/* Server error */}
         {serverError && (
           <div
-            className="px-4 py-3 rounded-[var(--radius-md)] text-[13px]"
+            className="px-4 py-3 rounded-[var(--radius-md)] text-body-sm"
             style={{ background: 'var(--state-error-bg)', color: 'var(--state-error)' }}
           >
             {serverError}
@@ -105,7 +105,7 @@ export function CreatePropertyForm({ redirectTo, onSuccess }: CreatePropertyForm
 
         {/* Location note */}
         <div
-          className="px-4 py-3 rounded-[var(--radius-md)] text-[13px] leading-relaxed"
+          className="px-4 py-3 rounded-[var(--radius-md)] text-body-sm leading-relaxed"
           style={{ background: 'var(--surface-overlay)', color: 'var(--text-secondary)' }}
         >
           <span className="font-medium" style={{ color: 'var(--text-primary)' }}>📍 Location — </span>

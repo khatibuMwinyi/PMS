@@ -62,11 +62,11 @@ export function BrandPanel({ title = 'Oweru', tagline = 'Your property, professi
       <motion.div variants={item} className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
         <div className="relative w-11 h-11 sm:w-14 sm:h-14 rounded-xl overflow-hidden shadow-lg ring-1 ring-white/15 flex-shrink-0">
           <Image
-            src="/images/logo.jpeg"
+            src="/images/logo.webp"
             alt="Oweru logo"
             fill
             sizes="(max-width: 640px) 44px, 56px"
-            className="object-cover"
+            className="object-contain"
           />
         </div>
         <span

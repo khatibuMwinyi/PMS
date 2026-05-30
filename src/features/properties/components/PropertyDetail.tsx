@@ -48,7 +48,7 @@ export function PropertyDetail({ property, isOwner }: PropertyDetailProps) {
           >
             <Building2 size={64} strokeWidth={0.7} style={{ color: 'rgba(255,255,255,0.12)' }} />
             <span
-              className="text-[12px] font-semibold uppercase tracking-widest"
+              className="text-caption font-semibold uppercase tracking-widest"
               style={{ color: 'rgba(255,255,255,0.25)' }}
             >
               No Photo Available
@@ -80,13 +80,13 @@ export function PropertyDetail({ property, isOwner }: PropertyDetailProps) {
             </h1>
             <div className="flex items-center gap-2 mt-2">
               <MapPin size={12} style={{ color: 'rgba(255,255,255,0.45)' }} />
-              <span className="text-[13px]" style={{ color: 'rgba(255,255,255,0.60)' }}>
+              <span className="text-body-sm" style={{ color: 'rgba(255,255,255,0.60)' }}>
                 {property.encryptedAddress}
               </span>
             </div>
           </div>
           <span
-            className="px-3 py-1.5 rounded-pill text-[10px] font-bold uppercase tracking-wider shrink-0"
+            className="px-3 py-1.5 rounded-pill text-caption font-bold uppercase tracking-wider shrink-0"
             style={{
               background: isActive ? 'rgba(16,185,129,0.92)' : 'rgba(100,116,139,0.85)',
               color: '#fff',
@@ -113,7 +113,7 @@ export function PropertyDetail({ property, isOwner }: PropertyDetailProps) {
             <div className="flex items-center gap-1.5">
               <Icon size={13} className={iconClass} />
               <span
-                className="text-[10px] font-semibold uppercase tracking-wider text-text-muted"
+                className="text-caption font-semibold uppercase tracking-wider text-text-muted"
               >
                 {label}
               </span>
@@ -133,7 +133,7 @@ export function PropertyDetail({ property, isOwner }: PropertyDetailProps) {
         className="flex items-center justify-between gap-4 flex-wrap px-4 py-3 rounded-md border border-border-subtle"
         style={{ background: 'var(--surface-overlay)' }}
       >
-        <div className="flex items-center gap-2 text-[12px] text-text-secondary">
+        <div className="flex items-center gap-2 text-caption text-text-secondary">
           <Calendar size={12} className="text-text-muted" />
           <span>
             Added{' '}
@@ -173,7 +173,7 @@ export function PropertyDetail({ property, isOwner }: PropertyDetailProps) {
         <div>
           {/* Section divider */}
           <div className="flex items-center gap-3 mb-4">
-            <span className="font-serif text-[16px] font-semibold text-text-primary">
+            <span className="font-serif text-body-lg font-semibold text-text-primary">
               Units{' '}
               <span className="font-sans text-caption font-normal text-text-muted">({unitCount})</span>
             </span>
@@ -192,11 +192,11 @@ export function PropertyDetail({ property, isOwner }: PropertyDetailProps) {
                   <Home size={15} className="text-primary" />
                 </div>
                 <div>
-                  <p className="text-[13px] font-semibold text-text-primary">
+                  <p className="text-body-sm font-semibold text-text-primary">
                     {unit.unitName}
                   </p>
                   <p
-                    className="text-[10px] font-semibold uppercase tracking-wider mt-0.5 text-text-muted"
+                    className="text-caption font-semibold uppercase tracking-wider mt-0.5 text-text-muted"
                   >
                     {unit.unitType}
                   </p>
