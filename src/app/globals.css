@@ -156,48 +156,6 @@ html, body {
   }
 }
 
-/* ─── Typography Classes ─────────────────────── */
-.font-h1 {
-  font-size: 24px;
-  line-height: 32px;
-  font-weight: 700;
-}
-
-.font-h2 {
-  font-size: 18px;
-  line-height: 28px;
-  font-weight: 600;
-}
-
-.font-body-md {
-  font-size: 14px;
-  line-height: 20px;
-}
-
-.font-body-sm {
-  font-size: 13px;
-  line-height: 18px;
-}
-
-.font-table-header {
-  font-size: 12px;
-  line-height: 16px;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-
-.font-data-tabular {
-  font-size: 14px;
-  line-height: 20px;
-  font-variant-numeric: tabular-nums;
-}
-
-.font-label {
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 500;
-}
 
 /* ─── Utility Classes ──────────────────────── */
 @layer utilities {
