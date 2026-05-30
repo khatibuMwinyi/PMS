@@ -25,7 +25,7 @@ function rowBgClass(status: OwnerServiceStatus): string {
 export async function OwnerServicesTable({ rows, currentPage, totalPages, basePath }: Props) {
   if (rows.length === 0) {
     return (
-      <div className="rounded-md border border-dashed border-border-subtle bg-surface-card p-12 text-center">
+      <div className="rounded-md border border-border-subtle bg-surface-card p-12 text-center">
         <p className="text-body-sm text-text-muted mb-3">No services yet.</p>
         <Link
           href="/owner/services/new"
