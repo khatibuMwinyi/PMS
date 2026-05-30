@@ -56,7 +56,7 @@ export function QuoteList({ quotes, onView, onAccept }: QuoteListProps) {
       key: 'property',
       header: 'Property Name',
       accessor: (quote: Quote) => (
-        <span className="text-caption uppercase tracking-wide text-[var(--text-primary)]">
+        <span className="text-body-sm text-[var(--text-primary)]">
           {quote.propertyName}
         </span>
       ),
@@ -66,7 +66,7 @@ export function QuoteList({ quotes, onView, onAccept }: QuoteListProps) {
       key: 'service',
       header: 'Service Type',
       accessor: (quote: Quote) => (
-        <span className="text-caption uppercase tracking-wide text-[var(--text-primary)]">
+        <span className="text-body-sm text-[var(--text-primary)]">
           {quote.serviceTypeName}
         </span>
       ),

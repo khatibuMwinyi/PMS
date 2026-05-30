@@ -30,7 +30,7 @@ export function DashboardShell({ children, role, userName, pageTitle }: Dashboar
 
         <Link href={getDashboardHref(role)} className="flex items-center gap-2 shrink-0">
           <div className="relative w-8 h-8 rounded-md overflow-hidden shrink-0">
-            <Image src="/images/logo.jpeg" alt="Oweru" fill sizes="32px" className="object-cover" />
+            <Image src="/images/logo.jpeg" alt="Oweru" fill sizes="32px" className="object-cover" priority />
           </div>
           <span className="hidden sm:block text-h4 font-serif font-semibold text-[var(--text-primary)]">
             Oweru

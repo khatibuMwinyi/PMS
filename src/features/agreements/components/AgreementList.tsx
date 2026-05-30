@@ -58,7 +58,7 @@ export function AgreementList({ agreements, onView }: AgreementListProps) {
       key: 'property',
       header: 'Property',
       accessor: (agreement: Agreement) => (
-        <span className="text-caption uppercase tracking-wide text-[var(--text-primary)]">
+        <span className="text-body-sm text-[var(--text-primary)]">
           {agreement.propertyName || 'N/A'}
         </span>
       ),
