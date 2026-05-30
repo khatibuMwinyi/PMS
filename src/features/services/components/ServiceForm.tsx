@@ -16,7 +16,7 @@ const FormSchema = z.object({
   basePrice:   z.coerce.number().positive('Base price must be positive'),
   priceUnit:   z.enum(['PER_SQM', 'PER_UNIT', 'FLAT', 'PER_BEDROOM']),
   category:    z.string().min(1, 'Category is required'),
-  isActive:    z.boolean().default(true),
+  isActive:    z.boolean(),
 });
 
 type FormValues = z.infer<typeof FormSchema>;
@@ -54,7 +54,7 @@ export function ServiceForm({ initialData, onSuccess, isEditing = false }: Servi
           category:    initialData.category,
           isActive:    initialData.isActive,
         }
-      : undefined,
+      : { name: '', description: '', basePrice: 0, priceUnit: 'FLAT', category: '', isActive: true },
   });
 
   const onSubmit = async (data: FormValues) => {

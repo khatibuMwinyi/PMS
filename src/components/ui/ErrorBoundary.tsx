@@ -50,26 +50,15 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
     this.props.onError?.(error, errorInfo);
 
     // Report error to monitoring service
-    if (typeof window !== 'undefined' && window.errorTrackingService) {
-      window.errorTrackingService.reportError(error, errorInfo);
+    if (typeof window !== 'undefined') {
+      const svc = (window as unknown as { errorTrackingService?: { reportError: (e: Error, i: object) => void } }).errorTrackingService;
+      svc?.reportError(error, errorInfo);
     }
   }
 
   resetErrorBoundary = () => {
     this.setState({ hasError: false, error: undefined, errorInfo: undefined });
-
-    // Call custom reset handler if provided
     this.props.onReset?.();
-
-    // Reset keys if provided
-    if (this.props.resetKeys) {
-      this.props.resetKeys.forEach((key) => {
-        const resetCallback = this.props.resetKeys?.find((k) => k === key);
-        if (typeof resetCallback === 'function') {
-          resetCallback();
-        }
-      });
-    }
   };
 
   render() {

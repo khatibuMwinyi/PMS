@@ -2,7 +2,7 @@ import { type ReactNode } from 'react';
 import type { LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/cn';
 
-type Variant = 'success' | 'warning' | 'info' | 'error' | 'neutral' | 'gold' | 'dark';
+type Variant = 'success' | 'warning' | 'info' | 'error' | 'neutral' | 'gold' | 'dark' | 'outline';
 type Size = 'sm' | 'md';
 
 interface BadgeProps {
@@ -22,6 +22,7 @@ const VARIANT: Record<Variant, { bg: string; text: string; dot: string }> = {
   neutral: { bg: 'bg-surface-overlay',  text: 'text-text-secondary',  dot: 'bg-text-muted' },
   gold:    { bg: 'bg-accent/15',        text: 'text-accent-dark',     dot: 'bg-accent' },
   dark:    { bg: 'bg-primary',          text: 'text-white',   dot: 'bg-accent' },
+  outline: { bg: 'bg-transparent border border-border-default', text: 'text-text-secondary', dot: 'bg-text-muted' },
 };
 
 const SIZE: Record<Size, string> = {

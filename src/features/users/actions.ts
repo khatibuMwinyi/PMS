@@ -1,6 +1,7 @@
 'use server';
 
 import { prisma } from '@/core/database/client';
+import { auth } from '@/core/auth';
 import bcrypt from 'bcryptjs';
 import {
   OwnerRegisterSchema,

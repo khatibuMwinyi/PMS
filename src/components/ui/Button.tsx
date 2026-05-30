@@ -11,6 +11,7 @@ interface BaseProps {
   variant?: Variant;
   size?: Size;
   loading?: boolean;
+  disabled?: boolean;
   fullWidth?: boolean;
   iconLeft?: ReactNode;
   iconRight?: ReactNode;
@@ -45,6 +46,7 @@ export const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPr
     variant = 'primary',
     size = 'md',
     loading = false,
+    disabled = false,
     fullWidth = false,
     iconLeft,
     iconRight,
@@ -72,15 +74,15 @@ export const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPr
     </>
   );
 
-  if (as === 'a') {
+  if ((as as string) === 'a') {
     const { href, onClick, ...anchorRest } = rest as AnchorHTMLAttributes<HTMLAnchorElement>;
     return (
       <a
         ref={ref as React.Ref<HTMLAnchorElement>}
-        href={href}
+        href={disabled ? undefined : href}
         className={classes}
-        onClick={loading ? (e) => e.preventDefault() : onClick}
-        aria-disabled={loading || undefined}
+        onClick={disabled || loading ? (e) => e.preventDefault() : onClick}
+        aria-disabled={disabled || loading || undefined}
         {...anchorRest}
       >
         {content}
@@ -88,7 +90,7 @@ export const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPr
     );
   }
 
-  const { onClick, disabled, type = 'button', ...buttonRest } = rest as ButtonHTMLAttributes<HTMLButtonElement>;
+  const { onClick, type = 'button', ...buttonRest } = rest as ButtonHTMLAttributes<HTMLButtonElement>;
   return (
     <button
       ref={ref as React.Ref<HTMLButtonElement>}

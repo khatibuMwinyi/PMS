@@ -8,6 +8,8 @@ import { X, CheckCircle, AlertCircle, Info, AlertTriangle } from 'lucide-react';
 export type ToastType = 'success' | 'error' | 'warning' | 'info';
 
 interface ToastProps {
+  /** Unique identifier */
+  id: string;
   /** Type of toast */
   type: ToastType;
   /** Main title of the toast */
@@ -212,7 +214,7 @@ export function ToastContainer({
 export const useToast = () => {
   const [toasts, setToasts] = React.useState<ToastProps[]>([]);
 
-  const addToast = (toast: Omit<ToastProps, 'isVisible'>) => {
+  const addToast = (toast: Omit<ToastProps, 'isVisible' | 'id'>) => {
     setToasts((prev) => [
       ...prev,
       { ...toast, isVisible: true, id: Date.now().toString() },

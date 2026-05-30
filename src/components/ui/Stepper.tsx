@@ -89,7 +89,6 @@ const StepItem = React.forwardRef<
       role={clickable ? 'button' : undefined}
       tabIndex={clickable ? 0 : undefined}
       aria-current={isActive ? 'step' : undefined}
-      aria-setsize={steps.length}
       aria-posinset={index + 1}
     >
       {/* Step connector */}
@@ -221,7 +220,7 @@ Stepper.displayName = 'Stepper';
 export const VerticalStepper = React.forwardRef<
   HTMLDivElement,
   StepperProps & { orientation?: 'vertical' }
->(({ steps, currentStep, className, orientation = 'vertical', ...props }, ref) => {
+>(({ steps, currentStep, className, orientation = 'vertical', clickable = false, size = 'md', showDescriptions = false, ...rest }, ref) => {
   return (
     <div
       ref={ref}
@@ -230,7 +229,7 @@ export const VerticalStepper = React.forwardRef<
         orientation === 'vertical' ? 'flex-col space-y-8' : 'flex-row items-center justify-between',
         className
       )}
-      {...props}
+      {...rest}
     >
       {steps.map((step, index) => (
         <div
@@ -249,9 +248,9 @@ export const VerticalStepper = React.forwardRef<
               isCompleted={index < currentStep}
               isFirst={index === 0}
               isLast={index === steps.length - 1}
-              clickable={props.clickable}
-              size={props.size}
-              showDescriptions={props.showDescriptions}
+              clickable={clickable}
+              size={size}
+              showDescriptions={showDescriptions}
             />
           </div>
 

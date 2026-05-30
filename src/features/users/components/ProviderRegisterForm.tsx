@@ -135,7 +135,7 @@ export function ProviderRegisterForm({ onSuccess }: ProviderRegisterFormProps) {
               autoComplete="new-password"
               placeholder="••••••••"
               error={errors.password?.message}
-                  rightElement={
+                  iconRight={
                 <button type="button" tabIndex={-1} onClick={() => setShowPass((v) => !v)} aria-label="Toggle password">
                   <EyeOff className="text-[var(--brand-gold-light)]/60 hover:text-white transition-colors" size={18} />
                 </button>
@@ -154,7 +154,7 @@ export function ProviderRegisterForm({ onSuccess }: ProviderRegisterFormProps) {
             autoComplete="new-password"
             placeholder="••••••••"
             error={errors.confirmPassword?.message}
-                  rightElement={
+                  iconRight={
               <button type="button" tabIndex={-1} onClick={() => setShowConfirm((v) => !v)} aria-label="Toggle confirm password">
                 <EyeOff className="text-[var(--brand-gold-light)]/60 hover:text-white transition-colors" size={18} />
               </button>

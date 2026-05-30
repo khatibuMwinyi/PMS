@@ -26,7 +26,7 @@ const config: Config = {
         body:       ['15px', { lineHeight: '24px' }],
         'body-sm':  ['13px', { lineHeight: '20px' }],
         caption:    ['12px', { lineHeight: '16px',  fontWeight: '500', letterSpacing: '0.04em' }],
-        data:       ['15px', { lineHeight: '20px',  fontWeight: '500', fontVariantNumeric: 'tabular-nums' }],
+        data:       ['15px', { lineHeight: '20px',  fontWeight: '500' }],
         mono:       ['13px', { lineHeight: '20px' }],
       },
 

@@ -21,9 +21,10 @@ type FormValues = z.infer<typeof Schema>;
 
 interface CreatePropertyFormProps {
   redirectTo?: string;
+  onSuccess?: () => void;
 }
 
-export function CreatePropertyForm({ redirectTo }: CreatePropertyFormProps) {
+export function CreatePropertyForm({ redirectTo, onSuccess }: CreatePropertyFormProps) {
   const router = useRouter();
   const [files, setFiles]           = useState<File[]>([]);
   const [serverError, setServerError] = useState<string | null>(null);
@@ -56,6 +57,7 @@ export function CreatePropertyForm({ redirectTo }: CreatePropertyFormProps) {
 
     reset();
     setFiles([]);
+    onSuccess?.();
     if (redirectTo) {
       router.push(redirectTo);
     }

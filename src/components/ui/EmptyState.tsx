@@ -52,6 +52,7 @@ export const EmptyState = React.forwardRef<HTMLDivElement, EmptyStateProps>(
     iconSize = 'md',
     className,
     variant = 'default',
+    children,
   }, ref) => {
     const getIconSize = () => {
       switch (iconSize) {

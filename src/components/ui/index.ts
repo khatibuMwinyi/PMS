@@ -29,5 +29,5 @@ export { default as ThemeToggle } from './ThemeToggle';
 // ── Accessibility ─────────────────────────────────────────────────────────────
 export { AccessibleWrapper, useFocusManagement, useFocusTrap } from './AccessibleWrapper';
 
-// ── Misc ──────────────────────────────────────────────────────────────────────
-export { default as Hero } from './Hero';
+// ── Progress ──────────────────────────────────────────────────────────────────
+export { Progress } from './progress';

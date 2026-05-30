@@ -34,7 +34,7 @@ export function calculatePostGISDistance(
   providerLon: number,
   propertyLat: number,
   propertyLon: number
-): number {
+): string {
   // This would be used in Prisma $queryRaw
   // ST_DistanceSphere returns meters, so we divide by 1000
   return `
