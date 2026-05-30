@@ -22,3 +22,4 @@ tsconfig.tsbuildinfo
 owners_page/*
 public/uploads/
 docs/*
+build-output.txt
