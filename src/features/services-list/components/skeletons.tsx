@@ -1,13 +1,9 @@
 // src/features/services-list/components/skeletons.tsx
 export function ServicesKpisSkeleton() {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+    <div className="border border-border-subtle rounded-lg overflow-hidden bg-surface-card shadow-card grid grid-cols-2 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-border-subtle">
       {Array.from({ length: 4 }).map((_, i) => (
-        <div
-          key={i}
-          className="bg-[var(--surface-container-lowest)] border border-[var(--outline-variant)] rounded-md p-4 h-[76px] animate-pulse"
-          style={{ borderLeftWidth: '3px', borderLeftColor: 'var(--outline-variant)' }}
-        />
+        <div key={i} className="border-t-[3px] border-t-border-subtle p-5 h-[92px] animate-pulse" />
       ))}
     </div>
   );

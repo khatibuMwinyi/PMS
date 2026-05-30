@@ -27,4 +27,15 @@ describe('DashboardHeader', () => {
     render(<DashboardHeader title="T" action={<button>Go</button>} />);
     expect(screen.getByRole('button', { name: 'Go' })).toBeInTheDocument();
   });
+
+  it('does not render asOf when action is also provided', () => {
+    render(
+      <DashboardHeader
+        title="T"
+        asOf={new Date('2025-01-01')}
+        action={<button>Go</button>}
+      />
+    );
+    expect(screen.queryByText('Data as of')).not.toBeInTheDocument();
+  });
 });
