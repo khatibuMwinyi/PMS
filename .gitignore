@@ -20,3 +20,5 @@ tsconfig.tsbuildinfo
 .worktrees/
 .superpowers/
 owners_page/*
+public/uploads/
+docs/*
