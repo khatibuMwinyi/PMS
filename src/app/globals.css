@@ -102,6 +102,17 @@
 
   /* ─── Focus ───────────────────────────────────── */
   --shadow-focus: 0 0 0 3px rgba(240, 165, 0, 0.35);
+
+  /* ─── Fluid Type Scale ───────────────────────────── */
+  --text-display: clamp(36px, calc(3.4vw + 23px), 64px);
+  --text-h1:      clamp(28px, calc(2vw + 21px),   44px);
+  --text-h2:      clamp(20px, calc(1vw + 16px),   28px);
+  --text-h3:      clamp(17px, calc(0.4vw + 15px), 20px);
+  --text-h4:      16px;
+  --text-body-lg: clamp(16px, calc(0.3vw + 15px), 18px);
+  --text-body:    15px;
+  --text-body-sm: 13px;
+  --text-caption: 12px;
 }
 
 [data-theme="dark"] {
