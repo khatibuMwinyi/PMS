@@ -91,7 +91,7 @@ async function AdminDashboardContent() {
     {
       key: 'role',
       header: 'Role',
-      accessor: (row) => <span className="text-[var(--font-data-tabular)]">{row.role}</span>,
+      accessor: (row) => <span className="text-body-sm tabular-nums">{row.role}</span>,
     },
     {
       key: 'status',
@@ -101,7 +101,7 @@ async function AdminDashboardContent() {
     {
       key: 'joinedAt',
       header: 'Joined',
-      accessor: (row) => <span className="text-[var(--font-data-tabular)]">{row.joinedAt}</span>,
+      accessor: (row) => <span className="text-body-sm tabular-nums">{row.joinedAt}</span>,
     },
   ];
 
@@ -125,7 +125,7 @@ async function AdminDashboardContent() {
 
       {/* Recent Users Table */}
       <div className="mt-6">
-        <h2 className="mb-4 text-[var(--font-h2)] text-[var(--text-primary)]">Recent Users</h2>
+        <h2 className="mb-4 text-h2 text-[var(--text-primary)]">Recent Users</h2>
         <Table
           columns={columns}
           data={recentUsers}

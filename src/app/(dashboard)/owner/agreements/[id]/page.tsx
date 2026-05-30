@@ -63,7 +63,7 @@ async function AgreementDetailContent({ agreementId }: { agreementId: string }) 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
           <div>
             <p className="text-sm text-[var(--text-muted)] mb-1">Quoted Price</p>
-            <p className="text-3xl font-bold text-[var(--brand-primary)] font-data-tabular">
+            <p className="text-3xl font-bold text-[var(--brand-primary)] tabular-nums">
               ${quotedPrice.toFixed(2)}
             </p>
             {isImmutable && (
@@ -91,31 +91,31 @@ async function AgreementDetailContent({ agreementId }: { agreementId: string }) 
           <div className="space-y-2">
             <div className="flex justify-between">
               <span className="text-sm text-[var(--text-muted)]">Quote ID</span>
-              <span className="text-sm font-data-tabular text-[var(--text-primary)]">
+              <span className="text-sm tabular-nums text-[var(--text-primary)]">
                 {agreement.quoteId.slice(0, 8)}...
               </span>
             </div>
             <div className="flex justify-between">
               <span className="text-sm text-[var(--text-muted)]">Property</span>
-              <span className="text-sm font-data-tabular text-[var(--text-primary)]">
+              <span className="text-sm tabular-nums text-[var(--text-primary)]">
                 {agreement.quote.property.name}
               </span>
             </div>
             <div className="flex justify-between">
               <span className="text-sm text-[var(--text-muted)]">Service Type</span>
-              <span className="text-sm font-data-tabular text-[var(--text-primary)]">
+              <span className="text-sm tabular-nums text-[var(--text-primary)]">
                 {agreement.quote.serviceType.name}
               </span>
             </div>
             <div className="flex justify-between">
               <span className="text-sm text-[var(--text-muted)]">Original Base Price</span>
-              <span className="text-sm font-data-tabular text-[var(--text-primary)]">
+              <span className="text-sm tabular-nums text-[var(--text-primary)]">
                 ${agreement.quote.serviceType.basePrice.toString()}
               </span>
             </div>
             <div className="flex justify-between font-semibold border-t border-[var(--border-default)] pt-2">
               <span>Immutable Quoted Price</span>
-              <span className="font-data-tabular text-[var(--brand-primary)]">
+              <span className="tabular-nums text-[var(--brand-primary)]">
                 ${quotedPrice.toFixed(2)}
               </span>
             </div>

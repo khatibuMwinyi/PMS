@@ -59,10 +59,10 @@ export function AgreementCard({
       </div>
 
       <div className="mb-4">
-        <p className="text-2xl font-bold text-[var(--brand-primary)] font-data-tabular">
+        <p className="text-2xl font-bold text-[var(--brand-primary)] tabular-nums">
           ${typeof quotedPrice === 'number' ? quotedPrice.toFixed(2) : quotedPrice}
         </p>
-        <p className="text-xs text-[var(--text-muted)] mt-1 font-data-tabular">
+        <p className="text-xs text-[var(--text-muted)] mt-1 tabular-nums">
           Created: {createdAt}
         </p>
         {isImmutable && (

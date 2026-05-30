@@ -58,43 +58,43 @@ export function AgreementList({ agreements, onView }: AgreementListProps) {
       key: 'property',
       header: 'Property',
       accessor: (agreement: Agreement) => (
-        <span className="font-[var(--font-table-header)] text-[var(--text-primary)]">
+        <span className="text-caption uppercase tracking-wide text-[var(--text-primary)]">
           {agreement.propertyName || 'N/A'}
         </span>
       ),
-      className: 'font-data-tabular',
+      className: 'text-body-sm tabular-nums',
     },
     {
       key: 'quoteId',
       header: 'Quote ID',
       accessor: (agreement: Agreement) => (
-        <span className="font-[var(--font-data-tabular)] text-[var(--text-primary)] text-xs">
+        <span className="text-xs tabular-nums text-[var(--text-primary)]">
           {agreement.quoteId.slice(0, 8)}...
         </span>
       ),
-      className: 'font-data-tabular',
+      className: 'text-body-sm tabular-nums',
     },
     {
       key: 'date',
       header: 'Created',
       accessor: (agreement: Agreement) => (
-        <span className="font-[var(--font-data-tabular)] text-[var(--text-primary)]">
+        <span className="text-body-sm tabular-nums text-[var(--text-primary)]">
           {agreement.formattedDate}
         </span>
       ),
-      className: 'font-data-tabular',
+      className: 'text-body-sm tabular-nums',
     },
     {
       key: 'price',
       header: 'Quoted Price',
       accessor: (agreement: Agreement) => (
-        <span className="text-right font-semibold font-[var(--font-data-tabular)] text-[var(--text-primary)]">
-          ${typeof agreement.quotedPrice === 'number' 
-            ? agreement.quotedPrice.toFixed(2) 
+        <span className="text-right font-semibold text-body-sm tabular-nums text-[var(--text-primary)]">
+          ${typeof agreement.quotedPrice === 'number'
+            ? agreement.quotedPrice.toFixed(2)
             : agreement.quotedPrice}
         </span>
       ),
-      className: 'text-right font-data-tabular',
+      className: 'text-right text-body-sm tabular-nums',
     },
     {
       key: 'immutable',

@@ -56,43 +56,43 @@ export function QuoteTable({ quotes, onView, onAccept }: QuoteTableProps) {
       key: 'property',
       header: 'Property Name',
       accessor: (quote: Quote) => (
-        <span className="font-[var(--font-table-header)] text-[var(--text-primary)]">
+        <span className="text-caption uppercase tracking-wide text-[var(--text-primary)]">
           {quote.propertyName}
         </span>
       ),
-      className: 'font-data-tabular',
+      className: 'text-body-sm tabular-nums',
     },
     {
       key: 'service',
       header: 'Service Type',
       accessor: (quote: Quote) => (
-        <span className="font-[var(--font-table-header)] text-[var(--text-primary)]">
+        <span className="text-caption uppercase tracking-wide text-[var(--text-primary)]">
           {quote.serviceTypeName}
         </span>
       ),
-      className: 'font-data-tabular',
+      className: 'text-body-sm tabular-nums',
     },
     {
       key: 'date',
       header: 'Quote Date',
       accessor: (quote: Quote) => (
-        <span className="font-[var(--font-data-tabular)] text-[var(--text-primary)]">
+        <span className="text-body-sm tabular-nums text-[var(--text-primary)]">
           {quote.formattedDate}
         </span>
       ),
-      className: 'font-data-tabular',
+      className: 'text-body-sm tabular-nums',
     },
     {
       key: 'price',
       header: 'Quoted Price',
       accessor: (quote: Quote) => (
-        <span className="text-right font-semibold font-[var(--font-data-tabular)] text-[var(--text-primary)]">
-          ${typeof quote.quotedPrice === 'number' 
-            ? quote.quotedPrice.toFixed(2) 
+        <span className="text-right font-semibold text-body-sm tabular-nums text-[var(--text-primary)]">
+          ${typeof quote.quotedPrice === 'number'
+            ? quote.quotedPrice.toFixed(2)
             : quote.quotedPrice}
         </span>
       ),
-      className: 'text-right font-data-tabular',
+      className: 'text-right text-body-sm tabular-nums',
     },
     {
       key: 'actions',

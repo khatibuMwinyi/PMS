@@ -29,9 +29,9 @@ export function ServiceCard({ service, href }: ServiceCardProps) {
       className="overflow-hidden border rounded-[var(--radius-lg)] transition-all duration-200 hover:border-[var(--text-primary)] hover:shadow-[var(--shadow-modal)] flex flex-col"
     >
       <CardContent className="flex flex-col gap-3 p-4 flex-1">
-        {/* Header: Service name (font-h2, 14px, font-bold) + Status */}
+        {/* Header: Service name (text-h2, font-bold) + Status */}
         <div className="flex items-start justify-between gap-2">
-          <h3 className="text-[14px] font-bold leading-snug line-clamp-1" style={{ fontFamily: 'var(--font-h2)' }}>
+          <h3 className="text-h2 font-bold leading-snug line-clamp-1">
             {service.name}
           </h3>
           <StatusBadge
@@ -56,7 +56,7 @@ export function ServiceCard({ service, href }: ServiceCardProps) {
           {service.description}
         </p>
 
-        {/* Stats row: Base price (font-data-tabular, text-right, font-semibold) */}
+        {/* Stats row: Base price (tabular-nums, text-right, font-semibold) */}
         <div
           className="flex items-center justify-between py-2 px-3 rounded-[var(--radius-md)] text-[var(--text-13px)] mt-auto"
           style={{ background: 'var(--surface-overlay)' }}
@@ -65,7 +65,7 @@ export function ServiceCard({ service, href }: ServiceCardProps) {
             <DollarSign size={13} style={{ color: 'var(--text-muted)' }} />
             <span>Base Price</span>
           </div>
-          <span className="text-[var(--font-data-tabular)] font-semibold text-right">
+          <span className="text-body-sm tabular-nums font-semibold text-right">
             ${service.basePrice.toFixed(2)}
           </span>
         </div>

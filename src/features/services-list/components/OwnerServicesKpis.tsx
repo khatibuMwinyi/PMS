@@ -19,7 +19,7 @@ function KpiCell({ label, value, hint, accent = 'default' }: CardProps) {
         accent === 'danger' ? 'border-l-4 border-l-[var(--state-error)]' : '',
       ].join(' ')}
     >
-      <span className="font-label text-[var(--text-muted)] uppercase tracking-wider">
+      <span className="text-body font-medium text-[var(--text-muted)] uppercase tracking-wider">
         {label}
       </span>
       <div className="flex justify-between items-end">

@@ -71,17 +71,17 @@ async function AdminServicesContent() {
       <div className="grid grid-cols-3 gap-4">
         <div className="p-4 rounded-[var(--radius-lg)] border" style={{ background: 'var(--surface)', borderColor: 'var(--border-default)' }}>
           <p className="text-[var(--text-sm)]" style={{ color: 'var(--text-secondary)' }}>Total Services</p>
-          <p className="text-[var(--font-h2)] font-bold text-[var(--text-primary)]">{serviceCards.length}</p>
+          <p className="text-h2 font-bold text-[var(--text-primary)]">{serviceCards.length}</p>
         </div>
         <div className="p-4 rounded-[var(--radius-lg)] border" style={{ background: 'var(--surface)', borderColor: 'var(--border-default)' }}>
           <p className="text-[var(--text-sm)]" style={{ color: 'var(--text-secondary)' }}>Active</p>
-          <p className="text-[var(--font-h2)] font-bold text-[var(--text-primary)]">
+          <p className="text-h2 font-bold text-[var(--text-primary)]">
             {serviceCards.filter((s) => s.isActive).length}
           </p>
         </div>
         <div className="p-4 rounded-[var(--radius-lg)] border" style={{ background: 'var(--surface)', borderColor: 'var(--border-default)' }}>
           <p className="text-[var(--text-sm)]" style={{ color: 'var(--text-secondary)' }}>Inactive</p>
-          <p className="text-[var(--font-h2)] font-bold text-[var(--text-primary)]">
+          <p className="text-h2 font-bold text-[var(--text-primary)]">
             {serviceCards.filter((s) => !s.isActive).length}
           </p>
         </div>

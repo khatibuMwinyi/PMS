@@ -73,7 +73,7 @@ async function AdminUsersContent() {
       key: 'phone',
       header: 'Phone',
       accessor: (row) => (
-        <span className="text-[var(--font-data-tabular)]">
+        <span className="text-body-sm tabular-nums">
           {row.phone || 'N/A'}
         </span>
       ),
@@ -96,7 +96,7 @@ async function AdminUsersContent() {
       key: 'joinedAt',
       header: 'Joined',
       accessor: (row) => (
-        <span className="text-[var(--font-data-tabular)]">{row.joinedAt}</span>
+        <span className="text-body-sm tabular-nums">{row.joinedAt}</span>
       ),
     },
     {
@@ -122,7 +122,7 @@ async function AdminUsersContent() {
           </div>
           <div>
             <p className="text-[var(--text-sm)] text-[var(--text-secondary)]">Total Users</p>
-            <p className="text-[var(--font-h2)] font-bold text-[var(--text-primary)]">
+            <p className="text-h2 font-bold text-[var(--text-primary)]">
               {userRows.length}
             </p>
           </div>
@@ -134,7 +134,7 @@ async function AdminUsersContent() {
           </div>
           <div>
             <p className="text-[var(--text-sm)] text-[var(--text-secondary)]">Active</p>
-            <p className="text-[var(--font-h2)] font-bold text-[var(--text-primary)]">
+            <p className="text-h2 font-bold text-[var(--text-primary)]">
               {userRows.filter((u) => u.status === 'ACTIVE').length}
             </p>
           </div>
@@ -146,7 +146,7 @@ async function AdminUsersContent() {
           </div>
           <div>
             <p className="text-[var(--text-sm)] text-[var(--text-secondary)]">Suspended</p>
-            <p className="text-[var(--font-h2)] font-bold text-[var(--text-primary)]">
+            <p className="text-h2 font-bold text-[var(--text-primary)]">
               {userRows.filter((u) => u.status === 'SUSPENDED').length}
             </p>
           </div>
@@ -155,7 +155,7 @@ async function AdminUsersContent() {
 
       {/* Users Table */}
       <div>
-        <h2 className="mb-4 text-[var(--font-h2)] text-[var(--text-primary)]">
+        <h2 className="mb-4 text-h2 text-[var(--text-primary)]">
           All Users
         </h2>
         <Table

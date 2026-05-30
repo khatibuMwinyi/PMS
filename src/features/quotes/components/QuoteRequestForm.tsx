@@ -193,7 +193,7 @@ export function QuoteRequestForm({ ownerId, properties, serviceTypes, onSuccess 
             animate={{ opacity: 1 }}
           >
             <p className="text-sm text-[var(--text-muted)] mb-1">Estimated Quote:</p>
-            <p className="text-2xl font-bold text-[var(--brand-primary)] font-data-tabular">
+            <p className="text-2xl font-bold text-[var(--brand-primary)] tabular-nums">
               ${calculatedPrice.toFixed(2)}
             </p>
             <p className="text-xs text-[var(--text-muted)] mt-2">
