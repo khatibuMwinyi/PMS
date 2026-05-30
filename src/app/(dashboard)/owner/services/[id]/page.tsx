@@ -41,6 +41,10 @@ function toOwnerStatus(
       case 'DISPUTED': return 'DISPUTED';
       case 'CANCELLED_BY_OWNER':
       case 'CANCELLED_NO_SHOW': return 'CANCELLED';
+      case 'EXPIRED':
+      case 'REJECTED':
+      case 'AUTO_REASSIGNED':
+      case 'NO_PROVIDER_AVAILABLE': return 'PENDING_ASSIGNMENT';
       default: return 'PENDING_ASSIGNMENT';
     }
   }
@@ -59,7 +63,7 @@ function DetailField({ label, value, mono = false }: { label: string; value: str
   return (
     <div>
       <p className="text-[10px] font-semibold uppercase tracking-[.05em] text-[#94A3B8] mb-1">{label}</p>
-      <p className={`text-[13px] font-semibold text-[var(--text-primary)] ${mono ? 'font-mono' : ''}`}>{value}</p>
+      <p className={`text-[13px] font-semibold text-[var(--text-primary)]${mono ? ' font-mono' : ''}`}>{value}</p>
     </div>
   );
 }
@@ -76,8 +80,8 @@ function TimelineStep({
   isLast: boolean;
 }) {
   const dotClass = {
-    done: 'bg-[var(--state-success)] ring-2 ring-[var(--state-success)] ring-offset-2',
-    active: 'bg-[var(--brand-gold)] ring-2 ring-[var(--brand-gold)] ring-offset-2',
+    done: 'bg-[var(--state-success)] ring-2 ring-[var(--state-success)] ring-offset-2 ring-offset-white',
+    active: 'bg-[var(--brand-gold)] ring-2 ring-[var(--brand-gold)] ring-offset-2 ring-offset-white',
     pending: 'bg-white border-2 border-[var(--outline-variant)]',
   }[state];
 
