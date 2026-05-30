@@ -22,4 +22,9 @@ describe('DashboardHeader', () => {
     render(<DashboardHeader title="Reports" />);
     expect(screen.getByRole('heading')).not.toHaveClass('font-serif');
   });
+
+  it('renders action slot when provided', () => {
+    render(<DashboardHeader title="T" action={<button>Go</button>} />);
+    expect(screen.getByRole('button', { name: 'Go' })).toBeInTheDocument();
+  });
 });

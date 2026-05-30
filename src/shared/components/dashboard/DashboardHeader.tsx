@@ -5,6 +5,7 @@ interface DashboardHeaderProps {
   subtitle?: string;
   asOf?: Date;
   serif?: boolean;
+  action?: React.ReactNode;
 }
 
 function formatAsOf(d: Date): string {
@@ -14,7 +15,7 @@ function formatAsOf(d: Date): string {
   });
 }
 
-export function DashboardHeader({ title, subtitle, asOf, serif }: DashboardHeaderProps) {
+export function DashboardHeader({ title, subtitle, asOf, serif, action }: DashboardHeaderProps) {
   return (
     <div className="mb-8 flex justify-between items-end">
       <div>
@@ -25,12 +26,12 @@ export function DashboardHeader({ title, subtitle, asOf, serif }: DashboardHeade
           <p className="text-body-sm text-[var(--text-secondary)] mt-1">{subtitle}</p>
         )}
       </div>
-      {asOf && (
+      {action ?? (asOf && (
         <div className="text-right">
           <span className="text-body-sm text-[var(--text-muted)]">Data as of</span>
           <p className="text-label font-semibold text-[var(--text-primary)]">{formatAsOf(asOf)}</p>
         </div>
-      )}
+      ))}
     </div>
   );
 }
