@@ -34,8 +34,13 @@ export function OwnerServiceActions(props: Props) {
   const close = () => setModal(null);
 
   return (
-    <div className="bg-[var(--surface-container-lowest)] border border-outline-variant rounded-md p-5 space-y-3 sticky top-20">
-      <h2 className="text-base font-semibold text-[var(--text-primary)] mb-1">Actions</h2>
+    <div
+      className="bg-white border border-[var(--outline-variant)] rounded-[10px] p-5 space-y-3 sticky top-20"
+      style={{ boxShadow: '0 1px 3px rgba(0,0,0,.04)' }}
+    >
+      <h2 className="text-[13px] font-bold uppercase tracking-[.05em] text-[#94A3B8] mb-4">
+        Actions
+      </h2>
 
       {props.canVerify && (
         <DeadlineBanner deadlineIso={props.verificationDeadlineIso} />
@@ -45,7 +50,7 @@ export function OwnerServiceActions(props: Props) {
         type="button"
         disabled={!props.canVerify}
         onClick={() => setModal('verify')}
-        className="w-full px-4 py-2 bg-[var(--state-success)] text-white rounded-md text-sm font-semibold disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-1.5"
+        className="w-full px-4 py-2.5 bg-[var(--state-success)] text-white rounded-md text-sm font-bold disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-1.5"
       >
         <CheckCircle2 size={16} /> Mark Satisfied
       </button>
@@ -54,7 +59,7 @@ export function OwnerServiceActions(props: Props) {
         type="button"
         disabled={!props.canDispute}
         onClick={() => setModal('dispute')}
-        className="w-full px-4 py-2 border border-[var(--state-error)] text-[var(--state-error)] rounded-md text-sm font-semibold disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-1.5"
+        className="w-full px-4 py-2.5 bg-white text-[var(--state-error)] border border-[var(--state-error)] rounded-md text-sm font-bold disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-1.5"
       >
         <MessageSquareWarning size={16} /> File Dispute
       </button>
@@ -63,12 +68,12 @@ export function OwnerServiceActions(props: Props) {
         type="button"
         disabled={!props.canCancel}
         onClick={() => setModal('cancel')}
-        className="w-full px-4 py-2 border border-outline-variant text-[var(--text-primary)] rounded-md text-sm font-semibold disabled:opacity-40 disabled:cursor-not-allowed"
+        className="w-full px-4 py-2.5 bg-white text-[var(--text-primary)] border border-[var(--outline-variant)] rounded-md text-sm font-semibold disabled:opacity-40 disabled:cursor-not-allowed"
       >
         Cancel Service
       </button>
 
-      <p className="text-caption text-[var(--text-muted)] leading-snug pt-1">
+      <p className="text-[11px] text-[var(--text-muted)] leading-snug pt-3 border-t border-[var(--outline-variant)]">
         After provider acceptance, cancellation incurs a 20% penalty
         (15% provider compensation + 5% Oweru). Disputes are reviewed by Oweru staff within 48h.
       </p>
@@ -102,7 +107,7 @@ function DeadlineBanner({ deadlineIso }: { deadlineIso: string | null }) {
   const remainingMs = new Date(deadlineIso).getTime() - now;
   if (remainingMs <= 0) {
     return (
-      <div className="bg-[var(--state-warning-bg)] text-[var(--state-warning)] rounded p-2 text-xs">
+      <div className="bg-[var(--state-warning-bg)] border border-[var(--outline-variant)] rounded-md p-3 flex gap-2 items-start text-xs text-[var(--state-warning)] font-medium">
         Verification window expired — system will auto-approve.
       </div>
     );
@@ -110,8 +115,9 @@ function DeadlineBanner({ deadlineIso }: { deadlineIso: string | null }) {
   const hours = Math.floor(remainingMs / 3600_000);
   const mins = Math.floor((remainingMs % 3600_000) / 60_000);
   return (
-    <div className="bg-[var(--state-info-bg)] text-[var(--state-info)] rounded p-2 text-xs tabular-nums">
-      {hours}h {mins}m left to mark satisfied or dispute.
+    <div className="bg-[var(--state-info-bg)] border border-[var(--outline-variant)] rounded-md p-3 flex gap-2 items-center text-xs text-[var(--state-info)] font-medium tabular-nums">
+      <span>⏱</span>
+      <span>{hours}h {mins}m left to mark satisfied or dispute.</span>
     </div>
   );
 }
