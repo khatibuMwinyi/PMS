@@ -17,17 +17,17 @@ const config: Config = {
 
       // ─── Font Size ──────────────────────────────────
       fontSize: {
-        display:    ['64px', { lineHeight: '72px',  fontWeight: '500', letterSpacing: '-0.02em' }],
-        h1:         ['44px', { lineHeight: '52px',  fontWeight: '500', letterSpacing: '-0.01em' }],
-        h2:         ['28px', { lineHeight: '36px',  fontWeight: '600', letterSpacing: '-0.005em' }],
-        h3:         ['20px', { lineHeight: '28px',  fontWeight: '600' }],
-        h4:         ['16px', { lineHeight: '24px',  fontWeight: '600' }],
-        'body-lg':  ['18px', { lineHeight: '28px' }],
-        body:       ['15px', { lineHeight: '24px' }],
-        'body-sm':  ['13px', { lineHeight: '20px' }],
-        caption:    ['12px', { lineHeight: '16px',  fontWeight: '500', letterSpacing: '0.04em' }],
-        data:       ['15px', { lineHeight: '20px',  fontWeight: '500' }],
-        mono:       ['13px', { lineHeight: '20px' }],
+        display:    ['var(--text-display)', { lineHeight: '1.1',  fontWeight: '500', letterSpacing: '-0.02em' }],
+        h1:         ['var(--text-h1)',      { lineHeight: '1.2',  fontWeight: '500', letterSpacing: '-0.01em' }],
+        h2:         ['var(--text-h2)',      { lineHeight: '1.3',  fontWeight: '600', letterSpacing: '-0.005em' }],
+        h3:         ['var(--text-h3)',      { lineHeight: '1.4',  fontWeight: '600' }],
+        h4:         ['var(--text-h4)',      { lineHeight: '1.5',  fontWeight: '600' }],
+        'body-lg':  ['var(--text-body-lg)', { lineHeight: '1.6' }],
+        body:       ['var(--text-body)',    { lineHeight: '1.6' }],
+        'body-sm':  ['var(--text-body-sm)', { lineHeight: '1.55' }],
+        caption:    ['var(--text-caption)', { lineHeight: '1.35', fontWeight: '500', letterSpacing: '0.04em' }],
+        data:       ['var(--text-body)',    { lineHeight: '1.35', fontWeight: '500' }],
+        mono:       ['var(--text-body-sm)', { lineHeight: '1.55' }],
       },
 
       // ─── Colors ────────────────────────────────────
