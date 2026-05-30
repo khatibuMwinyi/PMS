@@ -7,6 +7,7 @@ import { nanoid } from 'nanoid';
 import { addHours, addDays, addWeeks } from 'date-fns';
 import { Decimal } from '@prisma/client/runtime/library';
 import { processServicePayment } from '@/features/wallets/actions';
+import { uploadDataUrl } from '@/core/storage/upload';
 
 /**
  * Resolve the calling provider's profile id from the session, or throw if the
@@ -249,6 +250,10 @@ export async function submitTaskEvidence(taskId: string, imageDataUrls: string[]
     }
   }
 
+  const cloudinaryUrls = await Promise.all(
+    imageDataUrls.map((dataUrl) => uploadDataUrl(dataUrl, `tasks/${taskId}`)),
+  );
+
   const task = await prisma.task.findUnique({
     where: { id: taskId },
     include: { assignment: true },
@@ -261,7 +266,7 @@ export async function submitTaskEvidence(taskId: string, imageDataUrls: string[]
       data: {
         status: 'COMPLETED',
         checkOutTime: new Date(),
-        evidenceImages: imageDataUrls,
+        evidenceImages: cloudinaryUrls,
       },
     });
 
